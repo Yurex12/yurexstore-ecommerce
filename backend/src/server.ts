@@ -1,15 +1,26 @@
 import express from 'express';
-
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
-const app = express();
 dotenv.config();
 
-const PORT = process.env.PORT || 9000;
+// routes
+import authRoutes from './routes/authRoutes';
+import { errorHandler, notFoundHandler } from './middlewares/errorHandler';
 
-app.get('/', (req, res, next) => {
-  res.send('Hello, TypeScript with Express!');
+const PORT = process.env.PORT || 9000;
+const app = express();
+
+app.use(express.json());
+app.use(cookieParser());
+
+app.get('/', (req, res) => {
+  res.send('API is running...');
 });
+
+app.use('/api/auth', authRoutes);
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is running on PORT: ${PORT}`);
