@@ -38,6 +38,7 @@ export const registerUser = expressAsyncHandler(
         email,
         password: hashedPassword,
         role: 'USER',
+        cart: { create: { totalPrice: 0, totalQuantity: 0 } },
       },
       omit: {
         password: true,
