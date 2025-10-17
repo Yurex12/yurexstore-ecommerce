@@ -1,8 +1,10 @@
+import { Link } from 'react-router-dom';
+
 import Logo from '@/components/Logo';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import SignInForm from '@/features/auth/components/SignInForm';
 import SocialLogin from '@/features/auth/components/SocialLogin';
-import { Link } from 'react-router-dom';
 
 export default function SignInPage() {
   return (
@@ -11,7 +13,7 @@ export default function SignInPage() {
         <Logo className='text-center uppercase text-2xl' />
         <Card className='shadow-none border border-input'>
           <CardHeader className='text-center'>
-            <CardTitle className='text-xl text-foreground/80'>
+            <CardTitle className='text-xl text-foreground/90'>
               Login to your account
             </CardTitle>
           </CardHeader>

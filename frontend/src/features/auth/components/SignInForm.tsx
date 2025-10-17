@@ -1,5 +1,3 @@
-'use client';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
@@ -39,13 +37,10 @@ export default function SignInForm() {
           name='identifier'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='text-secondary-foreground/70'>
-                Email{' '}
-              </FormLabel>
+              <FormLabel>Email </FormLabel>
               <FormControl>
                 <Input
                   placeholder='johndoe@gmail.com'
-                  className='placeholder:text-xs shadow-none'
                   type='text'
                   {...field}
                   disabled={form.formState.isSubmitting}
@@ -60,14 +55,11 @@ export default function SignInForm() {
           name='password'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='text-secondary-foreground/70'>
-                Password
-              </FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
                   placeholder='********'
                   type='password'
-                  className='placeholder:text-xs shadow-none'
                   {...field}
                   disabled={form.formState.isSubmitting}
                 />
@@ -90,7 +82,7 @@ export default function SignInForm() {
                   disabled={form.formState.isSubmitting}
                 />
               </FormControl>
-              <FormLabel htmlFor='rememberMe' className='text-gray-700'>
+              <FormLabel htmlFor='rememberMe' className='text-foreground/70'>
                 Remember me
               </FormLabel>
               <FormMessage />

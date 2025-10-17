@@ -21,8 +21,8 @@ export default function App() {
           <Route path='/about-us' element={<AboutPage />} />
           <Route path='/contact-us' element={<ContactPage />} />
         </Route>
-        <Route path='/login' element={<SignInPage />} />
-        <Route path='/register' element={<SignupPage />} />
+        <Route path='/signin' element={<SignInPage />} />
+        <Route path='/signup' element={<SignupPage />} />
       </Routes>
     </BrowserRouter>
   );
