@@ -3,7 +3,6 @@ import { LocateIcon, Mail, Phone } from 'lucide-react';
 function ContactAddress() {
   return (
     <div className='space-y-5'>
-      <h1 className='text-xl font-semibold capitalize'>Get in touch</h1>
       <p className='lg:w-10/12'>
         Use our contact form for all information requests or contact us directly
         using the contact information below.

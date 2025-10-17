@@ -6,16 +6,16 @@ import { useState } from 'react';
 export default function ProductCard() {
   const [isLiked, setIsLiked] = useState(false);
   return (
-    <div className='rounded-lg p-4 border border-input'>
+    <div className='rounded-lg border border-input p-2 sm:p-4 space-y-2'>
       {/* image */}
       <div className='relative'>
         <button
-          className='absolute -right-1 top-2 inline-block rounded-full bg-indigo-50 p-1 shadow-sm hover:bg-indigo-200 sm:right-4'
+          className='absolute -right-1 top-2 inline-block rounded-full bg-primary/5 p-1 shadow-sm hover:bg-primary/20 sm:right-4'
           onClick={() => setIsLiked((cur) => !cur)}
         >
           <Heart
             className={`text-lg ${
-              isLiked ? 'fill-primary text-primary' : 'text-gray-500'
+              isLiked ? 'fill-primary text-primary' : 'text-foreground/50'
             }`}
           />
         </button>
@@ -23,15 +23,13 @@ export default function ProductCard() {
         <img src='shirt.png' alt='' className='w-full object-contain' />
       </div>
 
-      <div className='mt-3 space-y-2'>
-        {/*  name */}
-        <p className='truncate text-[11px] font-semibold lg:text-sm'>
+      <div className='space-y-2'>
+        <p className='truncate text-xs font-bold text-secondary-foreground/90 lg:text-sm'>
           Women Handbag
         </p>
 
-        {/* category */}
-        <p className='text-sm text-gray-500'>Bags</p>
-        {/*  price */}
+        <p className='text-sm text-foreground/50'>Bags</p>
+
         <p className='text-sm font-semibold'>{formatCurrency(20)}</p>
 
         <Button className='w-full'>Add to cart</Button>

@@ -5,9 +5,12 @@ function Logo({ className }: { className?: string }) {
   return (
     <Link
       to='/'
-      className={cn('text-xl font-semibold text-primary', className)}
+      className={cn(
+        'text-xl font-semibold text-primary flex items-center justify-center',
+        className
+      )}
     >
-      Yurexstore
+      <span>Yurexstore</span>
     </Link>
 
     // <Link to="/">

@@ -11,10 +11,6 @@ export const links: Link[] = [
     href: '/shop',
   },
   {
-    title: 'Cart',
-    href: '/cart',
-  },
-  {
     title: 'About us',
     href: '/about-us',
   },
