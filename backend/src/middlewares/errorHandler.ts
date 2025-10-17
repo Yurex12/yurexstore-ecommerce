@@ -1,16 +1,22 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 function errorHandler(
-  error: Error,
+  error: Error & { code?: number | string },
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  let message = error.message;
+
+  if (error?.code === 'P2025') {
+    statusCode = 404;
+    message = 'Resource not found';
+  }
 
   res.status(statusCode).json({
     success: false,
-    message: error.message,
+    message: message,
     stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
   });
 }

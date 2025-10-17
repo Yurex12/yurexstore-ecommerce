@@ -30,9 +30,7 @@ export default function ContactForm() {
 
   return (
     <div className='w-full rounded-md border border-gray-200 p-5 lg:max-w-xl lg:p-10'>
-      <h1 className='mb-4 text-lg font-semibold text-gray-800'>
-        Have a question?
-      </h1>
+      <h3 className='mb-4 text-xl'>Have a question?</h3>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
@@ -91,7 +89,7 @@ export default function ContactForm() {
               </FormItem>
             )}
           />
-          <Button type='submit'>Send</Button>
+          <Button type='submit'>Send Message</Button>
         </form>
       </Form>
     </div>

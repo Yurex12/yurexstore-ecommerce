@@ -9,7 +9,7 @@ export default function AboutPage() {
         <h1 className='mb-3 text-xl font-semibold capitalize sm:mb-5 sm:text-2xl md:text-3xl lg:basis-1/2 lg:text-4xl'>
           Welcome to Yurexstore
         </h1>
-        <div className='space-y-8'>
+        <div className='space-y-4'>
           <p>
             At Yurexstore, we are dedicated to delivering high-quality products
             that enrich the lives of our customers. With a focus on excellence,

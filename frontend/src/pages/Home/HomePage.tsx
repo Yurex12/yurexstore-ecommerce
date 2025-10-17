@@ -1,3 +1,11 @@
+import Hero from './Hero';
+import NewsLetter from './NewsLetter';
+
 export default function HomePage() {
-  return <div>This is the HomePage</div>;
+  return (
+    <>
+      <Hero />
+      <NewsLetter />
+    </>
+  );
 }

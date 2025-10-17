@@ -9,21 +9,24 @@ export const productSchema = z.object({
   description: z
     .string()
     .trim()
-    .min(1, 'Name is required')
+    .min(1, 'Description is required')
     .max(500, 'Name should not be more than 500 characters.'),
-  gender: z
-    .string()
-    .refine((val) => val === 'MALE' || val === 'FEMALE' || val === 'BOTH', {
-      error: 'Gender must be male, female or both',
-    }),
-  price: z.string().refine((val) => parseInt(val) > 0, {
-    error: 'Price must be greater than 0',
+  gender: z.enum(['MALE', 'FEMALE', 'BOTH'], {
+    error: 'Gender must be male, female or both.',
   }),
-  quantity: z.string().refine((val) => parseInt(val) > 0, {
-    error: 'Quantity must be greater than 0',
-  }),
-  categoryId: z
-    .string()
-    .min(1, 'Category does not exist')
-    .max(25, 'Category does not exist '),
+  price: z.coerce.number().positive('Price must be greater than 0'),
+  quantity: z.coerce.number().positive('Quantity must be greater than 0'),
+  categoryId: z.string().trim().nonempty('Category is required'),
 });
+
+const updatePostSchema = productSchema.extend({
+  imageUrls: z.array(
+    z.object({
+      url: z.url().nonempty('Image url is required'),
+      fileId: z.string().nonempty('File id is required'),
+    })
+  ),
+});
+
+export type ProductSchema = z.infer<typeof productSchema>;
+export type UpdateProductSchema = z.infer<typeof updatePostSchema>;

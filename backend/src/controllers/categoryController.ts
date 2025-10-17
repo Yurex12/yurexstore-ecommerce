@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import expressAsyncHandler from 'express-async-handler';
 import prisma from '../lib/prisma';
+import { CategorySchema } from '../schemas/categorySchema';
 
 //@desc fetch categories
 //@route GET api/category
@@ -38,7 +39,7 @@ export const getCategory = expressAsyncHandler(
 
     res.json({
       success: true,
-      message: 'Category created successfully',
+      message: 'Successful',
       data: { category },
     });
   }
@@ -49,7 +50,9 @@ export const getCategory = expressAsyncHandler(
 //@access private(ADMIN ONLY)
 export const createCategory = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name } = req.body;
+    const { name } = req.body as CategorySchema;
+
+    const nameLowercase = name.toLowerCase();
 
     const isAdmin = req.user.role === 'ADMIN';
 
@@ -58,9 +61,20 @@ export const createCategory = expressAsyncHandler(
       throw new Error('You are not allowed to create a category.');
     }
 
+    const category = await prisma.category.findUnique({
+      where: {
+        name: nameLowercase,
+      },
+    });
+
+    if (category) {
+      res.status(400);
+      throw new Error('This category already exist.');
+    }
+
     const newCategory = await prisma.category.create({
       data: {
-        name,
+        name: nameLowercase,
       },
     });
 
@@ -77,37 +91,37 @@ export const createCategory = expressAsyncHandler(
 //@access private(ADMIN ONLY)
 export const updateCategory = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name } = req.body;
+    const { name } = req.body as CategorySchema;
     const { id: categoryId } = req.params;
+
+    const nameLowercase = name.toLowerCase();
 
     const isAdmin = req.user.role === 'ADMIN';
 
     if (!isAdmin) {
       res.status(401);
-      throw new Error('You are not allowed to create a category.');
+      throw new Error('You are not allowed to update this category.');
     }
 
-    const category = await prisma.category.findUnique({
-      where: {
-        id: categoryId,
-      },
+    const categoryName = await prisma.category.findUnique({
+      where: { name: nameLowercase },
     });
 
-    if (!category) {
+    if (categoryName && categoryName.id !== categoryId) {
       res.status(400);
-      throw new Error('The category does not exist.');
+      throw new Error('This category name already exists.');
     }
 
     const updatedCategory = await prisma.category.update({
       where: {
-        id: category.id,
+        id: categoryId,
       },
       data: {
-        name,
+        name: nameLowercase,
       },
     });
 
-    res.status(201).json({
+    res.json({
       success: true,
       message: 'Category updated successfully',
       data: { category: updatedCategory },
@@ -126,23 +140,12 @@ export const deleteCategory = expressAsyncHandler(
 
     if (!isAdmin) {
       res.status(401);
-      throw new Error('You are not allowed to create a category.');
-    }
-
-    const category = await prisma.category.findUnique({
-      where: {
-        id: categoryId,
-      },
-    });
-
-    if (!category) {
-      res.status(400);
-      throw new Error('The category does not exist.');
+      throw new Error('You are not allowed to delete a category.');
     }
 
     await prisma.category.delete({
       where: {
-        id: category.id,
+        id: categoryId,
       },
     });
 
