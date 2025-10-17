@@ -6,7 +6,7 @@ export default function AboutPage() {
   return (
     <div className='mx-auto flex flex-col items-center justify-between gap-y-8 lg:flex-row lg:gap-x-20'>
       <div className='lg:basis-1/2'>
-        <h1 className='mb-3 text-xl font-semibold capitalize sm:mb-5 sm:text-2xl md:text-3xl lg:basis-1/2 lg:text-4xl'>
+        <h1 className='mb-3 capitalize sm:mb-5 lg:basis-1/2 heading'>
           Welcome to Yurexstore
         </h1>
         <div className='space-y-4'>
@@ -37,7 +37,7 @@ export default function AboutPage() {
             </p>
             <Link
               to='/shop'
-              className='rounded-lg bg-primary px-6 py-2 hover:bg-primary/90 font-medium text-white text-sm flex items-center w-fit gap-x-2'
+              className='rounded-lg bg-primary px-6 py-2 hover:bg-primary/90 font-medium text-background text-sm flex items-center w-fit gap-x-2'
             >
               <span>Explore Our Products</span>
               <MoveRight />

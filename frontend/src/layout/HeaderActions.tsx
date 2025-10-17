@@ -1,10 +1,11 @@
-import { Button } from '@/components/ui/button';
-import { SheetTrigger } from '@/components/ui/sheet';
 import { Briefcase, MenuIcon, User } from 'lucide-react';
 
-function MenuBar() {
+import { Button } from '@/components/ui/button';
+import { SheetTrigger } from '@/components/ui/sheet';
+
+export default function HeaderActions() {
   return (
-    <div className='flex items-center space-x-5 text-2xl hover:cursor-pointer md:space-x-10'>
+    <div className='flex items-center space-x-4 text-2xl hover:cursor-pointer md:space-x-10'>
       <Briefcase className='text-gray-600' />
       <User className='text-2xl text-gray-600' />
 
@@ -20,5 +21,3 @@ function MenuBar() {
     </div>
   );
 }
-
-export default MenuBar;

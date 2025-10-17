@@ -12,8 +12,8 @@ export default function Navbar() {
               to={link.href}
               className={({ isActive }) =>
                 `${
-                  isActive ? 'border-b-primary' : ''
-                } cursor-pointer border-2 border-white py-1 hover:border-b-primary`
+                  isActive ? 'border-b-primary text-primary' : ''
+                } cursor-pointer border-b-2 border-background py-1 hover:border-b-primary hover:text-primary`
               }
             >
               {link.title}

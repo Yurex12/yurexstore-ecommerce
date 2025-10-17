@@ -5,7 +5,7 @@ export default function CartItem() {
     <div className='flex items-center justify-between py-10'>
       {/* image */}
       <div className='flex gap-x-4'>
-        <img src='item.jpg' alt='' className='w-24' />
+        <img src='shirt.png' alt='' className='w-24' />
         <div className='flex flex-col md:space-y-2'>
           <p className='font-semibold text-gray-700'>Basic Tee</p>
           <p className='text-gray-500'>Shirts</p>

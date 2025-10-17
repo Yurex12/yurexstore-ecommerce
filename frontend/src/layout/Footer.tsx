@@ -11,8 +11,8 @@ function Footer() {
       <div className='mx-auto max-w-[1440px] px-6'>
         <div className='grid grid-cols-1 gap-y-5 py-5 sm:grid-cols-[2fr_1fr] sm:pl-2 lg:grid-cols-[2fr_1fr_1fr_1fr] lg:gap-x-4'>
           {/* text & logo */}
-          <div className='space-y-3 p-1'>
-            <Logo className='uppercase text-foreground/60' />
+          <div className='space-y-4 p-1'>
+            <Logo className='uppercase text-foreground/70' />
             <p className='sm:w-8/12 md:w-6/12'>
               Specializes in providing high-quality, stylish products for your
               wardrobe.

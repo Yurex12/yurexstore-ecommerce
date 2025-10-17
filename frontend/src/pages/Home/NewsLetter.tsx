@@ -2,9 +2,9 @@ import { Button } from '@/components/ui/button';
 
 export default function NewsLetter() {
   return (
-    <div className='container mx-auto mt-4 rounded-md sm:mt-20 md:mt-20 bg-gray-50'>
+    <div className='mt-4 rounded-md sm:mt-20 md:mt-20 bg-muted/50'>
       <div className='mx-auto max-w-3xl px-6 py-14 text-center'>
-        <h1 className='mb-2 text-lg font-semibold sm:text-2xl md:text-4xl'>
+        <h1 className='mb-2 heading text-center'>
           Subscribe to Our Newsletter
         </h1>
         <p className='mx-auto mb-6 w-11/12 px-1 text-sm sm:text-base md:w-9/12'>

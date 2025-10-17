@@ -175,7 +175,7 @@
 /* === Custom Typography Styles === */
 @layer components {
   /* Headings */
-  .heading-md {
+  /* .heading-md {
     @apply text-5xl font-bold leading-tight;
   }
 
@@ -185,19 +185,18 @@
 
   .heading {
     @apply text-2xl font-semibold leading-snug;
-  }
-
-  /* Paragraph / Body Text */
-  .paragraph {
-    @apply font-sans text-base text-gray-700 leading-relaxed;
-  }
-
-  .paragraph-sm {
-    @apply font-sans text-sm text-gray-600 leading-normal;
-  }
+  } */
 
   .active span {
     @apply bg-foreground/5 text-foreground px-3;
+  }
+
+  .heading {
+    @apply sm:text-left text-2xl sm:text-3xl  lg:text-4xl;
+  }
+
+  .sort-options input:checked + label span.icon {
+    @apply border-0 bg-indigo-600 ring-2 ring-indigo-600 ring-offset-2;
   }
 }
 
