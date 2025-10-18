@@ -1,4 +1,11 @@
 import express from 'express';
+
+import { validateToken } from '../middlewares/validateTokenHandler';
+import { requireAdmin } from '../middlewares/requireAdmin';
+import { validateData } from '../middlewares/validation';
+
+import { categorySchema } from '../schemas/categorySchema';
+
 import {
   createCategory,
   deleteCategory,
@@ -6,9 +13,6 @@ import {
   getCategory,
   updateCategory,
 } from '../controllers/categoryController';
-import { validateToken } from '../middlewares/validateTokenHandler';
-import { validateData } from '../middlewares/validation';
-import { categorySchema } from '../schemas/categorySchema';
 
 const router = express.Router();
 
@@ -16,10 +20,22 @@ router.get('/', getCategories);
 
 router.get('/:id', validateToken, getCategory);
 
-router.post('/', validateToken, validateData(categorySchema), createCategory);
+router.post(
+  '/',
+  validateToken,
+  requireAdmin,
+  validateData(categorySchema),
+  createCategory
+);
 
-router.put('/:id', validateToken, validateData(categorySchema), updateCategory);
+router.patch(
+  '/:id',
+  validateToken,
+  requireAdmin,
+  validateData(categorySchema),
+  updateCategory
+);
 
-router.delete('/:id', validateToken, deleteCategory);
+router.delete('/:id', validateToken, requireAdmin, deleteCategory);
 
 export default router;
