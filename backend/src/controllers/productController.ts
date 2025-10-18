@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 
 import prisma from '../lib/prisma';
-import { ProductSchema, UpdateProductSchema } from '../schemas/productSchema';
+import { ProductSchema, ProductUpdateSchema } from '../schemas/productSchema';
 
 //@desc fetch all products
 //@route GET api/products/
@@ -73,15 +73,7 @@ export const getProduct = expressAsyncHandler(
 //@access private(ADMINS ONLY)
 export const createProduct = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, categoryId, price, quantity, gender, description } =
-      req.body as ProductSchema;
-
-    const isAdmin = req.user.role === 'ADMIN';
-
-    if (!isAdmin) {
-      res.status(401);
-      throw new Error('You are not allowed to create a product');
-    }
+    const { categoryId, images, ...productData } = req.body as ProductSchema;
 
     const category = await prisma.category.findUnique({
       where: {
@@ -94,24 +86,13 @@ export const createProduct = expressAsyncHandler(
       throw new Error('The category does not exist.');
     }
 
-    //TODO: UploadImages to a storage bucket and store their urls
-    const uploadedImages = [
-      { fileId: '2021', url: 'https://www.yurex/dog' },
-      { fileId: '2022', url: 'https://www.yurex/dog' },
-      { fileId: '2022', url: 'https://www.yurex/dog' },
-    ];
-
     const newProduct = await prisma.product.create({
       data: {
-        name,
-        description,
-        price,
-        quantity,
+        ...productData,
         categoryId,
-        gender,
         Image: {
           createMany: {
-            data: uploadedImages,
+            data: images,
           },
         },
       },
@@ -126,64 +107,42 @@ export const createProduct = expressAsyncHandler(
 );
 
 //@desc Update a product
-//@route POST api/products/:id
+//@route PATCH api/products/:id
 //@access private(ADMINS ONLY)
 export const updateProduct = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const newData = req.body as UpdateProductSchema;
+    const { images, categoryId, ...rest } = req.body as ProductUpdateSchema;
     const { id: productId } = req.params;
 
-    const { imageUrls, ...productData } = newData;
+    const updateData: any = { ...rest };
 
-    const isAdmin = req.user.role === 'ADMIN';
+    if (categoryId) {
+      const category = await prisma.category.findUnique({
+        where: {
+          id: categoryId,
+        },
+      });
 
-    if (!isAdmin) {
-      res.status(401);
-      throw new Error('You are not allowed to create a product');
+      if (!category) {
+        res.status(400);
+        throw new Error('This category does not exist.');
+      }
+
+      updateData.categoryId = categoryId;
     }
 
-    const product = await prisma.product.findUnique({
-      where: {
-        id: productId,
-      },
-    });
-
-    if (!product) {
-      res.status(400);
-      throw new Error('This product does not exist.');
+    if (images && images.length > 0) {
+      updateData.Images = {
+        deleteMany: {},
+        createMany: { data: images },
+      };
     }
 
-    const category = await prisma.category.findUnique({
-      where: {
-        id: newData.categoryId,
-      },
-    });
-
-    if (!category) {
-      res.status(400);
-      throw new Error('This category does not exist.');
-    }
-
-    // UploadImages or delete if theres a new one
-    const uploadedImages = [
-      { fileId: '2021', url: 'https://www.yurex/dog' },
-      { fileId: '2022', url: 'https://www.yurex/dog' },
-      { fileId: '2022', url: 'https://www.yurex/dog' },
-    ];
-
-    //TODO: Delete products image if they are not used again and add new ones
     const updatedProduct = await prisma.product.update({
       where: {
         id: productId,
       },
-      data: {
-        ...productData,
-        Image: {
-          createMany: {
-            data: uploadedImages,
-          },
-        },
-      },
+      data: updateData,
     });
 
     res.json({
@@ -201,11 +160,15 @@ export const deleteProduct = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id: productId } = req.params;
 
-    const isAdmin = req.user.role === 'ADMIN';
+    const product = await prisma.product.findUnique({
+      where: {
+        id: productId,
+      },
+    });
 
-    if (!isAdmin) {
-      res.status(401);
-      throw new Error('You are not allowed to delete this product');
+    if (!product) {
+      res.status(404);
+      throw new Error('Product not found.');
     }
 
     await prisma.product.delete({

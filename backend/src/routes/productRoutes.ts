@@ -8,7 +8,8 @@ import {
 } from '../controllers/productController';
 import { validateToken } from '../middlewares/validateTokenHandler';
 import { validateData } from '../middlewares/validation';
-import { productSchema } from '../schemas/productSchema';
+import { productSchema, productUpdateSchema } from '../schemas/productSchema';
+import { requireAdmin } from '../middlewares/requireAdmin';
 
 const router = express.Router();
 
@@ -16,10 +17,22 @@ router.get('/', getProducts);
 
 router.get('/:id', validateToken, getProduct);
 
-router.post('/', validateToken, validateData(productSchema), createProduct);
+router.post(
+  '/',
+  validateToken,
+  requireAdmin,
+  validateData(productSchema),
+  createProduct
+);
 
-router.put('/:id', validateToken, validateData(productSchema), updateProduct);
+router.patch(
+  '/:id',
+  validateToken,
+  requireAdmin,
+  validateData(productUpdateSchema),
+  updateProduct
+);
 
-router.delete('/:id', validateToken, deleteProduct);
+router.delete('/:id', validateToken, requireAdmin, deleteProduct);
 
 export default router;

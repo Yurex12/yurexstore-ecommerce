@@ -24,7 +24,6 @@ export const signUpSchema = z
 
 export const signInSchema = z.object({
   identifier: z.email('Please enter a valid email address.').trim(),
-
   password: z.string().trim().min(1, 'Password is required'),
   rememberMe: z.boolean(),
 });

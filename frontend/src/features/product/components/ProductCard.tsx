@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/helpers';
-import { Heart } from 'lucide-react';
+import { Heart, Star } from 'lucide-react';
 import { useState } from 'react';
 
 export default function ProductCard() {
@@ -30,7 +30,13 @@ export default function ProductCard() {
 
         <p className='text-sm text-foreground/50'>Bags</p>
 
-        <p className='text-sm font-semibold'>{formatCurrency(20)}</p>
+        <div className='flex items-center justify-between'>
+          <span className='text-sm font-semibold'>{formatCurrency(20)}</span>
+          <div className='flex gap-x-2 items-center'>
+            <Star className='text-orange-400 fill-orange-400' size={18} />
+            <span className='text-xs'>4.5 (10)</span>
+          </div>
+        </div>
 
         <Button className='w-full'>Add to cart</Button>
       </div>

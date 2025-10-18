@@ -50,16 +50,9 @@ export const getCategory = expressAsyncHandler(
 //@access private(ADMIN ONLY)
 export const createCategory = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name } = req.body as CategorySchema;
+    const { name, image } = req.body as CategorySchema;
 
     const nameLowercase = name.toLowerCase();
-
-    const isAdmin = req.user.role === 'ADMIN';
-
-    if (!isAdmin) {
-      res.status(401);
-      throw new Error('You are not allowed to create a category.');
-    }
 
     const category = await prisma.category.findUnique({
       where: {
@@ -75,6 +68,7 @@ export const createCategory = expressAsyncHandler(
     const newCategory = await prisma.category.create({
       data: {
         name: nameLowercase,
+        image,
       },
     });
 
@@ -87,21 +81,14 @@ export const createCategory = expressAsyncHandler(
 );
 
 //@desc Update a category
-//@route PUT api/category/:id
+//@route PATCH api/category/:id
 //@access private(ADMIN ONLY)
 export const updateCategory = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name } = req.body as CategorySchema;
+    const { name, image } = req.body as CategorySchema;
     const { id: categoryId } = req.params;
 
     const nameLowercase = name.toLowerCase();
-
-    const isAdmin = req.user.role === 'ADMIN';
-
-    if (!isAdmin) {
-      res.status(401);
-      throw new Error('You are not allowed to update this category.');
-    }
 
     const categoryName = await prisma.category.findUnique({
       where: { name: nameLowercase },
@@ -135,13 +122,6 @@ export const updateCategory = expressAsyncHandler(
 export const deleteCategory = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id: categoryId } = req.params;
-
-    const isAdmin = req.user.role === 'ADMIN';
-
-    if (!isAdmin) {
-      res.status(401);
-      throw new Error('You are not allowed to delete a category.');
-    }
 
     await prisma.category.delete({
       where: {

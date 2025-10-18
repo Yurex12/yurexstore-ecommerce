@@ -55,8 +55,9 @@ model User {
 }
 
 model Category {
-  id   String @id @default(cuid())
-  name String @unique
+  id    String @id @default(cuid())
+  name  String @unique
+  image String
 
   product Product[]
 

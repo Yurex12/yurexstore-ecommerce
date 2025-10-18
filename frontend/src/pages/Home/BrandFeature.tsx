@@ -1,4 +1,3 @@
-import { brandFeatures } from './constants';
 import type { BrandFeature as BrandFeatureProps } from './types';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,12 +8,12 @@ export default function BrandFeature({
   description,
 }: BrandFeatureProps) {
   return (
-    <li className='rounded-xl py-6 lg:py-10 transition-transform duration-300 hover:scale-[1.03] hover:bg-muted/10'>
+    <li className='rounded-xl py-6 lg:py-10 bg-background'>
       <div
         className={`flex h-40 flex-col items-center space-y-6 md:h-60 md:px-6 md:py-3 xl:h-auto  `}
       >
         {/* icon */}
-        <div className='flex items-center justify-center rounded-full border border-border bg-muted/20 p-5 text-2xl shadow-inner md:p-7 md:text-4xl'>
+        <div className='flex items-center justify-center rounded-full border border-input bg-muted/50 p-5 text-2xl md:p-7 md:text-4xl'>
           <FontAwesomeIcon icon={icon} className='text-primary' />
         </div>
 

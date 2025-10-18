@@ -4,12 +4,12 @@ export const productSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(1, 'Name is required')
+    .nonempty('Name is required')
     .max(30, 'Name should not be more than 30 characters.'),
   description: z
     .string()
     .trim()
-    .min(1, 'Description is required')
+    .nonempty('Description is required')
     .max(500, 'Name should not be more than 500 characters.'),
   gender: z.enum(['MALE', 'FEMALE', 'BOTH'], {
     error: 'Gender must be male, female or both.',
@@ -17,10 +17,7 @@ export const productSchema = z.object({
   price: z.coerce.number().positive('Price must be greater than 0'),
   quantity: z.coerce.number().positive('Quantity must be greater than 0'),
   categoryId: z.string().trim().nonempty('Category is required'),
-});
-
-const updatePostSchema = productSchema.extend({
-  imageUrls: z.array(
+  images: z.array(
     z.object({
       url: z.url().nonempty('Image url is required'),
       fileId: z.string().nonempty('File id is required'),
@@ -28,5 +25,11 @@ const updatePostSchema = productSchema.extend({
   ),
 });
 
+export const productUpdateSchema = productSchema
+  .partial()
+  .refine((data) => Object.keys(data).length > 0, {
+    error: 'At least one field must be provided to update',
+  });
+
 export type ProductSchema = z.infer<typeof productSchema>;
-export type UpdateProductSchema = z.infer<typeof updatePostSchema>;
+export type ProductUpdateSchema = z.infer<typeof productUpdateSchema>;

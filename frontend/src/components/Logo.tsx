@@ -5,10 +5,7 @@ function Logo({ className }: { className?: string }) {
   return (
     <Link
       to='/'
-      className={cn(
-        'text-xl font-semibold text-primary flex items-center justify-center',
-        className
-      )}
+      className={cn('text-xl font-semibold text-primary', className)}
     >
       <span>Yurexstore</span>
     </Link>

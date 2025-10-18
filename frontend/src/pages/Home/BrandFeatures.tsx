@@ -3,15 +3,13 @@ import BrandFeature from './BrandFeature';
 
 function BrandFeatures() {
   return (
-    <section className='py-10 lg:py-16 bg-background'>
-      <div className='container mx-auto'>
-        <ul className='grid grid-cols-2 gap-6 rounded-xl border border-border bg-card p-8 md:grid-cols-4'>
-          {brandFeatures.map((feature, index) => (
-            <BrandFeature key={index} {...feature} />
-          ))}
-        </ul>
-      </div>
-    </section>
+    <div className='bg-muted/50'>
+      <ul className='grid grid-cols-2 gap-6 rounded-xl p-4 md:p-8 sm:grid-cols-3 lg:grid-cols-4'>
+        {brandFeatures.map((feature, index) => (
+          <BrandFeature key={index} {...feature} />
+        ))}
+      </ul>
+    </div>
   );
 }
 
