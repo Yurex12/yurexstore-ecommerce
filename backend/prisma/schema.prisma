@@ -37,18 +37,19 @@ enum NOTIFICATION_STATUS {
 }
 
 model User {
-  id           String         @id @default(cuid())
-  name         String
-  email        String         @unique
-  password     String
-  image        String?
-  role         ROLE
-  cart         Cart?
-  notification Notification[]
-  Review       Review[]
-  Order        Order[]
-  Address      Address[]
-  WishListItem WishListItem[]
+  id                String         @id @default(cuid())
+  name              String
+  email             String         @unique
+  password          String
+  image             String?
+  role              ROLE
+  cart              Cart?
+  notification      Notification[]
+  Review            Review[]
+  Order             Order[]
+  Address           Address[]
+  WishListItem      WishListItem[]
+  purchasedProducts Product[]      @relation("UserPurchases")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -78,6 +79,7 @@ model Product {
   Image        Image[]
   Review       Review[]
   OrderItem    OrderItem[]
+  buyers       User[]         @relation("UserPurchases")
 
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
@@ -86,11 +88,9 @@ model Product {
 }
 
 model Cart {
-  id            String     @id @default(cuid())
-  totalPrice    Float
-  totalQuantity Int
-  userId        String     @unique
-  cartItem      CartItem[]
+  id       String     @id @default(cuid())
+  userId   String     @unique
+  cartItem CartItem[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -105,10 +105,12 @@ model CartItem {
   cartId    String
 
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  Cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([productId, cartId])
 }
 
 model WishListItem {

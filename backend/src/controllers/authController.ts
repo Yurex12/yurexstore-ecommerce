@@ -1,16 +1,16 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import expressAsyncHandler from 'express-async-handler';
+import jwt from 'jsonwebtoken';
 
+import { cookieConfig } from '../config/cookieConfig';
 import prisma from '../lib/prisma';
 import {
   LoginSchema,
   RegisterSchema,
-  updatePasswordSchema,
+  UpdatePasswordSchema,
 } from '../schemas/authSchema';
-import { cookieConfig } from '../config/cookieConfig';
 
 //@desc Register a user
 //@route POST api/auth/register
@@ -38,7 +38,7 @@ export const registerUser = expressAsyncHandler(
         email,
         password: hashedPassword,
         role: 'USER',
-        cart: { create: { totalPrice: 0, totalQuantity: 0 } },
+        cart: {},
       },
       omit: {
         password: true,
@@ -107,6 +107,7 @@ export const loginUser = expressAsyncHandler(
 export const getUserData = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.id;
+
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -121,7 +122,7 @@ export const getUserData = expressAsyncHandler(
       throw new Error('User not found');
     }
 
-    if (user.id !== req.user.userId && req.user.role !== 'ADMIN') {
+    if (req.user.userId !== user.id && req.user.role !== 'ADMIN') {
       res.status(401);
       throw new Error('Unauthorized.');
     }
@@ -137,14 +138,14 @@ export const getUserData = expressAsyncHandler(
 );
 
 //@desc Change user password
-//@route PUT api/auth/update-password/:id
+//@route PATCH api/auth/:id/update-password/
 //@access private
 
 export const updateUserPassword = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.id;
 
-    const { oldPassword, newPassword } = req.body as updatePasswordSchema;
+    const { oldPassword, newPassword } = req.body as UpdatePasswordSchema;
 
     const user = await prisma.user.findUnique({
       where: {

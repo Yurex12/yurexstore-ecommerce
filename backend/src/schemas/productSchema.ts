@@ -4,12 +4,12 @@ export const productSchema = z.object({
   name: z
     .string()
     .trim()
-    .nonempty('Name is required')
+    .min(1, 'Name is required')
     .max(30, 'Name should not be more than 30 characters.'),
   description: z
     .string()
     .trim()
-    .nonempty('Description is required')
+    .min(1, 'Description is required')
     .max(500, 'Name should not be more than 500 characters.'),
   gender: z.enum(['MALE', 'FEMALE', 'BOTH'], {
     error: 'Gender must be male, female or both.',

@@ -25,8 +25,8 @@ router.post('/logout', logoutUser);
 
 router.get('/users/:id', validateToken, getUserData);
 
-router.put(
-  '/update-password/:id',
+router.patch(
+  'users/:id/update-password',
   validateToken,
   validateData(updatePasswordSchema),
   updateUserPassword

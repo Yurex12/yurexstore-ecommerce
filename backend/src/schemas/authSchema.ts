@@ -1,7 +1,7 @@
 import z from 'zod';
 
 export const registerSchema = z.object({
-  name: z.string().trim().min(1, 'Name is required'),
+  name: z.string().trim().nonempty('Name is required'),
   email: z.email('Invalid email address').trim(),
   password: z
     .string()
@@ -21,7 +21,7 @@ export const loginSchema = z.object({
 
 export const updatePasswordSchema = z
   .object({
-    oldPassword: z.string().trim().min(1, 'Password is required'),
+    oldPassword: z.string().trim().nonempty('Password is required'),
     newPassword: z
       .string()
       .trim()

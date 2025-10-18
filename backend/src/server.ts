@@ -8,6 +8,7 @@ dotenv.config();
 import authRoutes from './routes/authRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import productRoutes from './routes/productRoutes';
+import reviewRoutes from './routes/reviewRoutes';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler';
 
 const PORT = process.env.PORT || 9000;
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/reviews', reviewRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
