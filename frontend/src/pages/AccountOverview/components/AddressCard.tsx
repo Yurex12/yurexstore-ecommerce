@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 
 export default function AddressCard() {
   return (
-    <Card className='flex-1 border-0 rounded-xl py-6 lg:py-10 bg-background'>
+    <Card className='border border-input rounded-xl hover:shadow-md transition-shadow shadow-none duration-200 flex-1'>
       <CardHeader className='flex flex-row items-center justify-between'>
         <CardTitle className='font-semibold text-lg text-foreground/90'>
           Address Book

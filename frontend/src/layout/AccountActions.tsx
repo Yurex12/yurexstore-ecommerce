@@ -67,7 +67,7 @@ export default function AccountActions() {
         {/* Wishlist */}
         <DropdownMenuItem
           className='flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground transition hover:bg-accent hover:text-accent-foreground'
-          onClick={() => navigate('/wishlist')}
+          onClick={() => navigate('/account/wishlist')}
         >
           <Heart size={18} className='text-foreground/80' />
           <span>Wishlist</span>
