@@ -165,7 +165,7 @@
   h4,
   h5,
   h6 {
-    @apply font-display font-bold text-foreground/80;
+    @apply font-display font-bold text-foreground;
   }
   /* p {
     @apply font-sans text-foreground/70 leading-relaxed;

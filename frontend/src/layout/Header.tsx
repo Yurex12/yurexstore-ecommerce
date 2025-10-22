@@ -6,6 +6,7 @@ import NavBar from './Navbar';
 
 import { Sheet } from '@/components/ui/sheet';
 import Logo from '@/components/Logo';
+import AccountActions from './AccountActions';
 
 function Header() {
   const [open, setOpen] = useState(false);

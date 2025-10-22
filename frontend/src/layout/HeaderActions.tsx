@@ -1,8 +1,9 @@
-import { MenuIcon, ShoppingCart, User } from 'lucide-react';
+import { MenuIcon, ShoppingCart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { SheetTrigger } from '@/components/ui/sheet';
 import { Link } from 'react-router-dom';
+import AccountActions from './AccountActions';
 
 export default function HeaderActions() {
   return (
@@ -10,7 +11,8 @@ export default function HeaderActions() {
       <Link to='/cart'>
         <ShoppingCart />
       </Link>
-      <User />
+
+      <AccountActions />
 
       <div className='hidden md:block'>
         <Button className='w-fit rounded-lg bg-primary px-6 text-white hover:bg-primary/90'>

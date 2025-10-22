@@ -13,7 +13,7 @@ export default function SignUpPage() {
         <Logo className='text-center uppercase text-2xl' />
         <Card className='shadow-none border border-input'>
           <CardHeader className='text-center'>
-            <CardTitle className='text-xl text-foreground/90'>
+            <CardTitle className='text-lg md:text-2xl text-foreground/90'>
               Create an account
             </CardTitle>
           </CardHeader>

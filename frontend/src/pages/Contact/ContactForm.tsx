@@ -89,7 +89,9 @@ export default function ContactForm() {
               </FormItem>
             )}
           />
-          <Button type='submit'>Send Message</Button>
+          <Button type='submit' className='w-full py-4'>
+            Send Message
+          </Button>
         </form>
       </Form>
     </div>

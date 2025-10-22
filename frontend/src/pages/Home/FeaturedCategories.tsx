@@ -7,7 +7,7 @@ interface CategoryCardProps {
 
 export default function CategoryCard({ name, image }: CategoryCardProps) {
   return (
-    <Card className='relative w-[200px] h-[240px] flex-shrink-0 overflow-hidden rounded-2xl border-none shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl'>
+    <Card className='relative flex-1 h-[240px] flex-shrink-0 overflow-hidden rounded-2xl border-none shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl'>
       {/* Background image */}
       <img
         src={image}
