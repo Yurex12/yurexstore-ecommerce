@@ -12,6 +12,9 @@ import SignUpPage from './pages/SignUp/SignUpPage';
 import AccountLayout from './layout/AccountLayout';
 import SettingsPage from './pages/Settings/SettingsPage';
 import OrdersPage from './pages/Orders/OrdersPage';
+import AccountPage from './pages/Account/AccountPage';
+import ReviewsPage from './pages/Reviews/ReviewsPage';
+import WishlistPage from './pages/Wishlist/WishlistPage';
 
 export default function App() {
   return (
@@ -24,8 +27,11 @@ export default function App() {
           <Route path='/about-us' element={<AboutPage />} />
           <Route path='/contact-us' element={<ContactPage />} />
           <Route element={<AccountLayout />}>
+            <Route path='/account' element={<AccountPage />} />
             <Route path='/account/orders' element={<OrdersPage />} />
             <Route path='/account/settings' element={<SettingsPage />} />
+            <Route path='/account/reviews' element={<ReviewsPage />} />
+            <Route path='/account/wishlist' element={<WishlistPage />} />
           </Route>
         </Route>
         <Route path='/signin' element={<SignInPage />} />
