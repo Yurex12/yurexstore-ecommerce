@@ -19,7 +19,7 @@ export default function AccountSidebar() {
   ];
 
   return (
-    <aside className='flex h-full flex-col justify-between rounded-sm bg-muted/50 p-4'>
+    <aside className='hidden h-full flex-col justify-between rounded-sm bg-muted/50 p-4 md:flex'>
       {/* Header */}
       <div className='space-y-4'>
         <h2 className='text-lg font-semibold text-foreground'>My Account</h2>
