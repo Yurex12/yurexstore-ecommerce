@@ -14,11 +14,11 @@ export default function HeaderActions() {
 
       <AccountActions />
 
-      <div className='hidden md:block'>
+      {/* <div className='hidden md:block'>
         <Button className='w-fit rounded-lg bg-primary px-6 text-white hover:bg-primary/90'>
           Logout
         </Button>
-      </div>
+      </div> */}
 
       <SheetTrigger asChild>
         <MenuIcon className='text-gray-600 lg:hidden' />

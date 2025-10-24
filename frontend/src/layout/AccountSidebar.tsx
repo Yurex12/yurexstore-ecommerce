@@ -1,7 +1,9 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { LogOut, Package, Star, Settings, Home, Heart } from 'lucide-react';
 
 export default function AccountSidebar() {
+  const { pathname } = useLocation();
+
   const links = [
     { name: 'Overview', path: '/account', icon: <Home size={18} /> },
     { name: 'Orders', path: '/account/orders', icon: <Package size={18} /> },
@@ -18,6 +20,12 @@ export default function AccountSidebar() {
     },
   ];
 
+  const isActiveLink = (path: string) => {
+    if (path === '/account') return pathname === '/account'; // exact match
+
+    return pathname.startsWith(path); // works for /orders/:id
+  };
+
   return (
     <aside className='hidden h-full flex-col justify-between rounded-sm bg-muted/50 p-4 md:flex'>
       {/* Header */}
@@ -27,24 +35,25 @@ export default function AccountSidebar() {
         {/* Navigation */}
         <nav>
           <ul className='space-y-1'>
-            {links.map((link) => (
-              <li key={link.name}>
-                <NavLink
-                  end
-                  to={link.path}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 rounded-md p-3 text-sm font-medium transition-colors ${
-                      isActive
+            {links.map((link) => {
+              const active = isActiveLink(link.path);
+
+              return (
+                <li key={link.name}>
+                  <NavLink
+                    to={link.path}
+                    className={`flex items-center gap-3 rounded-md p-3 text-sm font-medium transition-colors ${
+                      active
                         ? 'bg-primary/10 text-primary'
                         : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                    }`
-                  }
-                >
-                  {link.icon}
-                  {link.name}
-                </NavLink>
-              </li>
-            ))}
+                    }`}
+                  >
+                    {link.icon}
+                    {link.name}
+                  </NavLink>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </div>

@@ -8,6 +8,7 @@ import AccountOverviewPage from './pages/AccountOverview/AccountOverviewPage';
 import CartPage from './pages/Cart/CartPage';
 import ContactPage from './pages/Contact/ContactPage';
 import HomePage from './pages/Home/HomePage';
+import OrderDetailsPage from './pages/OrderDetails/OrderDetailsPage';
 import OrdersPage from './pages/Orders/OrdersPage';
 import ReviewsPage from './pages/Reviews/ReviewsPage';
 import SettingsPage from './pages/Settings/SettingsPage';
@@ -15,7 +16,7 @@ import ShopPage from './pages/Shop/ShopPage';
 import SignInPage from './pages/SignIn/SignInPage';
 import SignUpPage from './pages/SignUp/SignUpPage';
 import WishlistPage from './pages/Wishlist/WishlistPage';
-import OrderDetails from './features/order/components/OrderDetails';
+import WriteReviewPage from './pages/WriteReview/WriteReviewPage';
 
 export default function App() {
   return (
@@ -32,7 +33,12 @@ export default function App() {
             <Route path='/account/orders' element={<OrdersPage />} />
             <Route path='/account/settings' element={<SettingsPage />} />
             <Route path='/account/reviews' element={<ReviewsPage />} />
-            <Route path='/account/wishlist' element={<OrderDetails />} />
+            <Route path='/account/wishlist' element={<WishlistPage />} />
+            <Route path='/account/orders/:id' element={<OrderDetailsPage />} />
+            <Route
+              path='/account/reviews/:productId/write'
+              element={<WriteReviewPage />}
+            />
           </Route>
         </Route>
         <Route path='/signin' element={<SignInPage />} />

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useNavigate } from 'react-router-dom';
 
 type Product = {
   id: string;
@@ -19,6 +20,7 @@ type Order = {
 };
 
 export function OrderCard({ order }: { order: Order }) {
+  const navigate = useNavigate();
   const statusColor =
     order.status === 'delivered'
       ? 'bg-green-100 text-green-700'
@@ -81,6 +83,7 @@ export function OrderCard({ order }: { order: Order }) {
             </span>
           </p>
           <Button
+            onClick={() => navigate('/account/orders/12')}
             variant='outline'
             size='sm'
             className='shadow-none text-foreground/70'
