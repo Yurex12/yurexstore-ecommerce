@@ -17,6 +17,9 @@ import SignInPage from './pages/SignIn/SignInPage';
 import SignUpPage from './pages/SignUp/SignUpPage';
 import WishlistPage from './pages/Wishlist/WishlistPage';
 import WriteReviewPage from './pages/WriteReview/WriteReviewPage';
+import ProfilePage from './pages/Profile/ProfilePage';
+import UpdatePasswordPage from './pages/UpdatePassword/UpdatePasswordPage';
+import AddressPage from './pages/Address/AddressPage';
 
 export default function App() {
   return (
@@ -35,10 +38,16 @@ export default function App() {
             <Route path='/account/reviews' element={<ReviewsPage />} />
             <Route path='/account/wishlist' element={<WishlistPage />} />
             <Route path='/account/orders/:id' element={<OrderDetailsPage />} />
+            <Route path='/account/profile' element={<ProfilePage />} />
+            <Route
+              path='/account/update-password'
+              element={<UpdatePasswordPage />}
+            />
             <Route
               path='/account/reviews/:productId/write'
               element={<WriteReviewPage />}
             />
+            <Route path='/account/addresses' element={<AddressPage />} />
           </Route>
         </Route>
         <Route path='/signin' element={<SignInPage />} />

@@ -10,13 +10,15 @@ export default function ProductCategories() {
       <h3 className='text-lg font-semibold'>Categories</h3>
       <ul className='mt-2 space-y-3'>
         {categories.map((category) => (
-          <li
-            className={`hover:cursor-pointer ${
-              queryValue === category.id ? 'text-primary font-medium' : ''
-            }`}
-            onClick={() => handleSearchQuery(category.id)}
-          >
-            {category.name}
+          <li>
+            <button
+              className={`hover:cursor-pointer ${
+                queryValue === category.id ? 'text-primary font-medium' : ''
+              }`}
+              onClick={() => handleSearchQuery(category.id)}
+            >
+              {category.name}
+            </button>
           </li>
         ))}
       </ul>

@@ -55,15 +55,6 @@ export default function AccountActions() {
           <span>Orders</span>
         </DropdownMenuItem>
 
-        {/* Settings */}
-        <DropdownMenuItem
-          className='flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground transition hover:bg-accent hover:text-accent-foreground'
-          onClick={() => navigate('/account/settings')}
-        >
-          <Package size={18} className='text-foreground/80' />
-          <span>Settings</span>
-        </DropdownMenuItem>
-
         {/* Wishlist */}
         <DropdownMenuItem
           className='flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground transition hover:bg-accent hover:text-accent-foreground'

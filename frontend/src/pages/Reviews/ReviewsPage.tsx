@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 type PendingReview = {
   id: string;
@@ -66,6 +67,7 @@ function PendingReviewCard({
   onReview: (id: string) => void;
   onSkip: (id: string) => void;
 }) {
+  const navigate = useNavigate();
   return (
     <div
       className='
@@ -91,7 +93,10 @@ function PendingReviewCard({
 
       {/* ACTIONS */}
       <div className='flex gap-2 justify-end mt-3 sm:mt-0'>
-        <Button onClick={() => onReview(item.id)} className='text-sm'>
+        <Button
+          onClick={() => navigate(`/account/reviews/${item.id}/write`)}
+          className='text-sm'
+        >
           Write Review
         </Button>
       </div>

@@ -1,5 +1,15 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { LogOut, Package, Star, Settings, Home, Heart } from 'lucide-react';
+import {
+  LogOut,
+  Package,
+  Star,
+  Home,
+  Heart,
+  User,
+  Key,
+  MapPin,
+} from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export default function AccountSidebar() {
   const { pathname } = useLocation();
@@ -13,31 +23,42 @@ export default function AccountSidebar() {
       path: '/account/reviews',
       icon: <Star size={18} />,
     },
+  ];
+
+  const accountManagementLinks = [
     {
-      name: 'Settings',
-      path: '/account/settings',
-      icon: <Settings size={18} />,
+      name: 'Profile Info',
+      path: '/account/profile',
+      icon: <User size={16} />,
+    },
+    {
+      name: 'Update Password',
+      path: '/account/update-password',
+      icon: <Key size={16} />,
+    },
+    {
+      name: 'Address Book',
+      path: '/account/addresses',
+      icon: <MapPin size={16} />,
     },
   ];
 
   const isActiveLink = (path: string) => {
     if (path === '/account') return pathname === '/account'; // exact match
-
-    return pathname.startsWith(path); // works for /orders/:id
+    return pathname.startsWith(path);
   };
 
   return (
-    <aside className='hidden h-full flex-col justify-between rounded-sm bg-muted/50 p-4 md:flex'>
+    <aside className='hidden h-full flex-col justify-between rounded-sm bg-muted/50 p-4 md:flex w-64'>
       {/* Header */}
-      <div className='space-y-4'>
+      <div className='space-y-6'>
         <h2 className='text-lg font-semibold text-foreground'>My Account</h2>
 
-        {/* Navigation */}
-        <nav>
+        {/* Main navigation */}
+        <nav className='space-y-4'>
           <ul className='space-y-1'>
             {links.map((link) => {
               const active = isActiveLink(link.path);
-
               return (
                 <li key={link.name}>
                   <NavLink
@@ -55,6 +76,35 @@ export default function AccountSidebar() {
               );
             })}
           </ul>
+
+          <Separator />
+
+          {/* Account Management */}
+          <div className='space-y-1'>
+            <p className='px-3 text-xs font-semibold uppercase text-muted-foreground'>
+              Account Management
+            </p>
+            <ul className='space-y-1'>
+              {accountManagementLinks.map((link) => {
+                const active = isActiveLink(link.path);
+                return (
+                  <li key={link.name}>
+                    <NavLink
+                      to={link.path}
+                      className={`flex items-center gap-2 rounded-md p-3 text-sm font-medium transition-colors ${
+                        active
+                          ? 'bg-primary/10 text-primary'
+                          : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                      }`}
+                    >
+                      {link.icon}
+                      {link.name}
+                    </NavLink>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </nav>
       </div>
 
