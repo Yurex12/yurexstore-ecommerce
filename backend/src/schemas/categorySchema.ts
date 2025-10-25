@@ -3,6 +3,7 @@ import z from 'zod';
 export const categorySchema = z.object({
   name: z.string().trim().nonempty('Name is required'),
   image: z.url().nonempty('Please provide an image url'),
+  description: z.string().nonempty('Description is required'),
 });
 
 export const categoryUpdateSchema = categorySchema

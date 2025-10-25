@@ -22,39 +22,50 @@ import UpdatePasswordPage from './pages/UpdatePassword/UpdatePasswordPage';
 import AddressPage from './pages/Address/AddressPage';
 import AccountMobileMenu from './layout/AccountMobileMenu';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient();
+
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<AppLayout />}>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/shop' element={<ShopPage />} />
-          <Route path='/cart' element={<CartPage />} />
-          <Route path='/about-us' element={<AboutPage />} />
-          <Route path='/contact-us' element={<ContactPage />} />
-          <Route element={<AccountLayout />}>
-            <Route path='/account' element={<AccountOverviewPage />} />
-            <Route path='/account/orders' element={<OrdersPage />} />
-            <Route path='/account/settings' element={<SettingsPage />} />
-            <Route path='/account/reviews' element={<ReviewsPage />} />
-            <Route path='/account/wishlist' element={<WishlistPage />} />
-            <Route path='/account/orders/:id' element={<OrderDetailsPage />} />
-            <Route path='/account/profile' element={<ProfilePage />} />
-            <Route
-              path='/account/update-password'
-              element={<UpdatePasswordPage />}
-            />
-            <Route
-              path='/account/reviews/:productId/write'
-              element={<WriteReviewPage />}
-            />
-            <Route path='/account/addresses' element={<AddressPage />} />
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <BrowserRouter>
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route path='/' element={<HomePage />} />
+            <Route path='/shop' element={<ShopPage />} />
+            <Route path='/cart' element={<CartPage />} />
+            <Route path='/about-us' element={<AboutPage />} />
+            <Route path='/contact-us' element={<ContactPage />} />
+            <Route element={<AccountLayout />}>
+              <Route path='/account' element={<AccountOverviewPage />} />
+              <Route path='/account/orders' element={<OrdersPage />} />
+              <Route path='/account/settings' element={<SettingsPage />} />
+              <Route path='/account/reviews' element={<ReviewsPage />} />
+              <Route path='/account/wishlist' element={<WishlistPage />} />
+              <Route
+                path='/account/orders/:id'
+                element={<OrderDetailsPage />}
+              />
+              <Route path='/account/profile' element={<ProfilePage />} />
+              <Route
+                path='/account/update-password'
+                element={<UpdatePasswordPage />}
+              />
+              <Route
+                path='/account/reviews/:productId/write'
+                element={<WriteReviewPage />}
+              />
+              <Route path='/account/addresses' element={<AddressPage />} />
+            </Route>
+            <Route path='/account/menu' element={<AccountMobileMenu />} />
           </Route>
-          <Route path='/account/menu' element={<AccountMobileMenu />} />
-        </Route>
-        <Route path='/signin' element={<SignInPage />} />
-        <Route path='/signup' element={<SignUpPage />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path='/signin' element={<SignInPage />} />
+          <Route path='/signup' element={<SignUpPage />} />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }

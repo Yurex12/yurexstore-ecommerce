@@ -53,7 +53,7 @@ export const getCategory = expressAsyncHandler(
 //@access private(ADMIN ONLY)
 export const createCategory = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, image } = req.body as CategorySchema;
+    const { name, ...rest } = req.body as CategorySchema;
 
     const nameLowercase = name.toLowerCase();
 
@@ -71,7 +71,7 @@ export const createCategory = expressAsyncHandler(
     const newCategory = await prisma.category.create({
       data: {
         name: nameLowercase,
-        image,
+        ...rest,
       },
     });
 
@@ -88,26 +88,22 @@ export const createCategory = expressAsyncHandler(
 //@access private(ADMIN ONLY)
 export const updateCategory = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, image } = req.body as CategoryUpdateSchema;
+    const { name, ...rest } = req.body as CategoryUpdateSchema;
     const { id: categoryId } = req.params;
 
-    const updateData: CategoryUpdateSchema = {};
+    const updateData: CategoryUpdateSchema = { ...rest };
 
     if (name) {
-      const categoryName = await prisma.category.findUnique({
+      const category = await prisma.category.findUnique({
         where: { name },
       });
 
-      if (categoryName && categoryName.id !== categoryId) {
-        res.status(400);
+      if (category && category.id !== categoryId) {
+        res.status(409);
         throw new Error('This category name already exists.');
       }
 
       updateData.name = name.toLowerCase();
-    }
-
-    if (image) {
-      updateData.image = image;
     }
 
     const updatedCategory = await prisma.category.update({
