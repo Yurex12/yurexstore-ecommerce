@@ -2,29 +2,27 @@ import { Card } from '@/components/ui/card';
 
 interface CategoryCardProps {
   name: string;
-  image: string;
+  desc: string;
+  image: string; // png or icon path
 }
 
-export default function CategoryCard({ name, image }: CategoryCardProps) {
+export default function CategoryCard({ name, desc, image }: CategoryCardProps) {
   return (
-    <Card className='relative flex-1 h-[240px] flex-shrink-0 overflow-hidden rounded-2xl border-none shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl'>
-      {/* Background image */}
-      <img
-        src={image}
-        alt={name}
-        className='absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'
-      />
-
-      {/* Gradient overlay */}
-      <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent'></div>
-
-      {/* Text content */}
-      <div className='absolute bottom-4 left-4 right-4 text-left'>
-        <h3 className='text-lg font-semibold text-white drop-shadow-md'>
-          {name}
-        </h3>
-        <p className='text-xs text-gray-200/90 mt-1'>Explore Collection</p>
+    <div className='flex flex-col shrink-0 flex-1 items-center justify-center gap-3 py-10 px-10 w-full rounded-xl cursor-pointer border bg-background text-foreground/80 transition-all hover:border-primary hover:shadow-md'>
+      <div className='bg-primary/5 p-6 rounded-full'>
+        <img
+          src={image}
+          alt={name}
+          width={48}
+          height={48}
+          className='object-contain'
+        />
       </div>
-    </Card>
+
+      <div className='text-center'>
+        <p className='font-semibold text-sm'>{name}</p>
+        <p className='text-xs text-muted-foreground'>{desc}</p>
+      </div>
+    </div>
   );
 }

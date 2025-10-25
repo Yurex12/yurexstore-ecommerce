@@ -39,4 +39,4 @@ export const updatePasswordSchema = z
 
 export type LoginSchema = z.infer<typeof loginSchema>;
 export type RegisterSchema = z.infer<typeof registerSchema>;
-export type updatePasswordSchema = z.infer<typeof updatePasswordSchema>;
+export type UpdatePasswordSchema = z.infer<typeof updatePasswordSchema>;

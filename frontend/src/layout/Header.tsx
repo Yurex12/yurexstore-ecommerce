@@ -4,9 +4,8 @@ import HeaderActions from './HeaderActions';
 import MobileNav from './MobileNav';
 import NavBar from './Navbar';
 
-import { Sheet } from '@/components/ui/sheet';
 import Logo from '@/components/Logo';
-import AccountActions from './AccountActions';
+import { Sheet } from '@/components/ui/sheet';
 
 function Header() {
   const [open, setOpen] = useState(false);
