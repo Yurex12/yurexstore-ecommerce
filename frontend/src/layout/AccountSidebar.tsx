@@ -81,9 +81,9 @@ export default function AccountSidebar() {
 
           {/* Account Management */}
           <div className='space-y-1'>
-            <p className='px-3 text-xs font-semibold uppercase text-muted-foreground'>
+            <h4 className='px-3 text-xs font-semibold uppercase'>
               Account Management
-            </p>
+            </h4>
             <ul className='space-y-1'>
               {accountManagementLinks.map((link) => {
                 const active = isActiveLink(link.path);

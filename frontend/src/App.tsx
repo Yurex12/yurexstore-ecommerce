@@ -20,6 +20,7 @@ import WriteReviewPage from './pages/WriteReview/WriteReviewPage';
 import ProfilePage from './pages/Profile/ProfilePage';
 import UpdatePasswordPage from './pages/UpdatePassword/UpdatePasswordPage';
 import AddressPage from './pages/Address/AddressPage';
+import AccountMobileMenu from './layout/AccountMobileMenu';
 
 export default function App() {
   return (
@@ -49,6 +50,7 @@ export default function App() {
             />
             <Route path='/account/addresses' element={<AddressPage />} />
           </Route>
+          <Route path='/account/menu' element={<AccountMobileMenu />} />
         </Route>
         <Route path='/signin' element={<SignInPage />} />
         <Route path='/signup' element={<SignUpPage />} />

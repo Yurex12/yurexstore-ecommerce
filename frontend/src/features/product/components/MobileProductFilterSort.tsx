@@ -6,7 +6,7 @@ import MobileSortOptions from './MobileSortOption';
 export default function MobileFilterSort() {
   return (
     <div className='fixed bottom-10 z-10 block w-full md:hidden'>
-      <div className='mx-auto flex w-45 justify-between rounded-full  px-4 py-1 shadow-2xl bg-background text-secondary-foreground border border-primary'>
+      <div className='mx-auto flex w-45 justify-between rounded-full  px-4 py-1 shadow-2xl bg-background text-secondary-foreground border border-primary/40'>
         <Sheet>
           <SheetTrigger asChild>
             <button className='flex items-center gap-1 cursor-pointer text-primary'>
