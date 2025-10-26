@@ -6,10 +6,10 @@ import MobileSortOptions from './MobileSortOption';
 export default function MobileFilterSort() {
   return (
     <div className='fixed bottom-10 z-10 block w-full md:hidden'>
-      <div className='mx-auto flex w-45 justify-between rounded-full  px-4 py-1 shadow-2xl bg-background text-secondary-foreground border border-primary/40'>
+      <div className='mx-auto flex w-45 justify-between rounded-full  shadow-2xl bg-foreground/80 text-background'>
         <Sheet>
           <SheetTrigger asChild>
-            <button className='flex items-center gap-1 cursor-pointer text-primary'>
+            <button className='flex items-center gap-1 cursor-pointer px-4 py-2 flex-1'>
               <span>Sort</span>
               <ArrowUpDown className='size-4' />
             </button>
@@ -18,11 +18,11 @@ export default function MobileFilterSort() {
           <MobileSortOptions />
         </Sheet>
 
-        <span className='text-primary'>|</span>
+        <span className='mt-2'>|</span>
 
         <Sheet>
           <SheetTrigger asChild>
-            <button className='flex items-center gap-1 cursor-pointer text-primary'>
+            <button className='flex items-center gap-1 cursor-pointer px-4 py-2 flex-1'>
               <span> Filter</span>
               <Filter className='size-4' />
             </button>

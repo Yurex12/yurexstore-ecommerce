@@ -1,4 +1,4 @@
-import type { Category, Color, SortOption } from '../types';
+import type { Color, SortOption } from '../types';
 
 export const sortOptions: SortOption[] = [
   { id: 'most-popular', name: 'Most Popular' },
@@ -14,13 +14,6 @@ export const colors: Color[] = [
   { id: 'blue', name: 'bg-blue-600', ringValue: 'ring-blue-600' },
   { id: 'red', name: 'bg-red-600', ringValue: 'ring-red-600' },
   { id: 'green', name: 'bg-green-600', ringValue: 'ring-green-600' },
-];
-
-export const categories: Category[] = [
-  { id: 'jewelry', name: 'Jewelry' },
-  { id: 'mens-apparel', name: "Men's Apparel" },
-  { id: 'women-wear', name: "Women's Wear" },
-  { id: 'electronics', name: 'Electronics' },
 ];
 
 export const genders: string[] = ['male', 'female', 'both'];

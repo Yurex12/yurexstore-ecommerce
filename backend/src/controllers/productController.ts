@@ -11,23 +11,31 @@ export const getProducts = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const products = await prisma.product.findMany({
       include: {
-        Image: true,
-        Review: true,
-        category: {
+        images: {
           select: {
             id: true,
+            url: true,
+            fileId: true,
+          },
+          take: 1,
+        },
+        category: {
+          select: {
             name: true,
+          },
+        },
+        reviews: {
+          select: {
+            rating: true,
           },
         },
       },
     });
 
-    const totalProduct = await prisma.product.count();
-
     res.json({
       success: true,
       message: 'Successful.',
-      data: { products, length: totalProduct },
+      data: { products },
     });
   }
 );
@@ -44,8 +52,8 @@ export const getProduct = expressAsyncHandler(
         id: productId,
       },
       include: {
-        Image: true,
-        Review: true,
+        images: true,
+        reviews: true,
         category: {
           select: {
             id: true,
@@ -90,7 +98,7 @@ export const createProduct = expressAsyncHandler(
       data: {
         ...productData,
         categoryId,
-        Image: {
+        images: {
           createMany: {
             data: images,
           },
@@ -132,7 +140,7 @@ export const updateProduct = expressAsyncHandler(
     }
 
     if (images && images.length > 0) {
-      updateData.Images = {
+      updateData.images = {
         deleteMany: {},
         createMany: { data: images },
       };

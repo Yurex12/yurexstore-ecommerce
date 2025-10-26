@@ -6,6 +6,7 @@ import {
   CategorySchema,
   CategoryUpdateSchema,
 } from '../schemas/categorySchema';
+import { slugify } from '../utils/helpers';
 
 //@desc fetch categories
 //@route GET api/category
@@ -55,11 +56,11 @@ export const createCategory = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, ...rest } = req.body as CategorySchema;
 
-    const nameLowercase = name.toLowerCase();
+    const slug = slugify(name);
 
     const category = await prisma.category.findUnique({
       where: {
-        name: nameLowercase,
+        slug,
       },
     });
 
@@ -70,7 +71,8 @@ export const createCategory = expressAsyncHandler(
 
     const newCategory = await prisma.category.create({
       data: {
-        name: nameLowercase,
+        name,
+        slug,
         ...rest,
       },
     });

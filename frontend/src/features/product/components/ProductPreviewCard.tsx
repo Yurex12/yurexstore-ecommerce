@@ -1,14 +1,9 @@
-import { useState } from 'react';
-
-import { useNavigate } from 'react-router-dom';
-import { Heart, Star } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/helpers';
-
+import { Star } from 'lucide-react';
 import type { Product } from '../types';
+import { useNavigate } from 'react-router-dom';
 
-export default function ProductCard({
+export default function ProductPreviewCard({
   id,
   name,
   images,
@@ -16,8 +11,6 @@ export default function ProductCard({
   category,
   reviews,
 }: Product) {
-  const [isLiked, setIsLiked] = useState(false);
-
   const navigate = useNavigate();
 
   const totalReviews = reviews.length;
@@ -31,19 +24,9 @@ export default function ProductCard({
   return (
     <div
       className='p-1 border border-input/50 pb-2 sm:p-4 space-y-2'
-      // onClick={() => navigate(`/products/${id}`)}
+      onClick={() => navigate(`/products/${id}`)}
     >
-      <div className='w-full h-48 sm:h-60 bg-muted/60 flex items-center justify-center relative'>
-        <button
-          className='absolute right-1 top-2 inline-block rounded-full bg-primary/5 p-1 shadow-sm hover:bg-primary/20 sm:right-4'
-          onClick={() => setIsLiked((cur) => !cur)}
-        >
-          <Heart
-            className={`text-lg ${
-              isLiked ? 'fill-primary text-primary' : 'text-foreground/50'
-            }`}
-          />
-        </button>
+      <div className='w-full h-48 sm:h-60 bg-muted/60 flex items-center justify-center'>
         <img
           src={images.at(0)?.url}
           alt={name}
@@ -69,13 +52,6 @@ export default function ProductCard({
             </div>
           )}
         </div>
-
-        <Button
-          className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
-          variant='outline'
-        >
-          Add to cart
-        </Button>
       </div>
     </div>
   );

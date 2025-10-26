@@ -1,9 +1,27 @@
+import { Spinner } from '@/components/ui/spinner';
+import useCategories from '@/features/category/hook/useCategories';
 import { useSearchQuery } from '@/hooks/useSearchQuery';
-
-import { categories } from '../constants';
 
 export default function ProductCategories() {
   const { queryValue, handleSearchQuery } = useSearchQuery('category', '');
+
+  const { categories, error, isPending } = useCategories();
+
+  if (isPending) {
+    return (
+      <div className='flex items-center gap-4'>
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <p>{error.message}</p>;
+  }
+
+  if (!categories?.length) {
+    return <p>No categories found</p>;
+  }
 
   return (
     <div className='pb-4'>
@@ -17,7 +35,7 @@ export default function ProductCategories() {
               }`}
               onClick={() => handleSearchQuery(category.id)}
             >
-              {category.name}
+              {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
             </button>
           </li>
         ))}

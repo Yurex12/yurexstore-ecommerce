@@ -9,7 +9,33 @@ export type Color = {
   ringValue: string;
 };
 
-export type Category = {
+type Images = {
+  id: string;
+  url: string;
+  fileId: string;
+};
+
+type Review = {
+  rating: number;
+};
+
+export type Product = {
   id: string;
   name: string;
+  description: string;
+  price: number;
+  quantity: number;
+  images: Images[];
+  gender: string;
+  categoryId: string;
+  category: { name: string };
+  reviews: Review[];
+};
+
+export type Products = {
+  success: boolean;
+  message: string;
+  data: {
+    products: Product[];
+  };
 };

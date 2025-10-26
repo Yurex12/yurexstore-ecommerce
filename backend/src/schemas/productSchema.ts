@@ -17,12 +17,16 @@ export const productSchema = z.object({
   price: z.coerce.number().positive('Price must be greater than 0'),
   quantity: z.coerce.number().positive('Quantity must be greater than 0'),
   categoryId: z.string().trim().nonempty('Category is required'),
-  images: z.array(
-    z.object({
-      url: z.url().nonempty('Image url is required'),
-      fileId: z.string().nonempty('File id is required'),
-    })
-  ),
+  images: z
+    .array(
+      z.object({
+        url: z.url().nonempty('Image url is required'),
+        fileId: z.string().nonempty('File id is required'),
+      })
+    )
+    .refine((data) => data.length > 0, {
+      error: 'Include at least one image',
+    }),
 });
 
 export const productUpdateSchema = productSchema

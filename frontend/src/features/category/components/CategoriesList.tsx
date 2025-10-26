@@ -1,7 +1,9 @@
-import { Spinner } from '@/components/ui/spinner';
 import useCategories from '../hook/useCategories';
-import CategoryCard from './CategoryCard';
+
+import { Spinner } from '@/components/ui/spinner';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+
+import CategoryCard from './CategoryCard';
 
 export default function CategoriesList() {
   const { categories, isPending, error } = useCategories();

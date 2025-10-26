@@ -44,11 +44,11 @@ model User {
   image             String?
   role              ROLE
   cart              Cart?
-  notification      Notification[]
-  Review            Review[]
-  Order             Order[]
-  Address           Address[]
-  WishListItem      WishListItem[]
+  notifications     Notification[]
+  reviews           Review[]
+  orders            Order[]
+  addresses         Address[]
+  wishListItems     WishListItem[]
   purchasedProducts Product[]      @relation("UserPurchases")
 
   createdAt DateTime @default(now())
@@ -58,40 +58,56 @@ model User {
 model Category {
   id          String @id @default(cuid())
   name        String @unique
+  slug        String @unique
   image       String
   description String
 
-  product Product[]
+  products Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Product {
-  id           String         @id @default(cuid())
-  name         String
-  price        Float
-  quantity     Int
-  gender       GENDER         @default(BOTH)
-  description  String         @db.Text
-  categoryId   String
-  CartItem     CartItem[]
-  WishListItem WishListItem[]
-  Image        Image[]
-  Review       Review[]
-  OrderItem    OrderItem[]
-  buyers       User[]         @relation("UserPurchases")
+  id              String           @id @default(cuid())
+  name            String
+  price           Float
+  quantity        Int
+  gender          GENDER           @default(BOTH)
+  description     String           @db.Text
+  categoryId      String
+  variantTypeName String?
+  cartItems       CartItem[]
+  wishListItems   WishListItem[]
+  images          Image[]
+  reviews         Review[]
+  orderItems      OrderItem[]
+  productVariant  ProductVariant[]
 
+  buyers   User[]   @relation("UserPurchases")
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+model ProductVariant {
+  id        String @id @default(cuid())
+  value     String
+  price     Float
+  quantity  Int
+  productId String
+
+  product Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Cart {
-  id       String     @id @default(cuid())
-  userId   String     @unique
-  cartItem CartItem[]
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  cartItems CartItem[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -160,17 +176,16 @@ model Review {
 }
 
 model Order {
-  id          String       @id @default(cuid())
-  totalPrice  Float
-  orderStatus ORDER_STATUS @default(PENDING)
-  userId      String
-  street      String
-  city        String
-  state       String
-  phone       String
-  orderItem   OrderItem[]
-
-  notification Notification[]
+  id            String         @id @default(cuid())
+  totalPrice    Float
+  orderStatus   ORDER_STATUS   @default(PENDING)
+  userId        String
+  street        String
+  city          String
+  state         String
+  phone         String
+  orderItems    OrderItem[]
+  notifications Notification[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
