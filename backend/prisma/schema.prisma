@@ -43,12 +43,12 @@ model User {
   password          String
   image             String?
   role              ROLE
-  cart              Cart?
   notifications     Notification[]
   reviews           Review[]
   orders            Order[]
   addresses         Address[]
   wishListItems     WishListItem[]
+  cartItems         CartItem[]
   purchasedProducts Product[]      @relation("UserPurchases")
 
   createdAt DateTime @default(now())
@@ -92,11 +92,12 @@ model Product {
 }
 
 model ProductVariant {
-  id        String @id @default(cuid())
+  id        String     @id @default(cuid())
   value     String
   price     Float
   quantity  Int
   productId String
+  cartItems CartItem[]
 
   product Product @relation(fields: [productId], references: [id])
 
@@ -104,30 +105,21 @@ model ProductVariant {
   updatedAt DateTime @updatedAt
 }
 
-model Cart {
-  id        String     @id @default(cuid())
-  userId    String     @unique
-  cartItems CartItem[]
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model CartItem {
-  id        String @id @default(cuid())
-  productId String
-  quantity  Int
-  cartId    String
+  id               String  @id @default(cuid())
+  productId        String
+  userId           String
+  quantity         Int
+  productVariantId String?
 
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product        Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productVariant ProductVariant? @relation(fields: [productVariantId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([productId, cartId])
+  @@unique([userId, productId, productVariantId])
 }
 
 model WishListItem {

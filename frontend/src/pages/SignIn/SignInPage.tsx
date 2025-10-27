@@ -8,7 +8,7 @@ import SocialLogin from '@/features/auth/components/SocialLogin';
 
 export default function SignInPage() {
   return (
-    <div className='flex h-screen flex-col items-center justify-center gap-6 p-4 md:p-10'>
+    <div className='flex h-svh flex-col items-center justify-center gap-6 p-4 md:p-10'>
       <div className='flex w-full max-w-md flex-col gap-y-6'>
         <Logo className='text-center uppercase text-2xl' />
         <Card className='shadow-none border border-input'>
@@ -22,7 +22,7 @@ export default function SignInPage() {
             <SocialLogin />
             <div className='text-center text-sm text-foreground/70'>
               Don&apos;t have an account?{' '}
-              <Link to='/signup' className='underline underline-offset-4'>
+              <Link to='/register' className='underline underline-offset-4'>
                 Sign up
               </Link>
             </div>

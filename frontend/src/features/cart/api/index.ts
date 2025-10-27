@@ -3,17 +3,17 @@ import type { AxiosError } from 'axios';
 import { api } from '@/services/api';
 
 import type { ApiError } from '@/services/types';
-import type { Categories } from '../types';
+import type { CartRes } from '../types';
 
-export async function getCategories() {
+export async function getCart() {
   try {
-    const res = await api.get<Categories>('/categories');
+    const res = await api.get<CartRes>('/cart');
 
     if (!res.data) {
-      throw new Error('Could not fetch categories');
+      throw new Error('Could not fetch cart');
     }
 
-    return res.data.data.categories;
+    return res.data.data.cart;
   } catch (error) {
     const err = error as AxiosError<ApiError>;
 
@@ -21,10 +21,10 @@ export async function getCategories() {
 
     let message = err.response?.data.message;
 
-    if (err.response?.status === 500) {
+    if (err.status === 500) {
       message = 'Something went wrong';
     }
 
-    throw new Error(message || 'Could not fetch categories');
+    throw new Error(message || 'Could not fetch cart');
   }
 }

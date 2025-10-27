@@ -13,28 +13,40 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { signInSchema, type SignInSchema } from '@/schemas/authSchema';
+import { useNavigate } from 'react-router-dom';
+import useSignIn from '../hooks/useSignIn';
+import { signInSchema, type SignInSchema } from '../schemas/signInSchema';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function SignInForm() {
+  const { signIn, isPending } = useSignIn();
+
+  const navigate = useNavigate();
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      identifier: '',
-      password: '',
+      email: 'sheriffamar3@gmail.com',
+      password: 'Adeyemi@17',
       rememberMe: false,
     },
   });
 
-  async function onsubmit(values: SignInSchema) {
-    console.log(values);
+  function onsubmit(userDetails: SignInSchema) {
+    signIn(userDetails, {
+      onSuccess() {
+        navigate('/');
+      },
+    });
   }
+
+  const isSubmitting = form.formState.isSubmitting || isPending;
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onsubmit)} className='space-y-6'>
         <FormField
           control={form.control}
-          name='identifier'
+          name='email'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email </FormLabel>
@@ -43,7 +55,7 @@ export default function SignInForm() {
                   placeholder='johndoe@gmail.com'
                   type='text'
                   {...field}
-                  disabled={form.formState.isSubmitting}
+                  disabled={isSubmitting}
                 />
               </FormControl>
               <FormMessage />
@@ -61,7 +73,7 @@ export default function SignInForm() {
                   placeholder='********'
                   type='password'
                   {...field}
-                  disabled={form.formState.isSubmitting}
+                  disabled={isSubmitting}
                 />
               </FormControl>
               <FormMessage />
@@ -79,7 +91,7 @@ export default function SignInForm() {
                   checked={field.value}
                   onCheckedChange={(checked) => field.onChange(checked)}
                   onBlur={field.onBlur}
-                  disabled={form.formState.isSubmitting}
+                  disabled={isSubmitting}
                 />
               </FormControl>
               <FormLabel htmlFor='rememberMe' className='text-foreground/70'>
@@ -90,12 +102,8 @@ export default function SignInForm() {
           )}
         />
 
-        <Button
-          type='submit'
-          className='w-full'
-          disabled={form.formState.isSubmitting}
-        >
-          Sign in
+        <Button type='submit' className='w-full' disabled={isSubmitting}>
+          {isSubmitting ? <Spinner /> : <span>Sign in</span>}
         </Button>
       </form>
     </Form>

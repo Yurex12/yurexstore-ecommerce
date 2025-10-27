@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { signUpSchema, type SignUpSchema } from '@/schemas/authSchema';
+import { signUpSchema, type SignUpSchema } from '../schemas/signUpSchema';
 
 export default function SignUpForm() {
   const form = useForm<SignUpSchema>({

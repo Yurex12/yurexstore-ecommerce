@@ -38,7 +38,6 @@ export const registerUser = expressAsyncHandler(
         email,
         password: hashedPassword,
         role: 'USER',
-        cart: {},
       },
       omit: {
         password: true,
@@ -48,7 +47,7 @@ export const registerUser = expressAsyncHandler(
     res.status(201).json({
       success: true,
       message: 'Registration successful.',
-      data: { user: newUser },
+      user: newUser,
     });
   }
 );
@@ -94,9 +93,7 @@ export const loginUser = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Login successful',
-      data: {
-        user: userWithoutPassword,
-      },
+      user: userWithoutPassword,
     });
   }
 );

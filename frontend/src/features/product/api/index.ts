@@ -19,6 +19,12 @@ export async function getProducts() {
 
     console.log(err.response?.data.message);
 
-    throw new Error('Could not fetch products');
+    let message = err.response?.data.message;
+
+    if (err.response?.status === 500) {
+      message = 'Something went wrong';
+    }
+
+    throw new Error(message || 'Could not fetch products.');
   }
 }
