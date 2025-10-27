@@ -16,7 +16,7 @@ import {
 
 const router = express.Router();
 
-router.get('/', getCategories);
+router.get('/', validateToken, getCategories);
 
 router.get('/:id', validateToken, getCategory);
 

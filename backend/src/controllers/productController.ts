@@ -17,7 +17,6 @@ export const getProducts = expressAsyncHandler(
             url: true,
             fileId: true,
           },
-          take: 1,
         },
         category: {
           select: {
@@ -29,13 +28,14 @@ export const getProducts = expressAsyncHandler(
             rating: true,
           },
         },
+        productVariant: true,
       },
     });
 
     res.json({
       success: true,
       message: 'Successful.',
-      data: { products },
+      products,
     });
   }
 );

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/helpers';
 
 import type { Product } from '../types';
+import AddToCartBtn from '@/features/cart/components/AddToCartBtn';
 
 export default function ProductCard({
   id,
@@ -15,6 +16,7 @@ export default function ProductCard({
   price,
   category,
   reviews,
+  productVariant,
 }: Product) {
   const [isLiked, setIsLiked] = useState(false);
 
@@ -70,12 +72,16 @@ export default function ProductCard({
           )}
         </div>
 
-        <Button
-          className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
-          variant='outline'
-        >
-          Add to cart
-        </Button>
+        {productVariant.length ? (
+          <Button
+            className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
+            variant='outline'
+          >
+            Add to cart
+          </Button>
+        ) : (
+          <AddToCartBtn productId={id} />
+        )}
       </div>
     </div>
   );

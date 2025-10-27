@@ -1,11 +1,9 @@
-export type Cart = {
+export type CartItem = {
   id: string;
 };
 
-export type CartRes = {
+export type CartItemRes = {
   success: boolean;
   message: string;
-  data: {
-    cart: Cart;
-  };
+  cartItem: CartItem;
 };

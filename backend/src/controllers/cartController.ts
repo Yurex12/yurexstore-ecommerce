@@ -39,19 +39,19 @@ export const getCart = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Successful.',
-      data: { cart: cartItems },
+      cart: cartItems,
     });
   }
 );
 
 //@desc Add item/increment in cart
-//@route PATCH /api/cart/
+//@route POST /api/cart/
 //@access Private
 export const addItemToCart = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user.userId;
 
-    const { productId, productVariantId } = req.body;
+    let { productId, productVariantId } = req.body;
 
     const product = await prisma.product.findUnique({
       where: {
@@ -69,40 +69,37 @@ export const addItemToCart = expressAsyncHandler(
       throw new Error('Product not found');
     }
 
-    const productVariant = await prisma.productVariant.findUnique({
-      where: {
-        id: productVariantId,
-      },
-      select: {
-        quantity: true,
-        productId: true,
-      },
-    });
+    let productVariant = null;
 
-    if (productVariantId && !productVariant) {
-      res.status(404);
-      throw new Error('Product variant not found');
+    if (productVariantId) {
+      productVariant = await prisma.productVariant.findUnique({
+        where: {
+          id: productVariantId,
+        },
+        select: {
+          quantity: true,
+          productId: true,
+        },
+      });
+
+      if (!productVariant) {
+        res.status(404);
+        throw new Error('Product variant not found');
+      }
     }
-
-    // if (product.variantTypeName && !productVariant) {
-    //   res.status(404);
-    //   throw new Error('This variant does not exist for this product');
-    // }
 
     if (productVariant && product.id !== productVariant.productId) {
       res.status(404);
       throw new Error('This variant does not exist for this product');
     }
 
-    let cartItem;
+    let cartItem = null;
 
-    const itemInCart = await prisma.cartItem.findUnique({
+    const itemInCart = await prisma.cartItem.findFirst({
       where: {
-        userId_productId_productVariantId: {
-          userId,
-          productId,
-          productVariantId: productVariantId || null,
-        },
+        userId,
+        productId,
+        productVariantId: productVariantId || null,
       },
       select: {
         id: true,
@@ -170,13 +167,13 @@ export const addItemToCart = expressAsyncHandler(
     res.status(201).json({
       success: true,
       message: 'Successful.',
-      data: { cartItem },
+      cartItem,
     });
   }
 );
 
 //@desc update/remove item in cart
-//@route PATCH /api/cart/decrement
+//@route PATCH /api/cart/
 //@access Private
 export const removeItemFromCart = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -184,13 +181,11 @@ export const removeItemFromCart = expressAsyncHandler(
 
     const { productId, productVariantId } = req.body;
 
-    const itemInCart = await prisma.cartItem.findUnique({
+    const itemInCart = await prisma.cartItem.findFirst({
       where: {
-        userId_productId_productVariantId: {
-          userId,
-          productId,
-          productVariantId: productVariantId || null,
-        },
+        productId,
+        userId,
+        productVariantId: productVariantId || null,
       },
       select: {
         id: true,
@@ -225,7 +220,7 @@ export const removeItemFromCart = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Successful.',
-      data: { cartItem },
+      cartItem,
     });
   }
 );

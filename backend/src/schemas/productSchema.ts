@@ -17,6 +17,20 @@ export const productSchema = z.object({
   price: z.coerce.number().positive('Price must be greater than 0'),
   quantity: z.coerce.number().positive('Quantity must be greater than 0'),
   categoryId: z.string().trim().nonempty('Category is required'),
+  variantTypeName: z.string().trim().optional(),
+  productVariants: z
+    .array(
+      z.object({
+        value: z.string().nonempty('Variant value is required'),
+        price: z.coerce
+          .number()
+          .positive('Variant Price must be greater than 0'),
+        quantity: z.coerce
+          .number()
+          .positive('Variant Quantity must be greater than 0'),
+      })
+    )
+    .optional(),
   images: z
     .array(
       z.object({

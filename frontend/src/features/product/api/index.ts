@@ -13,7 +13,7 @@ export async function getProducts() {
       throw new Error('Could not fetch products');
     }
 
-    return res.data.data.products;
+    return res.data.products;
   } catch (error) {
     const err = error as AxiosError<ApiError>;
 

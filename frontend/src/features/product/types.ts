@@ -19,6 +19,16 @@ type Review = {
   rating: number;
 };
 
+type productVariant = {
+  id: string;
+  productId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  price: number;
+  quantity: number;
+  value: string;
+};
+
 export type Product = {
   id: string;
   name: string;
@@ -30,12 +40,11 @@ export type Product = {
   categoryId: string;
   category: { name: string };
   reviews: Review[];
+  productVariant: productVariant[];
 };
 
 export type Products = {
   success: boolean;
   message: string;
-  data: {
-    products: Product[];
-  };
+  products: Product[];
 };
