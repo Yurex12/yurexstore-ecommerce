@@ -1,43 +1,92 @@
+import { Spinner } from '@/components/ui/spinner';
+import { formatCurrency } from '@/lib/helpers';
 import { Minus, Plus } from 'lucide-react';
+import useDecrementCartItem from '../hooks/useDecrementCartItem';
+import useIncrementCartItem from '../hooks/useIncrementCartItem';
+import useRemoveItemFromCart from '../hooks/useRemoveItemFromCart';
+import type { CartWithRelation } from '../types';
 
-export default function CartItem() {
+export default function CartItem({
+  id: cartItemId,
+  product: {
+    name: productName,
+    price: productPrice,
+    category: { name: productCategory },
+  },
+  quantity: cartItemQuantity,
+}: CartWithRelation) {
+  const { incrementCartItem, isPending: isIncrementing } =
+    useIncrementCartItem();
+  const { decrementCartItem, isPending: isDecrementing } =
+    useDecrementCartItem();
+  const { removeFromCart, isPending: isRemoving } = useRemoveItemFromCart();
+
+  const isWorking = isIncrementing || isDecrementing || isRemoving;
   return (
     <div className='flex items-center justify-between py-10'>
       {/* image */}
       <div className='flex gap-x-4'>
         <img src='shirt.png' alt='' className='w-24' />
         <div className='flex flex-col md:space-y-2'>
-          <p className='font-semibold text-gray-700'>Basic Tee</p>
-          <p className='text-gray-500'>Shirts</p>
-          <p className='text-gray-700'>$50.00</p>
-          <button className='mt-auto block text-left font-semibold text-red-500 text-sm md:hidden'>
+          <p className='font-medium text-foreground'>{productName}</p>
+          <p className='text-muted-foreground text-xs'>{productCategory}</p>
+          {/* <Badge variant='outline'>XL</Badge> */}
+          <p className='text-foreground text-sm font-medium'>
+            {formatCurrency(productPrice)}
+          </p>
+          <button
+            className='mt-auto text-left font-semibold text-destructive/90 cursor-pointer'
+            onClick={() => removeFromCart(cartItemId)}
+            disabled={isWorking}
+          >
             Remove
           </button>
-          {/* <p className="font-semibold text-gray-700">$50.00</p> */}
         </div>
       </div>
       {/* quantity */}
       <div className='flex flex-col items-center gap-y-4'>
-        <div className='flex items-center divide-x rounded-md border border-gray-200 p-1'>
-          <button className='px-2 text-gray-500'>
+        <div className='flex items-center divide-x rounded-md border border-input'>
+          <button
+            className='sm:px-4 sm:py-2 px-2 py-1 text-foreground/70 cursor-pointer hover:bg-muted disabled:opacity-50 '
+            disabled={isWorking}
+            onClick={() => decrementCartItem(cartItemId)}
+          >
             <Minus size={20} />
           </button>
-          <span className='px-2 font-semibold text-gray-500 text-sm'>2</span>
-          <button className='px-2 text-sm text-gray-500'>
+
+          <p className='sm:px-4 sm:py-2 px-2 py-1 flex items-center justify-center font-semibold text-foreground/70 text-sm'>
+            {isIncrementing || isDecrementing ? (
+              <Spinner />
+            ) : (
+              <span>{cartItemQuantity}</span>
+            )}
+          </p>
+          <button
+            className='sm:px-4 sm:py-2 px-2 py-1  text-foreground/70 cursor-pointer hover:bg-muted disabled:opacity-50 '
+            disabled={isWorking}
+            onClick={() => incrementCartItem(cartItemId)}
+          >
             <Plus size={20} />
           </button>
         </div>
-        <span className='block font-semibold text-gray-700 md:hidden'>
-          $100.00
+        <span className='block font-semibold text-foreground/70 md:hidden'>
+          {formatCurrency(productPrice * cartItemQuantity)}
         </span>
       </div>
       {/* subtotal */}
       <div className='hidden md:block'>
-        <span className='font-semibold text-gray-700'>$200.00</span>
+        <span className='font-semibold text-foreground'>
+          {' '}
+          {formatCurrency(productPrice * cartItemQuantity)}
+        </span>
       </div>
       {/* remove */}
       <div className='hidden md:block'>
-        <button className='mt-auto text-left font-semibold text-red-500'>
+        <button
+          className='mt-auto text-left font-semibold text-destructive/90 cursor-pointer'
+          onClick={() => removeFromCart(cartItemId)}
+          disabled={isWorking}
+        >
           Remove
         </button>
       </div>

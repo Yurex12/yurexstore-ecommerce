@@ -1,16 +1,19 @@
 import { useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
 import { Heart, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/helpers';
 
+import { Spinner } from '@/components/ui/spinner';
+
 import type { Product } from '../types';
-import AddToCartBtn from '@/features/cart/components/AddToCartBtn';
+
+import useAddToCart from '@/features/cart/hooks/useAddToCart';
 
 export default function ProductCard({
-  id,
+  id: productId,
   name,
   images,
   price,
@@ -19,6 +22,7 @@ export default function ProductCard({
   productVariant,
 }: Product) {
   const [isLiked, setIsLiked] = useState(false);
+  const { addToCart, isPending } = useAddToCart();
 
   const navigate = useNavigate();
 
@@ -80,7 +84,14 @@ export default function ProductCard({
             Add to cart
           </Button>
         ) : (
-          <AddToCartBtn productId={id} />
+          <Button
+            className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
+            variant='outline'
+            onClick={() => addToCart({ productId })}
+            disabled={isPending}
+          >
+            {isPending ? <Spinner /> : <span>Add to cart</span>}
+          </Button>
         )}
       </div>
     </div>

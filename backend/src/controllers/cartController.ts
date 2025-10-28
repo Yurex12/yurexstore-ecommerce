@@ -47,11 +47,139 @@ export const getCart = expressAsyncHandler(
 //@desc Add item/increment in cart
 //@route POST /api/cart/
 //@access Private
+// export const addItemToCart = expressAsyncHandler(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const userId = req.user.userId;
+
+//     let { productId, productVariantId } = req.body as CartSchema;
+
+//     const product = await prisma.product.findUnique({
+//       where: {
+//         id: productId,
+//       },
+//       select: {
+//         id: true,
+//         quantity: true,
+//         variantTypeName: true,
+//       },
+//     });
+
+//     if (!product) {
+//       res.status(404);
+//       throw new Error('Product not found');
+//     }
+
+//     let productVariant = null;
+
+//     if (productVariantId) {
+//       productVariant = await prisma.productVariant.findUnique({
+//         where: {
+//           id: productVariantId,
+//         },
+//         select: {
+//           quantity: true,
+//           productId: true,
+//         },
+//       });
+
+//       if (!productVariant) {
+//         res.status(404);
+//         throw new Error('Product variant not found');
+//       }
+//     }
+
+//     if (productVariant && product.id !== productVariant.productId) {
+//       res.status(404);
+//       throw new Error('This variant does not exist for this product');
+//     }
+
+//     let cartItem = null;
+
+//     const itemInCart = await prisma.cartItem.findFirst({
+//       where: {
+//         userId,
+//         productId,
+//         productVariantId: productVariantId || null,
+//       },
+//       select: {
+//         id: true,
+//         quantity: true,
+//       },
+//     });
+
+//     if (!itemInCart) {
+//       if (productVariant) {
+//         if (productVariant.quantity < 1) {
+//           res.status(409);
+//           throw new Error('This variant is currently out of stock');
+//         }
+//         cartItem = await prisma.cartItem.create({
+//           data: {
+//             productId,
+//             productVariantId,
+//             userId,
+//             quantity: 1,
+//           },
+//         });
+//       } else {
+//         if (product.quantity < 1) {
+//           res.status(409);
+//           throw new Error('This product is currently out of stock');
+//         }
+//         cartItem = await prisma.cartItem.create({
+//           data: {
+//             productId,
+//             userId,
+//             quantity: 1,
+//           },
+//         });
+//       }
+//     } else {
+//       if (productVariant) {
+//         if (productVariant.quantity < itemInCart.quantity + 1) {
+//           res.status(409);
+//           throw new Error('This variant is currently out of stock');
+//         }
+//         cartItem = await prisma.cartItem.update({
+//           where: {
+//             id: itemInCart.id,
+//           },
+//           data: {
+//             quantity: { increment: 1 },
+//           },
+//         });
+//       } else {
+//         if (product.quantity < itemInCart.quantity + 1) {
+//           res.status(409);
+//           throw new Error('This product is currently out of stock');
+//         }
+//         cartItem = await prisma.cartItem.update({
+//           where: {
+//             id: itemInCart.id,
+//           },
+//           data: {
+//             quantity: { increment: 1 },
+//           },
+//         });
+//       }
+//     }
+
+//     res.status(201).json({
+//       success: true,
+//       message: 'Successful.',
+//       cartItem,
+//     });
+//   }
+// );
+
+//@desc Add item/increment in cart
+//@route POST /api/cart/
+//@access Private
 export const addItemToCart = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user.userId;
 
-    let { productId, productVariantId } = req.body;
+    let { productId, productVariantId } = req.body as CartSchema;
 
     const product = await prisma.product.findUnique({
       where: {
@@ -107,85 +235,105 @@ export const addItemToCart = expressAsyncHandler(
       },
     });
 
-    if (!itemInCart) {
-      if (productVariant) {
-        if (productVariant.quantity < 1) {
-          res.status(409);
-          throw new Error('This variant is currently out of stock');
-        }
-        cartItem = await prisma.cartItem.create({
-          data: {
-            productId,
-            productVariantId,
-            userId,
-            quantity: 1,
-          },
-        });
-      } else {
-        if (product.quantity < 1) {
-          res.status(409);
-          throw new Error('This product is currently out of stock');
-        }
-        cartItem = await prisma.cartItem.create({
-          data: {
-            productId,
-            userId,
-            quantity: 1,
-          },
-        });
-      }
-    } else {
-      if (productVariant) {
-        if (productVariant.quantity < itemInCart.quantity + 1) {
-          res.status(409);
-          throw new Error('This variant is currently out of stock');
-        }
-        cartItem = await prisma.cartItem.update({
-          where: {
-            id: itemInCart.id,
-          },
-          data: {
-            quantity: { increment: 1 },
-          },
-        });
-      } else {
-        if (product.quantity < itemInCart.quantity + 1) {
-          res.status(409);
-          throw new Error('This product is currently out of stock');
-        }
-        cartItem = await prisma.cartItem.update({
-          where: {
-            id: itemInCart.id,
-          },
-          data: {
-            quantity: { increment: 1 },
-          },
-        });
-      }
+    if (itemInCart) {
+      res.status(400);
+      throw new Error('This product is already in cart');
     }
+
+    const availableStock = productVariant?.quantity ?? product.quantity;
+
+    if (availableStock < 1) {
+      res.status(409);
+      throw new Error('This product is currently out of stock');
+    }
+
+    const updatedCartItem = await prisma.cartItem.create({
+      data: {
+        productId,
+        userId,
+        quantity: 1,
+        ...(productVariantId && { productVariantId }),
+      },
+    });
 
     res.status(201).json({
       success: true,
       message: 'Successful.',
-      cartItem,
+      cartItem: updatedCartItem,
     });
   }
 );
 
-//@desc update/remove item in cart
-//@route PATCH /api/cart/
+//@desc increment item in cart
+//@route PATCH /api/cart/increment/:cartItemId
 //@access Private
-export const removeItemFromCart = expressAsyncHandler(
+export const incrementCartItem = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user.userId;
 
-    const { productId, productVariantId } = req.body;
+    const { cartItemId } = req.params;
 
     const itemInCart = await prisma.cartItem.findFirst({
       where: {
-        productId,
+        id: cartItemId,
         userId,
-        productVariantId: productVariantId || null,
+      },
+      select: {
+        id: true,
+        quantity: true,
+        productVariant: true,
+        productVariantId: true,
+        product: {
+          select: {
+            quantity: true,
+          },
+        },
+      },
+    });
+
+    if (!itemInCart) {
+      res.status(404);
+      throw new Error('Product does not exist in cart');
+    }
+
+    const availableStock =
+      itemInCart.productVariant?.quantity ?? itemInCart.product.quantity;
+
+    if (availableStock < itemInCart.quantity + 1) {
+      res.status(409);
+      throw new Error('Currently out of stock');
+    }
+
+    const updatedCartItem = await prisma.cartItem.update({
+      where: {
+        id: itemInCart.id,
+      },
+      data: {
+        quantity: { increment: 1 },
+      },
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Successful.',
+      cartItem: updatedCartItem,
+    });
+  }
+);
+
+//@desc decrement item in cart
+//@route PATCH /api/cart/decrement/:cartItemId
+//@access Private
+export const decrementCartItem = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user.userId;
+
+    const { cartItemId } = req.params;
+
+    const itemInCart = await prisma.cartItem.findFirst({
+      where: {
+        id: cartItemId,
+        userId,
       },
       select: {
         id: true,
@@ -230,7 +378,7 @@ export const removeItemFromCart = expressAsyncHandler(
 //@access Private
 export const removeCartItem = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id: cartItemId } = req.params;
+    const { cartItemId } = req.params;
 
     const cartItem = await prisma.cartItem.findFirst({
       where: {

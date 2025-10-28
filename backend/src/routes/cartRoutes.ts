@@ -6,21 +6,24 @@ import { validateToken } from '../middlewares/validateTokenHandler';
 import {
   addItemToCart,
   clearCart,
+  decrementCartItem,
   getCart,
+  incrementCartItem,
   removeCartItem,
-  removeItemFromCart,
 } from '../controllers/cartController';
 import { cartSchema } from '../schemas/cartSchema';
 
 const router = express.Router();
 
-router.get('/', getCart);
+router.get('/', validateToken, getCart);
 
 router.post('/', validateToken, validateData(cartSchema), addItemToCart);
 
-router.patch('/', validateToken, validateData(cartSchema), removeItemFromCart);
+router.patch('/increment/:cartItemId', validateToken, incrementCartItem);
 
-router.post('/:cartItemId', validateToken, removeCartItem);
+router.patch('/decrement/:cartItemId', validateToken, decrementCartItem);
+
+router.delete('/:cartItemId', validateToken, removeCartItem);
 
 router.delete('/', validateToken, clearCart);
 

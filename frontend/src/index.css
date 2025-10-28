@@ -112,6 +112,7 @@
   --sidebar-accent: oklch(0.967 0.001 286.375);
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-ring: rgb(79, 70, 229);
   --sidebar-ring: oklch(0.51 0.23 277);
 }
 
@@ -192,7 +193,7 @@
   }
 
   .heading {
-    @apply sm:text-left text-2xl sm:text-3xl  lg:text-4xl;
+    @apply text-xl sm:text-3xl  lg:text-4xl;
   }
 
   .sort-options input:checked + label span.icon {
