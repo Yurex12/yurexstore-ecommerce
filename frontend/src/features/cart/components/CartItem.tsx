@@ -22,15 +22,16 @@ export default function CartItem({
   const { removeFromCart, isPending: isRemoving } = useRemoveItemFromCart();
 
   const isWorking = isIncrementing || isDecrementing || isRemoving;
+  const totalPrice = productPrice * cartItemQuantity;
+
   return (
     <div className='flex items-center justify-between py-10'>
-      {/* image */}
+      {/* product info */}
       <div className='flex gap-x-4'>
         <img src='shirt.png' alt='' className='w-24' />
         <div className='flex flex-col md:space-y-2'>
           <p className='font-medium text-foreground'>{productName}</p>
           <p className='text-muted-foreground text-xs'>{productCategory}</p>
-          {/* <Badge variant='outline'>XL</Badge> */}
           <p className='text-foreground text-sm font-medium'>
             {formatCurrency(productPrice)}
           </p>
@@ -43,11 +44,12 @@ export default function CartItem({
           </button>
         </div>
       </div>
-      {/* quantity */}
+
+      {/* quantity controls */}
       <div className='flex flex-col items-center gap-y-4'>
         <div className='flex items-center divide-x rounded-md border border-input'>
           <button
-            className='sm:px-4 sm:py-2 px-2 py-1 text-foreground/70 cursor-pointer hover:bg-muted disabled:opacity-50 '
+            className='sm:px-4 sm:py-2 px-2 py-1 text-foreground/70 cursor-pointer hover:bg-muted disabled:opacity-50'
             disabled={isWorking}
             onClick={() => decrementCartItem(cartItemId)}
           >
@@ -61,26 +63,30 @@ export default function CartItem({
               <span>{cartItemQuantity}</span>
             )}
           </p>
+
           <button
-            className='sm:px-4 sm:py-2 px-2 py-1  text-foreground/70 cursor-pointer hover:bg-muted disabled:opacity-50 '
+            className='sm:px-4 sm:py-2 px-2 py-1 text-foreground/70 cursor-pointer hover:bg-muted disabled:opacity-50'
             disabled={isWorking}
             onClick={() => incrementCartItem(cartItemId)}
           >
             <Plus size={20} />
           </button>
         </div>
+
+        {/* total for small screens */}
         <span className='block font-semibold text-foreground/70 md:hidden'>
-          {formatCurrency(productPrice * cartItemQuantity)}
+          {formatCurrency(totalPrice)}
         </span>
       </div>
-      {/* subtotal */}
+
+      {/* total for desktop */}
       <div className='hidden md:block'>
         <span className='font-semibold text-foreground'>
-          {' '}
-          {formatCurrency(productPrice * cartItemQuantity)}
+          {formatCurrency(totalPrice)}
         </span>
       </div>
-      {/* remove */}
+
+      {/* remove for desktop */}
       <div className='hidden md:block'>
         <button
           className='mt-auto text-left font-semibold text-destructive/90 cursor-pointer'

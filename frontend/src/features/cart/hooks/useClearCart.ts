@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { clearCart as clearCartApi } from '../api';
 
 import { toast } from 'react-hot-toast';
+import type { CartWithRelation } from '../types';
 
 export default function useClearCart() {
   const queryClient = useQueryClient();
@@ -11,12 +12,31 @@ export default function useClearCart() {
     error,
   } = useMutation({
     mutationFn: clearCartApi,
-    onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
-      toast.success('Cart cleared successfully');
+
+    onMutate: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['cart'] });
+
+      const prevCart = queryClient.getQueryData<CartWithRelation[]>(['cart']);
+
+      queryClient.setQueryData<CartWithRelation[]>(['cart'], (cart) => {
+        if (!cart) return cart;
+        return [];
+      });
+
+      return { prevCart };
     },
-    onError(error) {
+
+    onSuccess: () => {
+      toast.success('Cart cleared successfully.');
+    },
+    onError: (error, _, context) => {
+      if (context?.prevCart) {
+        queryClient.setQueryData(['cart'], context.prevCart);
+      }
       toast.error(error.message);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
   });
   return { clearCart, isPending, error };
