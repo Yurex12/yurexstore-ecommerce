@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-hot-toast';
+
 import { clearCart as clearCartApi } from '../api';
 
-import { toast } from 'react-hot-toast';
 import type { CartWithRelation } from '../types';
 
 export default function useClearCart() {

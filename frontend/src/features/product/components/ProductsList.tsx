@@ -22,7 +22,7 @@ export default function ProductsList() {
     return <p>No products found</p>;
   }
   return (
-    <div className='mt-3 grid grid-cols-2 items-center justify-around gap-1 sm:gap-2 md:grid lg:grid-cols-3 xl:grid-cols-4'>
+    <div className='mt-3 grid grid-cols-2 items-center justify-around gap-1 sm:gap-2 md:grid lg:grid-cols-3 '>
       {products.map((product) => (
         <ProductCard key={product.id} {...product} />
       ))}

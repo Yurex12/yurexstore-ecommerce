@@ -40,7 +40,7 @@ export type Product = {
   categoryId: string;
   category: { name: string };
   reviews: Review[];
-  productVariant: productVariant[];
+  productVariants: productVariant[];
 };
 
 export type Products = {

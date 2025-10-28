@@ -28,7 +28,7 @@ export const getProducts = expressAsyncHandler(
             rating: true,
           },
         },
-        productVariant: true,
+        productVariants: true,
       },
     });
 
@@ -81,7 +81,8 @@ export const getProduct = expressAsyncHandler(
 //@access private(ADMINS ONLY)
 export const createProduct = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { categoryId, images, ...productData } = req.body as ProductSchema;
+    const { categoryId, images, productVariants, ...productData } =
+      req.body as ProductSchema;
 
     const category = await prisma.category.findUnique({
       where: {
@@ -101,6 +102,11 @@ export const createProduct = expressAsyncHandler(
         images: {
           createMany: {
             data: images,
+          },
+        },
+        productVariants: {
+          createMany: {
+            data: productVariants || [],
           },
         },
       },

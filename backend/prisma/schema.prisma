@@ -82,7 +82,7 @@ model Product {
   images          Image[]
   reviews         Review[]
   orderItems      OrderItem[]
-  productVariant  ProductVariant[]
+  productVariants ProductVariant[]
 
   buyers   User[]   @relation("UserPurchases")
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
