@@ -7,6 +7,7 @@ type Product = {
   id: string;
   name: string;
   price: number;
+  quantity: number;
   images: Image[];
 };
 
@@ -16,7 +17,7 @@ export type WishlistItem = {
   updatedAt: Date;
   productId: string;
   userId: string;
-  product: Product[];
+  product: Product;
 };
 
 export type WishlistData = {

@@ -21,6 +21,7 @@ export const getWishlists = expressAsyncHandler(
             id: true,
             name: true,
             price: true,
+            quantity: true,
             images: {
               select: {
                 fileId: true,
