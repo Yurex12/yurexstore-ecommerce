@@ -1,10 +1,11 @@
 import { api, handleApiError } from '@/services/api';
+import type { WishlistData } from '../types';
 
 export async function getWishlist() {
   try {
-    const { data } = await api.get('/wishlist');
+    const { data } = await api.get<WishlistData>('/wishlist');
 
-    return data.wishlists;
+    return data.wishlist;
   } catch (error) {
     handleApiError(error, 'Failed to fetch wishlist');
   }

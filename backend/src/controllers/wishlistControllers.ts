@@ -11,7 +11,7 @@ export const getWishlists = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user.userId;
 
-    const reviews = await prisma.wishListItem.findMany({
+    const wishlist = await prisma.wishListItem.findMany({
       where: {
         userId,
       },
@@ -36,7 +36,7 @@ export const getWishlists = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Successful.',
-      reviews,
+      wishlist,
     });
   }
 );
