@@ -16,9 +16,9 @@ import {
 
 const router = express.Router();
 
-router.get('/', validateToken, getCategories);
+router.get('/', getCategories);
 
-router.get('/:id', validateToken, getCategory);
+router.get('/:id', getCategory);
 
 router.post(
   '/',

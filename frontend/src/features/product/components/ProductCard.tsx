@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { Heart, Minus, Plus, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,11 +9,14 @@ import { Spinner } from '@/components/ui/spinner';
 import type { Product } from '../types';
 
 import useAddToCart from '@/features/cart/hooks/useAddToCart';
+import useCart from '@/features/cart/hooks/useCart';
+import useDecrementCartItem from '@/features/cart/hooks/useDecrementCartItem';
+import useIncrementCartItem from '@/features/cart/hooks/useIncrementCartItem';
+import useAddToWishlist from '@/features/wishlist/hooks/useAddToWishlist';
+import useRemoveFromWishlist from '@/features/wishlist/hooks/useRemoveFromWishlist';
+import useWishlist from '@/features/wishlist/hooks/useWishlist';
 import { useProductDialogStore } from '../store/useProductDialogStore';
 import ProductVariantDialog from './ProductVariantDialog';
-import useCart from '@/features/cart/hooks/useCart';
-import useIncrementCartItem from '@/features/cart/hooks/useIncrementCartItem';
-import useDecrementCartItem from '@/features/cart/hooks/useDecrementCartItem';
 
 export default function ProductCard(product: Product) {
   const {
@@ -28,13 +29,16 @@ export default function ProductCard(product: Product) {
     productVariants,
   } = product;
 
-  const [isLiked, setIsLiked] = useState(false);
-  const { addToCart, isPending: isAdding } = useAddToCart();
+  const { addToCart, isPending: isAddingToCart } = useAddToCart();
   const { toggleOpen } = useProductDialogStore();
   const { incrementCartItem, isPending: isIncrementing } =
     useIncrementCartItem();
   const { decrementCartItem, isPending: isDecrementing } =
     useDecrementCartItem();
+  const { wishlist } = useWishlist();
+  const { isPending: isAddingToWishlist, addToWishlist } = useAddToWishlist();
+  const { isPending: isRemovingFromWishlist, removeFromWishlist } =
+    useRemoveFromWishlist();
   const { cart } = useCart();
 
   const navigate = useNavigate();
@@ -47,9 +51,21 @@ export default function ProductCard(product: Product) {
 
   const avgRating = totalReviews ? (rating / totalReviews).toFixed(1) : 0;
 
-  const cartItem = cart?.find((cartItem) => cartItem.productId === productId);
+  const inCart = cart?.find((cartItem) => cartItem.productId === productId);
+
+  const productInWishlist = wishlist?.find(
+    (wishlistItem) => wishlistItem.productId === productId
+  );
 
   const isWorking = isIncrementing || isDecrementing;
+
+  function handleWishlistToggle() {
+    if (productInWishlist) {
+      removeFromWishlist(productInWishlist.id);
+    } else {
+      addToWishlist(productId);
+    }
+  }
 
   return (
     <>
@@ -59,12 +75,15 @@ export default function ProductCard(product: Product) {
       >
         <div className='w-full h-48 sm:h-72 bg-muted/60 flex items-center justify-center relative'>
           <button
-            className='absolute right-1 top-2 inline-block rounded-full bg-primary/5 p-1 shadow-sm hover:bg-primary/20 sm:right-4'
-            onClick={() => setIsLiked((cur) => !cur)}
+            className='absolute right-1 top-2 inline-block rounded-full bg-primary/5 p-1 shadow-sm hover:bg-primary/20 sm:right-4 disabled:opacity-50'
+            onClick={handleWishlistToggle}
+            disabled={isAddingToWishlist || isRemovingFromWishlist}
           >
             <Heart
               className={`text-lg ${
-                isLiked ? 'fill-primary text-primary' : 'text-foreground/50'
+                productInWishlist
+                  ? 'fill-primary text-primary'
+                  : 'text-foreground/50'
               }`}
             />
           </button>
@@ -104,19 +123,19 @@ export default function ProductCard(product: Product) {
             </Button>
           ) : (
             <>
-              {cartItem ? (
+              {inCart ? (
                 <div className='flex justify-between items-center'>
                   <Button
-                    onClick={() => decrementCartItem(cartItem.id)}
+                    onClick={() => decrementCartItem(inCart.id)}
                     disabled={isWorking}
                   >
                     <Minus className='text-background' />
                   </Button>
                   <span className='text-foreground font-bold text-xl'>
-                    {cartItem.quantity}
+                    {inCart.quantity}
                   </span>
                   <Button
-                    onClick={() => incrementCartItem(cartItem.id)}
+                    onClick={() => incrementCartItem(inCart.id)}
                     disabled={isWorking}
                   >
                     <Plus className='text-background' />
@@ -127,9 +146,9 @@ export default function ProductCard(product: Product) {
                   className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
                   variant='outline'
                   onClick={() => addToCart({ productId })}
-                  disabled={isAdding || isWorking}
+                  disabled={isAddingToCart || isWorking}
                 >
-                  {isAdding ? <Spinner /> : <span>Add to cart</span>}
+                  {isAddingToCart ? <Spinner /> : <span>Add to cart</span>}
                 </Button>
               )}
             </>

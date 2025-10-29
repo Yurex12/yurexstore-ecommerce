@@ -13,7 +13,7 @@ export default function useAddToWishlist() {
     mutationFn: addToWishlistApi,
 
     onSuccess() {
-      toast.success('Item added to wishlist');
+      toast.success('Product added to wishlist');
       queryClient.invalidateQueries({ queryKey: ['wishlist'] });
     },
     onError(error) {

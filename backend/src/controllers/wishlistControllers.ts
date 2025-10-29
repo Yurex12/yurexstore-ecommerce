@@ -48,7 +48,7 @@ export const createWishlistItem = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user.userId;
 
-    const { productId } = req.params as WishlistSchema;
+    const { productId } = req.body as WishlistSchema;
 
     const reviews = await prisma.wishListItem.create({
       data: {
