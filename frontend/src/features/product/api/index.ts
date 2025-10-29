@@ -1,30 +1,13 @@
-import type { AxiosError } from 'axios';
+import { api, handleApiError } from '@/services/api';
 
-import { api } from '@/services/api';
-
-import type { ApiError } from '@/services/types';
 import type { Products } from '../types';
 
 export async function getProducts() {
   try {
-    const res = await api.get<Products>('/products');
+    const { data } = await api.get<Products>('/products');
 
-    if (!res.data) {
-      throw new Error('Could not fetch products');
-    }
-
-    return res.data.products;
+    return data.products;
   } catch (error) {
-    const err = error as AxiosError<ApiError>;
-
-    console.log(err.response?.data.message);
-
-    let message = err.response?.data.message;
-
-    if (err.response?.status === 500) {
-      message = 'Something went wrong';
-    }
-
-    throw new Error(message || 'Could not fetch products.');
+    handleApiError(error, 'Failed to fetch products');
   }
 }

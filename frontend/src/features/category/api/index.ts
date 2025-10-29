@@ -1,30 +1,11 @@
-import type { AxiosError } from 'axios';
-
-import { api } from '@/services/api';
-
-import type { ApiError } from '@/services/types';
+import { api, handleApiError } from '@/services/api';
 import type { Categories } from '../types';
 
 export async function getCategories() {
   try {
-    const res = await api.get<Categories>('/categories');
-
-    if (!res.data) {
-      throw new Error('Could not fetch categories');
-    }
-
-    return res.data.data.categories;
+    const { data } = await api.get<Categories>('/categories');
+    return data.categories;
   } catch (error) {
-    const err = error as AxiosError<ApiError>;
-
-    console.log(err.response?.data.message);
-
-    let message = err.response?.data.message;
-
-    if (err.response?.status === 500) {
-      message = 'Something went wrong';
-    }
-
-    throw new Error(message || 'Could not fetch categories');
+    handleApiError(error, 'Failed to fetch categories');
   }
 }

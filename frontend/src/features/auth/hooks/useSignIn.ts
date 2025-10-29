@@ -12,9 +12,7 @@ export default function useSignIn() {
   } = useMutation({
     mutationFn: signInUser,
     onSuccess(data) {
-      console.log(data);
-
-      queryClient.setQueryData(['user'], data.user);
+      queryClient.setQueryData(['user'], data);
       toast.success('Login successful');
     },
     onError(error) {

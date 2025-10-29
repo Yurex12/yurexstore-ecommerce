@@ -7,7 +7,7 @@ function errorHandler(
   next: NextFunction
 ) {
   let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  let message = error.message;
+  let message = res.statusCode === 500 ? error.message : 'Something went wrong';
 
   if (error?.code === 'P2025') {
     statusCode = 404;
@@ -16,7 +16,7 @@ function errorHandler(
 
   res.status(statusCode).json({
     success: false,
-    message: message,
+    message: process.env.NODE_ENV === 'development' ? error.message : message,
     stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
   });
 }

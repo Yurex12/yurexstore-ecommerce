@@ -18,7 +18,7 @@ export const getCategories = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Successful',
-      data: { categories },
+      categories,
     });
   }
 );
@@ -44,7 +44,7 @@ export const getCategory = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Successful',
-      data: { category },
+      category,
     });
   }
 );
@@ -80,7 +80,7 @@ export const createCategory = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Category created successfully',
-      data: { category: newCategory },
+      category: newCategory,
     });
   }
 );
@@ -118,7 +118,7 @@ export const updateCategory = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Category updated successfully',
-      data: { category: updatedCategory },
+      category: updatedCategory,
     });
   }
 );

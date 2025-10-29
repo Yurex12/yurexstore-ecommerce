@@ -9,7 +9,5 @@ export type Category = {
 export type Categories = {
   success: boolean;
   message: string;
-  data: {
-    categories: Category[];
-  };
+  categories: Category[];
 };

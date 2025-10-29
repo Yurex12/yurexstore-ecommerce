@@ -1,22 +1,28 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import type { ApiError } from './types';
 
 export const api = axios.create({
-  //   baseURL: 'http://localhost:8080/api',
-  baseURL: 'http://192.168.0.2:8080/api',
+  baseURL: 'http://localhost:8080/api',
+  // baseURL: 'http://192.168.0.2:8080/api',
   withCredentials: true,
 });
 
-api.interceptors.response.use(
-  (response) => response,
+export function handleApiError(error: unknown, fallbackMessage: string) {
+  if (axios.isAxiosError(error)) {
+    const err = error as AxiosError<ApiError>;
+    let message = err.response?.data.message;
 
-  (error) => {
-    if (!error.response) {
-      error.message = 'Network error. Please check your connection.';
+    if (err.response?.status === 500) {
+      console.log(err.response.data.message);
+      message = 'Something went wrong';
     }
 
-    // if (error.response?.status === 401) {
-    //   window.location.href = '/sign-in';
-    // }
-    return Promise.reject(error);
+    if (err.code === 'ERR_NETWORK') {
+      message = 'Network error. Please check your connection.';
+    }
+
+    throw new Error(message || fallbackMessage);
   }
-);
+
+  throw new Error('Unexpected error');
+}
