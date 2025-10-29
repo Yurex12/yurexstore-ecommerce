@@ -34,6 +34,9 @@ export const getCart = expressAsyncHandler(
         },
         productVariant: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     res.json({

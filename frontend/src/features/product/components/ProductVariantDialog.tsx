@@ -31,7 +31,7 @@ export default function ProductVariantDialog({
       <DialogContent className='sm:max-w-xl w-10/12 rounded-2xl'>
         <DialogHeader>
           <DialogTitle>
-            <h3 className='text-lg text-foreground'>Select a size</h3>
+            <h5 className='text-lg text-foreground'>Select a size</h5>
             <p className='text-foreground/60 text-sm'>{productName}</p>
           </DialogTitle>
         </DialogHeader>

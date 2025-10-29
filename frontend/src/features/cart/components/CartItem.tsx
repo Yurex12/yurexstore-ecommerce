@@ -5,6 +5,7 @@ import useDecrementCartItem from '../hooks/useDecrementCartItem';
 import useIncrementCartItem from '../hooks/useIncrementCartItem';
 import useRemoveItemFromCart from '../hooks/useRemoveItemFromCart';
 import type { CartWithRelation } from '../types';
+import { Badge } from '@/components/ui/badge';
 
 export default function CartItem({
   id: cartItemId,
@@ -14,6 +15,7 @@ export default function CartItem({
     category: { name: productCategory },
   },
   quantity: cartItemQuantity,
+  productVariant,
 }: CartWithRelation) {
   const { incrementCartItem, isPending: isIncrementing } =
     useIncrementCartItem();
@@ -31,12 +33,17 @@ export default function CartItem({
         <img src='shirt.png' alt='' className='w-24' />
         <div className='flex flex-col md:space-y-2'>
           <p className='font-medium text-foreground'>{productName}</p>
-          <p className='text-muted-foreground text-xs'>{productCategory}</p>
-          <p className='text-foreground text-sm font-medium'>
+          {/* <p className='text-muted-foreground text-xs'>{productCategory}</p> */}
+          <p className='text-foreground/80 text-sm font-medium'>
             {formatCurrency(productPrice)}
           </p>
+          {productVariant && (
+            <Badge className='text-foreground/80' variant='outline'>
+              {productVariant.value}
+            </Badge>
+          )}
           <button
-            className='mt-auto text-left font-semibold text-destructive/90 cursor-pointer'
+            className='md:hidden text-sm mt-auto text-left font-semibold text-destructive/90 cursor-pointer'
             onClick={() => removeFromCart(cartItemId)}
             disabled={isWorking}
           >

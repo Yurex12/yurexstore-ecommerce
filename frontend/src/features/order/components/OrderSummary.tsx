@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button';
+import useCart from '@/features/cart/hooks/useCart';
 
 export default function OrderSummary() {
+  const { cart, isPending } = useCart();
   return (
     <div className='basis-2/6 lg:mt-10 '>
       <div className='mx-auto rounded-sm bg-muted/50 px-8 py-8'>
