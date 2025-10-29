@@ -1,15 +1,4 @@
-type Image = {
-  url: string;
-  fileId: string;
-};
-
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  images: Image[];
-};
+import type { Product } from '../product/types';
 
 export type WishlistItem = {
   id: string;

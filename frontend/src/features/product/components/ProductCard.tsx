@@ -15,22 +15,14 @@ import useIncrementCartItem from '@/features/cart/hooks/useIncrementCartItem';
 import useAddToWishlist from '@/features/wishlist/hooks/useAddToWishlist';
 import useRemoveFromWishlist from '@/features/wishlist/hooks/useRemoveFromWishlist';
 import useWishlist from '@/features/wishlist/hooks/useWishlist';
-import { useProductDialogStore } from '../store/useProductDialogStore';
+import { useState } from 'react';
 import ProductVariantDialog from './ProductVariantDialog';
 
 export default function ProductCard(product: Product) {
-  const {
-    id: productId,
-    name,
-    images,
-    price,
-    category,
-    reviews,
-    productVariants,
-  } = product;
+  const [open, setOpen] = useState(false);
 
   const { addToCart, isPending: isAddingToCart } = useAddToCart();
-  const { toggleOpen } = useProductDialogStore();
+
   const { incrementCartItem, isPending: isIncrementing } =
     useIncrementCartItem();
   const { decrementCartItem, isPending: isDecrementing } =
@@ -43,18 +35,18 @@ export default function ProductCard(product: Product) {
 
   const navigate = useNavigate();
 
-  const totalReviews = reviews.length;
+  const totalReviews = product.reviews.length;
 
   const rating = totalReviews
-    ? reviews.reduce((acc, x) => acc + x.rating, 0)
+    ? product.reviews.reduce((acc, x) => acc + x.rating, 0)
     : 0;
 
   const avgRating = totalReviews ? (rating / totalReviews).toFixed(1) : 0;
 
-  const inCart = cart?.find((cartItem) => cartItem.productId === productId);
+  const inCart = cart?.find((cartItem) => cartItem.productId === product.id);
 
   const productInWishlist = wishlist?.find(
-    (wishlistItem) => wishlistItem.productId === productId
+    (wishlistItem) => wishlistItem.productId === product.id
   );
 
   const isWorking = isIncrementing || isDecrementing;
@@ -63,7 +55,7 @@ export default function ProductCard(product: Product) {
     if (productInWishlist) {
       removeFromWishlist(productInWishlist.id);
     } else {
-      addToWishlist(productId);
+      addToWishlist(product.id);
     }
   }
 
@@ -88,20 +80,22 @@ export default function ProductCard(product: Product) {
             />
           </button>
           <img
-            src={images.at(0)?.url}
-            alt={name}
+            src={product.images.at(0)?.url}
+            alt={product.name}
             className='max-h-full max-w-full object-contain'
           />
         </div>
 
         <div className='space-y-2'>
-          <p className='truncate text-sm font-medium text-foreground'>{name}</p>
+          <p className='truncate text-sm font-medium text-foreground'>
+            {product.name}
+          </p>
 
-          <p className='text-xs text-foreground/50'>{category.name}</p>
+          <p className='text-xs text-foreground/50'>{product.category.name}</p>
 
           <div className='flex items-center justify-between'>
             <span className='text-sm text-foreground font-medium'>
-              {formatCurrency(price)}
+              {formatCurrency(product.price)}
             </span>
             {totalReviews > 0 && (
               <div className='flex gap-x-2 items-center'>
@@ -113,11 +107,11 @@ export default function ProductCard(product: Product) {
             )}
           </div>
 
-          {productVariants?.length ? (
+          {product.productVariants?.length ? (
             <Button
               className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
               variant='outline'
-              onClick={toggleOpen}
+              onClick={() => setOpen(true)}
             >
               Add to cart
             </Button>
@@ -145,7 +139,7 @@ export default function ProductCard(product: Product) {
                 <Button
                   className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
                   variant='outline'
-                  onClick={() => addToCart({ productId })}
+                  onClick={() => addToCart({ productId: product.id })}
                   disabled={isAddingToCart || isWorking}
                 >
                   {isAddingToCart ? <Spinner /> : <span>Add to cart</span>}
@@ -156,7 +150,7 @@ export default function ProductCard(product: Product) {
         </div>
       </div>
 
-      <ProductVariantDialog {...product} />
+      <ProductVariantDialog product={product} open={open} setOpen={setOpen} />
     </>
   );
 }

@@ -41,10 +41,17 @@ export type Product = {
   category: { name: string };
   reviews: Review[];
   productVariants: productVariant[];
+  variantTypeName: string | null;
 };
 
 export type Products = {
   success: boolean;
   message: string;
   products: Product[];
+};
+
+export type ProductVariantProps = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  product: Product;
 };

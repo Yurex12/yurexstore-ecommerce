@@ -17,18 +17,9 @@ export const getWishlists = expressAsyncHandler(
       },
       include: {
         product: {
-          select: {
-            id: true,
-            name: true,
-            price: true,
-            quantity: true,
-            images: {
-              select: {
-                fileId: true,
-                url: true,
-              },
-              take: 1,
-            },
+          include: {
+            productVariants: true,
+            images: true,
           },
         },
       },
