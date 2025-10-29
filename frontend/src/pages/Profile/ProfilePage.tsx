@@ -1,13 +1,19 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Edit } from 'lucide-react';
 
+import useUser from '@/features/auth/hooks/useUser';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+
 export default function ProfilePage() {
-  // You can replace this with real user data from your state or API
-  const user = {
-    name: 'Yusuf Ekungomi',
-    email: 'ekungomiadeyemi@gmail.com',
-  };
+  const { user, isPending, error } = useUser();
+
+  if (isPending) return <Spinner />;
+
+  if (error) return <p>{error.message}</p>;
+
+  if (!user) return <p>Something went wrong</p>;
 
   return (
     <div className='p-4 lg:p-8 space-y-6'>

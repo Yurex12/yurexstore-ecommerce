@@ -119,7 +119,7 @@ export default function ProductVariantDialog({
                   <Button
                     className='w-40 border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary disabled:opacity-50'
                     variant='outline'
-                    disabled={isAdding}
+                    disabled={isAdding || isWorking}
                     onClick={() =>
                       addToCart({
                         productId: product.id,

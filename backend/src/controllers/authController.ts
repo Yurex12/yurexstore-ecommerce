@@ -99,11 +99,11 @@ export const loginUser = expressAsyncHandler(
 );
 
 //@desc get user data
-//@route POST api/auth/user/:id
+//@route POST api/auth/user
 //@access private
 export const getUserData = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.params.id;
+    const userId = req.user.userId;
 
     const user = await prisma.user.findUnique({
       where: {
@@ -119,28 +119,21 @@ export const getUserData = expressAsyncHandler(
       throw new Error('User not found');
     }
 
-    if (req.user.userId !== user.id && req.user.role !== 'ADMIN') {
-      res.status(401);
-      throw new Error('Unauthorized.');
-    }
-
     res.json({
       success: true,
       message: 'Successful.',
-      data: {
-        user,
-      },
+      user,
     });
   }
 );
 
 //@desc Change user password
-//@route PATCH api/auth/:id/update-password/
+//@route PATCH api/auth/update-password/
 //@access private
 
 export const updateUserPassword = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.params.id;
+    const userId = req.user.userId;
 
     const { oldPassword, newPassword } = req.body as UpdatePasswordSchema;
 
@@ -155,16 +148,16 @@ export const updateUserPassword = expressAsyncHandler(
       throw new Error('User not found');
     }
 
-    if (user.id !== req.user.userId && req.user.role !== 'ADMIN') {
-      res.status(401);
-      throw new Error('Unauthorized to update this password');
-    }
-
     const passwordMatch = await bcrypt.compare(oldPassword, user.password);
 
     if (!passwordMatch) {
+      res.status(400);
+      throw new Error('Old Password is incorrect.');
+    }
+
+    if (await bcrypt.compare(newPassword, user.password)) {
       res.status(401);
-      throw new Error('Password is incorrect.');
+      throw new Error('New password must be different from old password');
     }
 
     const newHashedPassword = await bcrypt.hash(newPassword, 10);
@@ -181,7 +174,6 @@ export const updateUserPassword = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Password updated successfully.',
-      data: { user: { userId } },
     });
   }
 );

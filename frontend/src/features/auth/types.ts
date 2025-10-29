@@ -5,7 +5,7 @@ export type User = {
   role: string;
 };
 
-export type UserRes = {
+export type UserData = {
   success: boolean;
   message: string;
   user: User;

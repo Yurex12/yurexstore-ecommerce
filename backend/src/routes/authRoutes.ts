@@ -23,10 +23,10 @@ router.post('/login', validateData(loginSchema), loginUser);
 
 router.post('/logout', logoutUser);
 
-router.get('/users/:id', validateToken, getUserData);
+router.get('/user', validateToken, getUserData);
 
 router.patch(
-  'users/:id/update-password',
+  '/update-password',
   validateToken,
   validateData(updatePasswordSchema),
   updateUserPassword
