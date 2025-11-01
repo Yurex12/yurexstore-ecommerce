@@ -36,6 +36,16 @@ enum NOTIFICATION_STATUS {
   UNREAD
 }
 
+enum PAYMENT_METHOD {
+  CASH_ON_DELIVERY
+  STRIPE
+}
+
+enum PAYMENT_STATUS {
+  PENDING
+  CONFIRMED
+}
+
 model User {
   id                String         @id @default(cuid())
   name              String
@@ -168,16 +178,17 @@ model Review {
 }
 
 model Order {
-  id            String         @id @default(cuid())
-  totalPrice    Float
-  orderStatus   ORDER_STATUS   @default(PENDING)
-  userId        String
-  street        String
-  city          String
-  state         String
-  phone         String
-  orderItems    OrderItem[]
-  notifications Notification[]
+  id              String         @id @default(cuid())
+  totalPrice      Float
+  orderStatus     ORDER_STATUS   @default(PENDING)
+  userId          String
+  deliveryAddress String
+  phone           String
+  paymentMethod   PAYMENT_METHOD
+  paymentStatus   PAYMENT_STATUS @default(PENDING)
+  stripePaymentId String?
+  orderItems      OrderItem[]
+  notifications   Notification[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -186,11 +197,12 @@ model Order {
 }
 
 model OrderItem {
-  id        String @id @default(cuid())
-  orderId   String
-  productId String
-  price     Float
-  quantity  Int
+  id          String @id @default(cuid())
+  orderId     String
+  productId   String
+  productName String
+  price       Float
+  quantity    Int
 
   order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -200,12 +212,15 @@ model OrderItem {
 }
 
 model Address {
-  id     String @id @default(cuid())
-  street String
-  city   String
-  state  String
-  phone  String
-  userId String
+  id              String  @id @default(cuid())
+  firstName       String
+  lastName        String
+  deliveryAddress String
+  city            String
+  state           String
+  phone           String
+  userId          String
+  default         Boolean
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

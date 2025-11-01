@@ -9,11 +9,7 @@ import { Badge } from '@/components/ui/badge';
 
 export default function CartItem({
   id: cartItemId,
-  product: {
-    name: productName,
-    price: productPrice,
-    category: { name: productCategory },
-  },
+  product: { name: productName, price: productPrice },
   quantity: cartItemQuantity,
   productVariant,
 }: CartWithRelation) {

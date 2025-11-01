@@ -25,6 +25,7 @@ import AccountMobileMenu from './layout/AccountMobileMenu';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from 'react-hot-toast';
+import CheckoutPage from './pages/checkout/CheckoutPage';
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ export default function App() {
             <Route path='/cart' element={<CartPage />} />
             <Route path='/about-us' element={<AboutPage />} />
             <Route path='/contact-us' element={<ContactPage />} />
+            <Route path='/checkout' element={<CheckoutPage />} />
             <Route element={<AccountLayout />}>
               <Route path='/account' element={<AccountOverviewPage />} />
               <Route path='/account/orders' element={<OrdersPage />} />
