@@ -2,8 +2,8 @@ import axios, { AxiosError } from 'axios';
 import type { ApiError } from './types';
 
 export const api = axios.create({
-  // baseURL: 'http://localhost:8080/api',
-  baseURL: 'http://192.168.0.2:8080/api',
+  baseURL: 'http://localhost:8080/api',
+  // baseURL: 'http://192.168.0.2:8080/api',
   withCredentials: true,
 });
 

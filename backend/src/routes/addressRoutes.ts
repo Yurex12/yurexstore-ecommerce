@@ -3,8 +3,9 @@ import express from 'express';
 import { validateData } from '../middlewares/validation';
 
 import { validateToken } from '../middlewares/validateTokenHandler';
-import { createAddress, getAddresses } from '../controllers/addressController';
+
 import { addressSchema } from '../schemas/addressSchema';
+import { createAddress, getAddresses } from '../controllers/addressController';
 
 const router = express.Router();
 

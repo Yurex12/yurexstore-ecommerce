@@ -2,6 +2,7 @@ import { Separator } from '@/components/ui/separator';
 import { CustomerAddress } from '@/features/address/components/CustomerAddress';
 import OrderSummary from '@/features/order/components/OrderSummary';
 import CheckoutItemsList from './components/CheckoutItemsList';
+import useCart from '@/features/cart/hooks/useCart';
 
 export default function CheckoutPage() {
   return (

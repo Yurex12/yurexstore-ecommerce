@@ -1,12 +1,11 @@
-import { Heart, Minus, Plus, Star } from 'lucide-react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { Heart, Minus, Plus, Star } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
-import { formatCurrency } from '@/lib/helpers';
-
 import { Spinner } from '@/components/ui/spinner';
-
-import type { Product } from '../types';
+import ProductVariantDialog from './ProductVariantDialog';
 
 import useAddToCart from '@/features/cart/hooks/useAddToCart';
 import useCart from '@/features/cart/hooks/useCart';
@@ -15,8 +14,10 @@ import useIncrementCartItem from '@/features/cart/hooks/useIncrementCartItem';
 import useAddToWishlist from '@/features/wishlist/hooks/useAddToWishlist';
 import useRemoveFromWishlist from '@/features/wishlist/hooks/useRemoveFromWishlist';
 import useWishlist from '@/features/wishlist/hooks/useWishlist';
-import { useState } from 'react';
-import ProductVariantDialog from './ProductVariantDialog';
+
+import type { Product } from '../types';
+
+import { formatCurrency } from '@/lib/helpers';
 
 export default function ProductCard(product: Product) {
   const [open, setOpen] = useState(false);
@@ -63,12 +64,15 @@ export default function ProductCard(product: Product) {
     <>
       <div
         className='p-1 border border-input/50 pb-2 sm:p-4 space-y-2'
-        // onClick={() => navigate(`/products/${id}`)}
+        onClick={() => navigate(`/products/${product.id}`)}
       >
         <div className='w-full h-48 sm:h-72 bg-muted/60 flex items-center justify-center relative'>
           <button
             className='absolute right-1 top-2 inline-block rounded-full bg-primary/5 p-1 shadow-sm hover:bg-primary/20 sm:right-4 disabled:opacity-50'
-            onClick={handleWishlistToggle}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleWishlistToggle();
+            }}
             disabled={isAddingToWishlist || isRemovingFromWishlist}
           >
             <Heart
@@ -111,7 +115,10 @@ export default function ProductCard(product: Product) {
             <Button
               className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
               variant='outline'
-              onClick={() => setOpen(true)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpen(true);
+              }}
             >
               Add to cart
             </Button>
@@ -120,7 +127,10 @@ export default function ProductCard(product: Product) {
               {inCart ? (
                 <div className='flex justify-between items-center'>
                   <Button
-                    onClick={() => decrementCartItem(inCart.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      decrementCartItem(inCart.id);
+                    }}
                     disabled={isWorking}
                   >
                     <Minus className='text-background' />
@@ -129,7 +139,10 @@ export default function ProductCard(product: Product) {
                     {inCart.quantity}
                   </span>
                   <Button
-                    onClick={() => incrementCartItem(inCart.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      incrementCartItem(inCart.id);
+                    }}
                     disabled={isWorking}
                   >
                     <Plus className='text-background' />
@@ -139,7 +152,10 @@ export default function ProductCard(product: Product) {
                 <Button
                   className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
                   variant='outline'
-                  onClick={() => addToCart({ productId: product.id })}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToCart({ productId: product.id });
+                  }}
                   disabled={isAddingToCart || isWorking}
                 >
                   {isAddingToCart ? <Spinner /> : <span>Add to cart</span>}
