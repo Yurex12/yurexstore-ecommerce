@@ -1,5 +1,5 @@
 import CartItemsList from '@/features/cart/components/CartItemList';
-import OrderSummary from '@/features/order/components/OrderSummary';
+import OrderSummary from '@/features/order/components/OrderSummary2';
 
 export default function CartPage() {
   return (

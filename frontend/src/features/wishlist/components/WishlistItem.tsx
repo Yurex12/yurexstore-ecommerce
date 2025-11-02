@@ -15,8 +15,9 @@ export default function WishlistItem({
 }: WishlistItem) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { removeFromWishlist, isPending: isRemoving } = useRemoveFromWishlist();
   const { cart } = useCart();
+
+  const { removeFromWishlist, isPending: isRemoving } = useRemoveFromWishlist();
 
   const { addToCart, isPending: isAdding } = useAddToCart();
 

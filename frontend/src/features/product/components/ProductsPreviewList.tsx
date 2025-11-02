@@ -1,26 +1,18 @@
-import { Spinner } from '@/components/ui/spinner';
-
+import { EmptyState } from '@/components/EmptyState';
+import InlineError from '@/components/InlineError';
 import useProducts from '../hooks/useProducts';
 import ProductPreviewCard from './ProductPreviewCard';
+import ProductPreviewSkeletonGrid from './ProductPreviewSkeletonGrid';
 
 export default function ProductsPreviewList() {
   const { products, isPending, error } = useProducts();
 
-  if (isPending) {
-    return (
-      <div className='flex items-center gap-4'>
-        <Spinner />
-      </div>
-    );
-  }
+  if (isPending) return <ProductPreviewSkeletonGrid />;
 
-  if (error) {
-    return <p>{error.message}</p>;
-  }
+  if (error) return <InlineError message='Unable to load products' />;
 
-  if (!products?.length) {
-    return <p>No products found</p>;
-  }
+  if (!products?.length) return <EmptyState message='No products found' />;
+
   return (
     <div className='grid grid-cols-2 md:grid-cols-3 gap-1 sm:gap-2  lg:grid-cols-4'>
       {products.map((product) => (

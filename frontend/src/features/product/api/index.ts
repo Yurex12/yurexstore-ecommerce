@@ -1,10 +1,10 @@
 import { api, handleApiError } from '@/services/api';
 
-import type { Products } from '../types';
+import type { ProductListResponse } from '../types';
 
 export async function getProducts() {
   try {
-    const { data } = await api.get<Products>('/products');
+    const { data } = await api.get<ProductListResponse>('/products');
 
     return data.products;
   } catch (error) {

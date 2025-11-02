@@ -25,6 +25,7 @@ export const getCart = expressAsyncHandler(
             price: true,
             quantity: true,
             variantTypeName: true,
+
             category: {
               select: {
                 name: true,

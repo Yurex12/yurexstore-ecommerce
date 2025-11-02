@@ -44,7 +44,7 @@ export type Product = {
   variantTypeName: string | null;
 };
 
-export type Products = {
+export type ProductListResponse = {
   success: boolean;
   message: string;
   products: Product[];
