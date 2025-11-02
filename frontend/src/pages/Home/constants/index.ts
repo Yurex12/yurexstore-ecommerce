@@ -4,6 +4,7 @@ import {
   faTruckFast,
   faEye,
 } from '@fortawesome/free-solid-svg-icons';
+
 import type { BrandFeature } from '../types';
 
 export const brandFeatures: BrandFeature[] = [

@@ -1,26 +1,24 @@
-import { Spinner } from '@/components/ui/spinner';
-import useCategories from '@/features/category/hook/useCategories';
 import { useSearchQuery } from '@/hooks/useSearchQuery';
+
+import { EmptyState } from '@/components/EmptyState';
+import InlineError from '@/components/InlineError';
+
+import useCategories from '@/features/category/hook/useCategories';
+import ProductCategoriesSkeleton from './ProductCategoriesSkeleton';
 
 export default function ProductCategories() {
   const { queryValue, handleSearchQuery } = useSearchQuery('category', '');
 
   const { categories, error, isPending } = useCategories();
 
-  if (isPending) {
-    return (
-      <div className='flex items-center gap-4'>
-        <Spinner />
-      </div>
-    );
-  }
+  if (isPending) return <ProductCategoriesSkeleton />;
 
   if (error) {
-    return <p>{error.message}</p>;
+    return <InlineError message='Unable to load categories.' />;
   }
 
   if (!categories?.length) {
-    return <p>No categories found</p>;
+    return <EmptyState message='No categories found.' />;
   }
 
   return (
