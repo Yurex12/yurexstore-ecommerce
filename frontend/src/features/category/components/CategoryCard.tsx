@@ -11,7 +11,7 @@ export default function CategoryCard({
   const navigate = useNavigate();
   return (
     <div
-      className='flex flex-col shrink-0 flex-1 items-center justify-center gap-3 py-10 px-10 w-full cursor-pointer border bg-background rounded text-foreground/80 transition-all hover:border-primary hover:shadow-md'
+      className='flex flex-col shrink-0 w-[30%] sm:w-[35%] md:w-[38%] lg:w-[24%] items-center justify-center gap-3 py-10 px-10 cursor-pointer border bg-background rounded text-foreground/80 transition-all hover:border-primary hover:shadow-md'
       onClick={() => navigate(`/shop?category=${slug}`)}
     >
       <div className='bg-primary/5 p-6 rounded-full'>
@@ -25,9 +25,7 @@ export default function CategoryCard({
       </div>
 
       <div className='text-center'>
-        <p className='font-semibold text-sm'>
-          {name.charAt(0).toUpperCase() + name.slice(1)}
-        </p>
+        <p className='font-semibold text-sm'>{name}</p>
         <p className='text-xs text-muted-foreground'>{description}</p>
       </div>
     </div>

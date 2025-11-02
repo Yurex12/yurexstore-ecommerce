@@ -1,3 +1,5 @@
+import type { ApiResponseBase } from '@/services/types';
+
 export type Category = {
   id: string;
   name: string;
@@ -6,8 +8,6 @@ export type Category = {
   slug: string;
 };
 
-export type Categories = {
-  success: boolean;
-  message: string;
+export type CategoryListResponse = ApiResponseBase & {
   categories: Category[];
 };

@@ -1,4 +1,4 @@
-export type ApiError = {
+export type ApiResponseBase = {
   success: boolean;
   message: string;
 };

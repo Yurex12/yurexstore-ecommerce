@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import type { ApiError } from './types';
+import type { ApiResponseBase } from './types';
 
 export const api = axios.create({
   baseURL: 'http://localhost:8080/api',
@@ -9,7 +9,7 @@ export const api = axios.create({
 
 export function handleApiError(error: unknown, fallbackMessage: string) {
   if (axios.isAxiosError(error)) {
-    const err = error as AxiosError<ApiError>;
+    const err = error as AxiosError<ApiResponseBase>;
     let message = err.response?.data.message;
 
     if (err.response?.status === 500) {
