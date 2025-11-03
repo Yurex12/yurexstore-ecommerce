@@ -1,9 +1,8 @@
-import { useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
+import { useEffect } from 'react';
 
-import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
+import { Separator } from '@/components/ui/separator';
 import { AddressForm } from './AddressForm';
 import { AddressSelection } from './AddressSelection';
 import { EmptyAddress } from './EmptyAddress';
@@ -11,6 +10,8 @@ import { EmptyAddress } from './EmptyAddress';
 import { useAddressStore } from '../store/useAddressStore';
 
 import useAddresses from '../hooks/useAddresses';
+import CustomerAddressSkeleton from './CustomerAddressSkeleton';
+import InlineError from '@/components/InlineError';
 
 export function CustomerAddress() {
   const { addresses, error, isPending } = useAddresses();
@@ -34,12 +35,10 @@ export function CustomerAddress() {
   }, [addresses, isPending, error, setAddresses, selectAddress]);
 
   if (isPending) {
-    return (
-      <div className='flex items-center gap-4'>
-        <Spinner />
-      </div>
-    );
+    return <CustomerAddressSkeleton />;
   }
+
+  if (error) return <InlineError message='Unable to load address' />;
 
   const selectedAddress = addresses?.find((a) => a.id === selectedAddressId);
 

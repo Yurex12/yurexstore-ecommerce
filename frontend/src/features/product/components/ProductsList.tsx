@@ -13,7 +13,7 @@ export default function ProductsList() {
   }
 
   if (error) {
-    return <InlineError message='Failed to load products.' />;
+    return <InlineError message='unable to load products.' />;
   }
 
   if (!products?.length) {

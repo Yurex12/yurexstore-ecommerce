@@ -1,18 +1,13 @@
+import { Minus, Plus, Trash } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Spinner } from '@/components/ui/spinner';
-import { formatCurrency } from '@/lib/helpers';
-import { Minus, Plus } from 'lucide-react';
 import useDecrementCartItem from '../hooks/useDecrementCartItem';
 import useIncrementCartItem from '../hooks/useIncrementCartItem';
 import useRemoveItemFromCart from '../hooks/useRemoveItemFromCart';
+import { formatCurrency } from '@/lib/helpers';
 import type { CartWithRelation } from '../types';
-import { Badge } from '@/components/ui/badge';
 
-export default function CartItem({
-  id: cartItemId,
-  product: { name: productName, price: productPrice },
-  quantity: cartItemQuantity,
-  productVariant,
-}: CartWithRelation) {
+export default function CartItem(cartItem: CartWithRelation) {
   const { incrementCartItem, isPending: isIncrementing } =
     useIncrementCartItem();
   const { decrementCartItem, isPending: isDecrementing } =
@@ -20,84 +15,92 @@ export default function CartItem({
   const { removeFromCart, isPending: isRemoving } = useRemoveItemFromCart();
 
   const isWorking = isIncrementing || isDecrementing || isRemoving;
-  const totalPrice = productPrice * cartItemQuantity;
+
+  const hasReachedStockLimit =
+    cartItem.quantity >=
+    (cartItem.productVariant?.quantity || cartItem.product.quantity);
 
   return (
-    <div className='flex items-center justify-between py-10'>
-      {/* product info */}
-      <div className='flex gap-x-4'>
-        <img src='shirt.png' alt='' className='w-24' />
-        <div className='flex flex-col md:space-y-2'>
-          <p className='font-medium text-foreground'>{productName}</p>
-          {/* <p className='text-muted-foreground text-xs'>{productCategory}</p> */}
-          <p className='text-foreground/80 text-sm font-medium'>
-            {formatCurrency(productPrice)}
-          </p>
-          {productVariant && (
-            <Badge className='text-foreground/80' variant='outline'>
-              {productVariant.value}
-            </Badge>
-          )}
-          <button
-            className='md:hidden text-sm mt-auto text-left font-semibold text-destructive/90 cursor-pointer'
-            onClick={() => removeFromCart(cartItemId)}
-            disabled={isWorking}
-          >
-            Remove
-          </button>
+    <div className='py-4 border-b space-y-4'>
+      {/* top section */}
+      <div className='flex gap-4 sm:gap-6'>
+        <div className='size-20 rounded bg-muted/60 flex items-center justify-center'>
+          <img
+            src={cartItem.product.images[0].url}
+            alt={cartItem.product.name}
+            className='max-h-full max-w-full object-contain rounded'
+          />
         </div>
-      </div>
 
-      {/* quantity controls */}
-      <div className='flex flex-col items-center gap-y-4'>
-        <div className='flex items-center divide-x rounded-md border border-input'>
-          <button
-            className='sm:px-4 sm:py-2 px-2 py-1 text-foreground/70 cursor-pointer hover:bg-muted disabled:opacity-50'
-            disabled={isWorking}
-            onClick={() => decrementCartItem(cartItemId)}
-          >
-            <Minus size={20} />
-          </button>
+        <div className='flex-1 flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4 min-w-0'>
+          <div className='flex-1 flex flex-col justify-between min-w-0'>
+            <p className='text-foreground/70 text-sm line-clamp-2 sm:text-base min-w-0'>
+              {cartItem.product.name}
+            </p>
+            {cartItem.productVariant && (
+              <Badge className='text-foreground/80 mt-1' variant='outline'>
+                {cartItem.productVariant.value}
+              </Badge>
+            )}
+          </div>
 
-          <p className='sm:px-4 sm:py-2 px-2 py-1 flex items-center justify-center font-semibold text-foreground/70 text-sm'>
-            {isIncrementing || isDecrementing ? (
-              <Spinner />
-            ) : (
-              <span>{cartItemQuantity}</span>
+          <p className='text-foreground text-sm sm:text-base font-medium whitespace-nowrap'>
+            {formatCurrency(
+              cartItem.productVariant?.price || cartItem.product.price
             )}
           </p>
-
-          <button
-            className='sm:px-4 sm:py-2 px-2 py-1 text-foreground/70 cursor-pointer hover:bg-muted disabled:opacity-50'
-            disabled={isWorking}
-            onClick={() => incrementCartItem(cartItemId)}
-          >
-            <Plus size={20} />
-          </button>
         </div>
-
-        {/* total for small screens */}
-        <span className='block font-semibold text-foreground/70 md:hidden'>
-          {formatCurrency(totalPrice)}
-        </span>
       </div>
 
-      {/* total for desktop */}
-      <div className='hidden md:block'>
-        <span className='font-semibold text-foreground'>
-          {formatCurrency(totalPrice)}
-        </span>
-      </div>
-
-      {/* remove for desktop */}
-      <div className='hidden md:block'>
+      <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1'>
         <button
-          className='mt-auto text-left font-semibold text-destructive/90 cursor-pointer'
-          onClick={() => removeFromCart(cartItemId)}
+          className='flex gap-x-2 items-center text-sm sm:text-base font-medium text-destructive/70 cursor-pointer disabled:opacity-50'
+          onClick={() => removeFromCart(cartItem.id)}
           disabled={isWorking}
         >
-          Remove
+          <Trash />
+          <span>Remove</span>
         </button>
+
+        <div className='flex flex-col items-start sm:items-center gap-1'>
+          <div className='flex items-center gap-x-2 sm:gap-x-4'>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                decrementCartItem(cartItem.id);
+              }}
+              disabled={isWorking}
+              className='p-2 bg-primary rounded-md disabled:opacity-50 flex items-center justify-center'
+            >
+              <Minus className='text-background' size={15} />
+            </button>
+
+            <p className='flex items-center justify-center font-semibold text-foreground/70 w-5'>
+              {isIncrementing || isDecrementing ? (
+                <Spinner />
+              ) : (
+                <span>{cartItem.quantity}</span>
+              )}
+            </p>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                incrementCartItem(cartItem.id);
+              }}
+              disabled={isWorking || hasReachedStockLimit}
+              className='p-2 bg-primary rounded-md disabled:opacity-50 flex items-center justify-center'
+            >
+              <Plus className='text-background' size={15} />
+            </button>
+          </div>
+
+          {hasReachedStockLimit && (
+            <p className='text-xs text-destructive mt-1'>
+              Maximum stock reached
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

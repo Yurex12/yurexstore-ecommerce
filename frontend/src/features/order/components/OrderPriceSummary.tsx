@@ -3,12 +3,12 @@ import { Spinner } from '@/components/ui/spinner';
 import useCart from '@/features/cart/hooks/useCart';
 import { formatCurrency } from '@/lib/helpers';
 
-export function OrderPriceSummary() {
+export default function OrderPriceSummary() {
   const { cart, isPending, error } = useCart();
 
   if (isPending) {
     return (
-      <div className='flex items-center gap-4'>
+      <div className='flex items-center gap-4 w-full justify-center'>
         <Spinner />
       </div>
     );

@@ -2,6 +2,8 @@ import { Spinner } from '@/components/ui/spinner';
 
 import useCart from '../hooks/useCart';
 import CartItem from './CartItem';
+import { EmptyState } from '@/components/EmptyState';
+import InlineError from '@/components/InlineError';
 
 function CartItemsList() {
   const { cart, isPending, error } = useCart();
@@ -14,19 +16,15 @@ function CartItemsList() {
     );
   }
 
-  if (error) {
-    return <p>{error.message}</p>;
-  }
+  if (error) return <InlineError message='Unable to load cart' />;
 
-  if (!cart?.length) {
-    return <p>No products found</p>;
-  }
+  if (!cart?.length) return <EmptyState message='Cart not found' />;
   return (
-    <div className='basis-4/6 divide-y md:mt-4'>
+    <>
       {cart.map((cart) => (
         <CartItem key={cart.id} {...cart} />
       ))}
-    </div>
+    </>
   );
 }
 
