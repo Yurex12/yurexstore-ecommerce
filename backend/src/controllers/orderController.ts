@@ -3,23 +3,80 @@ import expressAsyncHandler from 'express-async-handler';
 
 import prisma from '../lib/prisma';
 
-import { CartSchema } from '../schemas/cartSchema';
 import { Order } from '../schemas/orderSchema';
 
-//@desc fetch user Cart
-//@route GET api/cart/
+//@desc fetch an order
+//@route GET api/orders/
 //@access Private
-// export const getOrder = expressAsyncHandler(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const userId = req.user.userId;
+export const getOrders = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user.userId;
 
-//     res.json({
-//       success: true,
-//       message: 'Successful.',
-//       cart: cartItems,
-//     });
-//   }
-// );
+    const orders = await prisma.order.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        orderItems: true,
+      },
+      omit: {
+        paymentStatus: true,
+        stripePaymentId: true,
+      },
+    });
+
+    if (!orders) {
+      res.status(404);
+      throw new Error('Orders not found');
+    }
+
+    res.json({
+      success: true,
+      message: 'Successful.',
+      orders,
+    });
+  }
+);
+
+//@desc fetch an order
+//@route GET api/orders/:id
+//@access Private
+export const getOrder = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user.userId;
+
+    const { id } = req.params;
+
+    const order = await prisma.order.findUnique({
+      where: {
+        id,
+      },
+      omit: {
+        stripePaymentId: true,
+        paymentStatus: true,
+      },
+      include: {
+        orderItems: true,
+      },
+    });
+
+    if (!order) {
+      res.status(404);
+      throw new Error('Order not found');
+    }
+
+    if (userId !== order.userId && req.user.role !== 'ADMIN') {
+      res.status(403);
+      throw new Error('Forbidden');
+    }
+
+    res.json({
+      success: true,
+      message: 'Successful.',
+      order,
+    });
+  }
+);
 
 //@desc create an order
 //@route POST api/orders/
@@ -108,6 +165,9 @@ export const createOrder = expressAsyncHandler(
       0
     );
 
+    // 1% of total price
+    const deliveryFee = +((1 / 100) * totalPrice).toFixed(2);
+
     const order = await prisma.$transaction(
       async (tx) => {
         const newOrder = await tx.order.create({
@@ -115,6 +175,7 @@ export const createOrder = expressAsyncHandler(
             deliveryAddress: data.deliveryAddress,
             phone: data.phone,
             totalPrice,
+            deliveryFee,
             paymentMethod: data.paymentMethod,
             userId,
             orderItems: {
@@ -164,7 +225,7 @@ export const createOrder = expressAsyncHandler(
     res.status(201).json({
       success: true,
       message: 'Successful.',
-      order,
+      orderId: order.id,
     });
   }
 );

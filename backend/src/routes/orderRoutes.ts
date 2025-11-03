@@ -4,12 +4,18 @@ import { validateData } from '../middlewares/validation';
 
 import { validateToken } from '../middlewares/validateTokenHandler';
 
-import { createOrder } from '../controllers/orderController';
+import {
+  createOrder,
+  getOrder,
+  getOrders,
+} from '../controllers/orderController';
 import { OrderSchema } from '../schemas/orderSchema';
 
 const router = express.Router();
 
-// router.get('/', validateToken, getAddresses);
+router.get('/', validateToken, getOrders);
+
+router.get('/:id', validateToken, getOrder);
 
 router.post('/', validateToken, validateData(OrderSchema), createOrder);
 

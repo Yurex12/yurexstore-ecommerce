@@ -52,7 +52,7 @@ export default function CartItem(cartItem: CartWithRelation) {
         </div>
       </div>
 
-      <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1'>
+      <div className='flex sm:flex-row justify-between items-start sm:items-center gap-1'>
         <button
           className='flex gap-x-2 items-center text-sm sm:text-base font-medium text-destructive/70 cursor-pointer disabled:opacity-50'
           onClick={() => removeFromCart(cartItem.id)}

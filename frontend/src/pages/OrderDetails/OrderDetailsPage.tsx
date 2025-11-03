@@ -1,10 +1,11 @@
 // adjust path
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft } from 'lucide-react';
 import DeliveryInfo from '@/features/order/components/DeliveryInfo';
 import OrderProductList from '@/features/order/components/OrderProductList';
 import OrderStatus from '@/features/order/components/OrderStatus';
 import PaymentInfo from '@/features/order/components/PaymentInfo';
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const mockOrders = [
   {
@@ -83,6 +84,7 @@ const mockOrders = [
 ];
 
 export default function OrderDetailsPage() {
+  const navigate = useNavigate();
   const id = '3456';
   const order = mockOrders.find((o) => o.id === id);
 
@@ -118,7 +120,7 @@ export default function OrderDetailsPage() {
     <div className='space-y-4'>
       <div className='space-y-2'>
         <div className='flex items-center gap-x-4'>
-          <ArrowLeft onClick={() => history.back()} />
+          <ArrowLeft onClick={() => navigate('/account/orders')} />
           <h2 className='text-xl font-semibold text-foreground'>
             Order Details
           </h2>

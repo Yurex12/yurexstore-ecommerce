@@ -186,7 +186,8 @@ model Order {
   phone           String
   paymentMethod   PAYMENT_METHOD
   paymentStatus   PAYMENT_STATUS @default(PENDING)
-  // stripePaymentId String?
+  deliveryFee     Float
+  stripePaymentId String?
   orderItems      OrderItem[]
   notifications   Notification[]
 

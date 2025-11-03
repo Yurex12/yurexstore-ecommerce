@@ -1,93 +1,41 @@
-import { useOrderStore } from '../store/useOrderStore';
+import { EmptyState } from '@/components/EmptyState';
+import useOrders from '../hooks/useOrders';
 import { OrderCard } from './OrderCard';
+import InlineError from '@/components/InlineError';
+import { useOrderStore } from '../store/useOrderStore';
 
 export default function OrderList() {
-  const { value } = useOrderStore();
-  const mockOrders = [
-    {
-      id: '3456',
-      date: 'Oct 20, 2025',
-      status: 'delivered',
-      total: 120000,
-      products: [
-        {
-          id: '1',
-          name: 'Nike Air Zoom',
-          image: '/shirt.png',
-          price: 45000,
-          quantity: 1,
-        },
-        {
-          id: '2',
-          name: 'Cotton Hoodie',
-          image: '/item.jpg',
-          price: 30000,
-          quantity: 2,
-        },
-        {
-          id: '3',
-          name: 'Headphones',
-          image: '/shirt.png',
-          price: 15000,
-          quantity: 1,
-        },
-        {
-          id: '4',
-          name: 'Smart Watch',
-          image: '/shirt.png',
-          price: 30000,
-          quantity: 1,
-        },
-      ],
-    },
-    {
-      id: '3460',
-      date: 'Oct 15, 2025',
-      status: 'processing',
-      total: 65000,
-      products: [
-        {
-          id: '1',
-          name: 'Running Shorts',
-          image: '/shirt.png',
-          price: 25000,
-          quantity: 1,
-        },
-        {
-          id: '2',
-          name: 'Backpack',
-          image: '/shirt.png',
-          price: 40000,
-          quantity: 1,
-        },
-      ],
-    },
-    {
-      id: '3475',
-      date: 'Oct 10, 2025',
-      status: 'cancelled',
-      total: 35000,
-      products: [
-        {
-          id: '1',
-          name: 'Sneakers',
-          image: '/shirt.png',
-          price: 35000,
-          quantity: 1,
-        },
-      ],
-    },
-  ];
+  const { orders, isPending, error } = useOrders();
+  const { status } = useOrderStore();
 
-  console.log(value);
+  if (isPending) return <p>Loading..</p>;
+
+  if (error) return <InlineError message='Unable to fetch orders' />;
+
+  if (!orders?.length) return <EmptyState message='No orders found' />;
+
+  let filteredOrders;
+
+  if (status === 'PENDING') {
+    filteredOrders = orders.filter((order) => order.orderStatus === 'PENDING');
+  } else if (status === 'DELIVERED') {
+    filteredOrders = orders.filter(
+      (order) => order.orderStatus === 'DELIVERED'
+    );
+  } else if (status === 'CANCELLED') {
+    filteredOrders = orders.filter(
+      (order) => order.orderStatus === 'CANCELLED'
+    );
+  } else {
+    filteredOrders = orders;
+  }
+
+  if (!filteredOrders?.length) return <EmptyState message='No Data found' />;
 
   return (
     <ul className='space-y-4'>
-      {mockOrders.map((order) => (
-        <li key={order.id}>
-          {' '}
-          <OrderCard order={order} />
-        </li>
+      {filteredOrders.map((order) => (
+        <OrderCard order={order} key={order.id} />
       ))}
     </ul>
   );

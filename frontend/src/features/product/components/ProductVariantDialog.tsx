@@ -18,6 +18,8 @@ import { formatCurrency } from '@/lib/helpers';
 
 import type { ProductVariantProps } from '../types';
 
+import { Spinner } from '@/components/ui/spinner';
+
 export default function ProductVariantDialog({
   product,
   open,
@@ -148,11 +150,13 @@ export default function ProductVariantDialog({
                         })
                       }
                     >
-                      {isAdding
-                        ? 'Adding...'
-                        : isOutOfStock
-                        ? 'Out of stock'
-                        : 'Add to cart'}
+                      {isAdding ? (
+                        <Spinner />
+                      ) : isOutOfStock ? (
+                        'Out of stock'
+                      ) : (
+                        'Add to cart'
+                      )}
                     </Button>
                     {hasReachedStockLimit && (
                       <p className='text-xs text-destructive mt-1 text-right'>

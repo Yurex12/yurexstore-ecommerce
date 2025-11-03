@@ -10,6 +10,9 @@ import CheckoutSkeleton from './components/CheckoutSkeleton';
 import { useAddressStore } from '@/features/address/store/useAddressStore';
 import { usePaymentStore } from '@/features/order/store/usePaymentStore';
 import useCreateOrder from '@/features/order/hooks/useCreateOrder';
+import FullPageLoader from '@/components/FullPageLoader';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function CheckoutPage() {
   const { cart, isPending: isFetchingCart, error } = useCart();
@@ -17,6 +20,8 @@ export default function CheckoutPage() {
 
   const { addresses, selectedAddressId } = useAddressStore();
   const { selectedMethod } = usePaymentStore();
+
+  const navigate = useNavigate();
 
   if (isFetchingCart) return <CheckoutSkeleton />;
 
@@ -32,37 +37,50 @@ export default function CheckoutPage() {
     quantity: cartItem.quantity,
   }));
 
-  const deliveryAddress = `${selectedAddress?.deliveryAddress} | ${selectedAddress?.city} | ${selectedAddress?.state}`;
-  const phone = selectedAddress?.phone;
-
-  const order = {
-    orderItems,
-    deliveryAddress,
-    phone,
-    paymentMethod: selectedMethod,
-  };
-
   function handleOrder() {
-    createOrder(order);
+    if (!selectedAddress || !selectedAddress.phone) {
+      toast.error('Please select a valid address before placing your order');
+      return;
+    }
+
+    createOrder(
+      {
+        orderItems,
+        deliveryAddress: `${selectedAddress!.deliveryAddress} | ${
+          selectedAddress!.city
+        } | ${selectedAddress!.state}`,
+        phone: selectedAddress.phone,
+        paymentMethod: selectedMethod,
+      },
+      {
+        onSuccess(data) {
+          navigate(`/account/orders/${data?.orderId}`);
+        },
+      }
+    );
   }
 
   return (
-    <div className='grid grid-cols-1 lg:grid-cols-[60%_35%] gap-5 justify-between lg:space-y-8'>
-      <div className='space-y-6'>
-        <CustomerAddress />
+    <>
+      <div className='grid grid-cols-1 lg:grid-cols-[60%_35%] gap-5 justify-between lg:space-y-8'>
+        <div className='space-y-6'>
+          <CustomerAddress />
 
-        <div className='border space-y-2 px-4 py-4 rounded-md'>
-          <h1 className='text-xl font-semibold'>Order Items</h1>
-          <Separator />
-          <CheckoutItemsList />
+          <div className='border space-y-2 px-4 py-4 rounded-md'>
+            <h1 className='text-xl font-semibold'>Order Items</h1>
+            <Separator />
+            <CheckoutItemsList />
+          </div>
         </div>
+
+        <OrderSummary
+          onOrder={handleOrder}
+          disabled={!selectedAddress}
+          isCreatingOrder={isCreating}
+        />
       </div>
 
-      <OrderSummary
-        onOrder={handleOrder}
-        disabled={!selectedAddress}
-        isCreatingOrder={isCreating}
-      />
-    </div>
+      {isCreating && <FullPageLoader text='Placing your order...' />}
+    </>
   );
 }

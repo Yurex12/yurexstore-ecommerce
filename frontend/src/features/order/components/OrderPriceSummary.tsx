@@ -1,6 +1,7 @@
 import { Spinner } from '@/components/ui/spinner';
 
 import useCart from '@/features/cart/hooks/useCart';
+
 import { formatCurrency } from '@/lib/helpers';
 
 export default function OrderPriceSummary() {
@@ -30,6 +31,8 @@ export default function OrderPriceSummary() {
     )
     .reduce((acc, price) => acc + price, 0);
 
+  const deliveryFee = (1 / 100) * totalPrice;
+
   return (
     <div className='space-y-5 text-sm'>
       <div className='flex justify-between'>
@@ -39,8 +42,10 @@ export default function OrderPriceSummary() {
         </span>
       </div>
       <div className='flex justify-between'>
-        <span className='text-foreground/80'>Shipping Cost</span>
-        <span className='font-medium text-foreground/70'>$0.00</span>
+        <span className='text-foreground/80'>Delivery Fee</span>
+        <span className='font-medium text-foreground/70'>
+          {formatCurrency(deliveryFee)}
+        </span>
       </div>
       <div className='border-t pt-3 flex justify-between'>
         <span className='font-semibold text-foreground'>Total</span>
