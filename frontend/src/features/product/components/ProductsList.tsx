@@ -1,4 +1,4 @@
-import { EmptyState } from '@/components/EmptyState';
+import EmptyState from '@/components/EmptyState';
 import InlineError from '@/components/InlineError';
 import ProductCard from './ProductCard';
 import ProductListSkeleton from './ProductListSkeleton';

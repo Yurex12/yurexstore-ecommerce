@@ -6,6 +6,12 @@ type OrderItemData = {
   quantity: number;
 };
 
+export type PaymentInfoProps = {
+  paymentMethod: string;
+  deliveryFee: number;
+  totalPrice: number;
+};
+
 export type OrderStatus = 'PENDING' | 'CANCELLED' | 'DELIVERED';
 
 export type OrderData = {
@@ -15,7 +21,7 @@ export type OrderData = {
   orderItems: OrderItemData[];
 };
 
-type OrderItem = {
+export type OrderItem = {
   id: string;
   productId: string;
   productVariantId: string | null;

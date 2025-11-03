@@ -2,7 +2,7 @@ import useCart from '@/features/cart/hooks/useCart';
 import CheckoutItem from './CheckoutItem';
 import { Spinner } from '@/components/ui/spinner';
 import InlineError from '@/components/InlineError';
-import { EmptyState } from '@/components/EmptyState';
+import EmptyState from '@/components/EmptyState';
 
 export default function CheckoutItemsList() {
   const { isPending, cart, error } = useCart();

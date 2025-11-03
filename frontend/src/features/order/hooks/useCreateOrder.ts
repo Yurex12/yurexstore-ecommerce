@@ -3,7 +3,7 @@ import { createOrder as createOrderApi } from '../api';
 
 import toast from 'react-hot-toast';
 
-export default function useCreateOrder() {
+export function useCreateOrder() {
   const queryClient = useQueryClient();
   const {
     mutate: createOrder,

@@ -1,20 +1,22 @@
 import { Badge } from '@/components/ui/badge';
 
-export default function OrderStatus({
-  status,
-}: {
-  status: 'processing' | 'delivered' | 'cancelled';
-}) {
+import type { OrderStatus } from '../types';
+
+export default function OrderStatus({ status }: { status: OrderStatus }) {
   return (
     <div>
-      {status === 'delivered' && (
-        <Badge variant='default'>{status.toUpperCase()}</Badge>
+      {status === 'PENDING' && (
+        <Badge className='bg-yellow-100 text-yellow-700 capitalize'>
+          {status}
+        </Badge>
       )}
-      {status === 'processing' && (
-        <Badge variant='secondary'>{status.toUpperCase()}</Badge>
+      {status === 'DELIVERED' && (
+        <Badge className='bg-green-100 text-green-700 capitalize'>
+          {status}
+        </Badge>
       )}
-      {status === 'cancelled' && (
-        <Badge variant='destructive'>{status.toUpperCase()}</Badge>
+      {status === 'CANCELLED' && (
+        <Badge className='bg-red-100 text-red-700 capitalize'>{status}</Badge>
       )}
     </div>
   );

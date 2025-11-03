@@ -1,10 +1,12 @@
-import { EmptyState } from '@/components/EmptyState';
 import useOrders from '../hooks/useOrders';
-import { OrderCard } from './OrderCard';
+
+import EmptyState from '@/components/EmptyState';
+import OrderCard from './OrderCard';
 import InlineError from '@/components/InlineError';
+
 import { useOrderStore } from '../store/useOrderStore';
 
-export default function OrderList() {
+export default function OrdersList() {
   const { orders, isPending, error } = useOrders();
   const { status } = useOrderStore();
 

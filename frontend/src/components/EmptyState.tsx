@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { AlertCircle } from 'lucide-react';
 
-export function EmptyState({
+export default function EmptyState({
   message = 'No data available',
   className,
 }: {

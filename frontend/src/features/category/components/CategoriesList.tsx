@@ -1,6 +1,6 @@
 import InlineError from '@/components/InlineError';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { EmptyState } from '@/components/EmptyState';
+import EmptyState from '@/components/EmptyState';
 import useCategories from '../hook/useCategories';
 import CategoryCard from './CategoryCard';
 import CategorySkeletonList from './CategorySkeletonList';

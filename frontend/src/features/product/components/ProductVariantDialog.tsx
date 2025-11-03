@@ -53,9 +53,9 @@ export default function ProductVariantDialog({
       <DialogContent className='sm:max-w-xl w-10/12 rounded-2xl'>
         <DialogHeader>
           <DialogTitle>
-            <h5 className='text-lg text-foreground'>
+            <span className='text-lg text-foreground'>
               Select a {product.variantTypeName}
-            </h5>
+            </span>
             <p className='text-foreground/60 text-sm'>{product.name}</p>
           </DialogTitle>
         </DialogHeader>

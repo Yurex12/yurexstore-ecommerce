@@ -3,23 +3,16 @@ import { useNavigate } from 'react-router-dom';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import OrderStatus from '../components/OrderStatus';
 
 import type { Order } from '../types';
 import { formatCurrency } from '@/lib/helpers';
 
-export function OrderCard({ order }: { order: Order }) {
+export default function OrderCard({ order }: { order: Order }) {
   const navigate = useNavigate();
 
-  const statusColor =
-    order.orderStatus === 'DELIVERED'
-      ? 'bg-green-100 text-green-700'
-      : order.orderStatus === 'PENDING'
-      ? 'bg-yellow-100 text-yellow-700'
-      : 'bg-red-100 text-red-700';
-
   return (
-    <Card className='border rounded-xl'>
+    <Card className='border rounded-xl shadow-none'>
       {/* Header */}
       <CardHeader className='flex flex-row items-center justify-between gap-2 pb-3 border-b border-border/30'>
         <div className='space-y-2'>
@@ -32,9 +25,7 @@ export function OrderCard({ order }: { order: Order }) {
           </p>
         </div>
 
-        <Badge variant='secondary' className={`${statusColor} capitalize`}>
-          {order.orderStatus}
-        </Badge>
+        <OrderStatus status={order.orderStatus} />
       </CardHeader>
 
       <CardContent className='space-y-4'>
@@ -73,7 +64,7 @@ export function OrderCard({ order }: { order: Order }) {
             </span>
           </p>
           <Button
-            onClick={() => navigate('/account/orders/12')}
+            onClick={() => navigate(`/account/orders/${order.id}`)}
             variant='outline'
             size='sm'
             className='shadow-none text-foreground/70'

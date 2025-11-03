@@ -1,5 +1,5 @@
 import { Separator } from '@/components/ui/separator';
-import OrderList from '@/features/order/components/OrderList';
+import OrdersList from '@/features/order/components/OrdersList';
 import OrderTabs from '@/features/order/components/OrderTabs';
 
 export default function OrdersPage() {
@@ -11,7 +11,7 @@ export default function OrdersPage() {
 
       <OrderTabs />
 
-      <OrderList />
+      <OrdersList />
     </div>
   );
 }

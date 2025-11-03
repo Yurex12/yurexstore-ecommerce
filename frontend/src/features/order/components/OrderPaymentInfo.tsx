@@ -1,5 +1,12 @@
-export default function PaymentInfo({ orderInfo }) {
-  const formatCurrency = (n: number) => `₦${n.toLocaleString()}`;
+import { formatCurrency } from '@/lib/helpers';
+
+import type { PaymentInfoProps } from '../types';
+
+export default function OrderPaymentInfo({
+  paymentMethod,
+  deliveryFee,
+  totalPrice,
+}: PaymentInfoProps) {
   return (
     <div className='border rounded-xl p-4 bg-background space-y-4 flex-1'>
       <h3 className='font-semibold'>Payment Information</h3>
@@ -9,7 +16,7 @@ export default function PaymentInfo({ orderInfo }) {
           Payment Method
         </h3>
         <p className='text-sm text-muted-foreground'>
-          {orderInfo.paymentMethod}
+          {paymentMethod.split('_').join(' ')}
         </p>
       </div>
 
@@ -19,15 +26,15 @@ export default function PaymentInfo({ orderInfo }) {
         </h3>
         <div className='flex justify-between'>
           <span>Items total:</span>
-          <span>{formatCurrency(orderInfo.subtotal)}</span>
+          <span>{formatCurrency(totalPrice)}</span>
         </div>
         <div className='flex justify-between'>
           <span>Delivery Fees:</span>
-          <span>{formatCurrency(orderInfo.deliveryFee)}</span>
+          <span>{formatCurrency(deliveryFee)}</span>
         </div>
         <div className='flex justify-between font-medium'>
           <span>Total:</span>
-          <span>{formatCurrency(orderInfo.total)}</span>
+          <span>{formatCurrency(totalPrice + deliveryFee)}</span>
         </div>
       </div>
     </div>

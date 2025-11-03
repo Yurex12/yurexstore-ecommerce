@@ -1,18 +1,20 @@
-import { Separator } from '@/components/ui/separator';
-import { CustomerAddress } from '@/features/address/components/CustomerAddress';
-import OrderSummary from '@/features/order/components/OrderSummary';
-import CheckoutItemsList from './components/CheckoutItemsList';
-import useCart from '@/features/cart/hooks/useCart';
-import InlineError from '@/components/InlineError';
-import { EmptyState } from '@/components/EmptyState';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
+import { Separator } from '@/components/ui/separator';
+
+import CheckoutItemsList from './components/CheckoutItemsList';
+import InlineError from '@/components/InlineError';
+import EmptyState from '@/components/EmptyState';
+import FullPageLoader from '@/components/FullPageLoader';
 import CheckoutSkeleton from './components/CheckoutSkeleton';
+
 import { useAddressStore } from '@/features/address/store/useAddressStore';
 import { usePaymentStore } from '@/features/order/store/usePaymentStore';
-import useCreateOrder from '@/features/order/hooks/useCreateOrder';
-import FullPageLoader from '@/components/FullPageLoader';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useCreateOrder } from '@/features/order/hooks/useCreateOrder';
+import { CustomerAddress } from '@/features/address/components/CustomerAddress';
+import OrderSummary from '@/features/order/components/OrderSummary';
+import useCart from '@/features/cart/hooks/useCart';
 
 export default function CheckoutPage() {
   const { cart, isPending: isFetchingCart, error } = useCart();
