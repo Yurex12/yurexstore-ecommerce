@@ -27,11 +27,6 @@ export async function getOrder(orderId: string) {
 }
 
 export async function createOrder(orderData: OrderData) {
-  try {
-    const { data } = await api.post<CreateOrderResponse>('/orders', orderData);
-
-    return data;
-  } catch (error) {
-    handleApiError(error, 'Failed to create order');
-  }
+  const { data } = await api.post<CreateOrderResponse>('/orders', orderData);
+  return data.orderId;
 }

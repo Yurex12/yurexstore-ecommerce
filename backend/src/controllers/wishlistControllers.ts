@@ -23,6 +23,9 @@ export const getWishlists = expressAsyncHandler(
           },
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     res.json({

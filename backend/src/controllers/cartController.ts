@@ -4,6 +4,7 @@ import expressAsyncHandler from 'express-async-handler';
 import prisma from '../lib/prisma';
 
 import { CartSchema } from '../schemas/cartSchema';
+import { ca } from 'zod/v4/locales';
 
 //@desc fetch user Cart
 //@route GET api/cart/
@@ -40,10 +41,67 @@ export const getCart = expressAsyncHandler(
       },
     });
 
+    const processedCartItems = await Promise.all(
+      cartItems.map(async (cartItem) => {
+        // product deleted
+        if (!cartItem.product) {
+          await prisma.cartItem.delete({ where: { id: cartItem.id } });
+          return null;
+        }
+
+        const availableStock =
+          cartItem.productVariant?.quantity || cartItem.product.quantity;
+
+        // product out of stock
+        if (availableStock === 0) {
+          await prisma.cartItem.delete({ where: { id: cartItem.id } });
+          return null;
+        }
+
+        const needsUpdate = cartItem.quantity > availableStock;
+
+        let updatedCartItem;
+
+        if (needsUpdate) {
+          updatedCartItem = await prisma.cartItem.update({
+            where: {
+              id: cartItem.id,
+            },
+            data: {
+              quantity: availableStock,
+            },
+            include: {
+              product: {
+                select: {
+                  id: true,
+                  images: true,
+                  name: true,
+                  price: true,
+                  quantity: true,
+                  variantTypeName: true,
+
+                  category: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                },
+              },
+              productVariant: true,
+            },
+          });
+        }
+
+        return updatedCartItem ? updatedCartItem : cartItem;
+      })
+    );
+
+    const validCartItems = processedCartItems.filter((item) => item !== null);
+
     res.json({
       success: true,
       message: 'Successful.',
-      cart: cartItems,
+      cart: validCartItems,
     });
   }
 );
@@ -222,7 +280,7 @@ export const decrementCartItem = expressAsyncHandler(
 
     let cartItem;
 
-    if (itemInCart.quantity === 1) {
+    if (itemInCart.quantity <= 1) {
       cartItem = await prisma.cartItem.delete({
         where: {
           id: itemInCart.id,

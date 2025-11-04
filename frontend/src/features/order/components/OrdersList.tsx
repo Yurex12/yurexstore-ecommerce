@@ -1,8 +1,9 @@
 import useOrders from '../hooks/useOrders';
 
 import EmptyState from '@/components/EmptyState';
-import OrderCard from './OrderCard';
 import InlineError from '@/components/InlineError';
+import OrderCard from './OrderCard';
+import OrdersSkeleton from './OrdersSkeleton';
 
 import { useOrderStore } from '../store/useOrderStore';
 
@@ -10,7 +11,7 @@ export default function OrdersList() {
   const { orders, isPending, error } = useOrders();
   const { status } = useOrderStore();
 
-  if (isPending) return <p>Loading..</p>;
+  if (isPending) return <OrdersSkeleton />;
 
   if (error) return <InlineError message='Unable to fetch orders' />;
 

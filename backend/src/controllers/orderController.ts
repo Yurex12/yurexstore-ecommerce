@@ -23,6 +23,9 @@ export const getOrders = expressAsyncHandler(
         paymentStatus: true,
         stripePaymentId: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     if (!orders) {
@@ -110,15 +113,15 @@ export const createOrder = expressAsyncHandler(
           });
 
           if (!variant) {
-            throw new Error(
-              `Product variant ${orderItem.productVariantId} not found`
-            );
+            res.status(404);
+            throw new Error('Some items in your cart are no longer available.');
           }
 
           // Check stock
           if (variant.quantity < orderItem.quantity) {
+            res.status(409);
             throw new Error(
-              `Insufficient stock for ${variant.product.name}. Available: ${variant.quantity}, Requested: ${orderItem.quantity}`
+              'Some items are out of stock. Your cart has been updated.'
             );
           }
 
@@ -126,31 +129,33 @@ export const createOrder = expressAsyncHandler(
             productId: variant.productId,
             productVariantId: variant.id,
             productName: variant.product.name,
+            productVariantValue: variant.value,
             productPrice: variant.price,
             productImage: variant.product.images[0].url || '',
             quantity: orderItem.quantity,
           };
         } else {
-          // Item without variant - check main product
           const product = await prisma.product.findUnique({
             where: { id: orderItem.productId },
             include: { images: { select: { url: true }, take: 1 } },
           });
 
           if (!product) {
-            throw new Error(`Product ${orderItem.productId} not found`);
+            res.status(404);
+            throw new Error('Some items in your cart are no longer available.');
           }
 
-          // Check stock
           if (product.quantity < orderItem.quantity) {
+            res.status(409);
             throw new Error(
-              `Insufficient stock for ${product.name}. Available: ${product.quantity}, Requested: ${orderItem.quantity}`
+              'Some items are out of stock. Your cart has been updated.'
             );
           }
 
           return {
             productId: product.id,
             productVariantId: null,
+            productVariantValue: null,
             productName: product.name,
             productPrice: product.price,
             productImage: product.images[0].url || '',

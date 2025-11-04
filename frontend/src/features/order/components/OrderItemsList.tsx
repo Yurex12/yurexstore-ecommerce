@@ -1,5 +1,6 @@
 import { formatCurrency } from '@/lib/helpers';
 import type { OrderItem } from '../types';
+import { Badge } from '@/components/ui/badge';
 
 export default function OrderItemsList({
   orderItems,
@@ -20,13 +21,18 @@ export default function OrderItemsList({
           />
 
           <div className='flex-1'>
-            <h4 className='font-medium'>{orderItem.productName}</h4>
-            <p className='text-sm text-muted-foreground'>
+            <p className='font-medium flex items-center gap-2 text-sm text-foreground'>
+              <span className='line-clamp-1'>{orderItem.productName}</span>
+              {orderItem.productVariantValue && (
+                <Badge variant='outline'>{orderItem.productVariantValue}</Badge>
+              )}
+            </p>
+            <p className='text-sm text-muted-foreground '>
               Qty: {orderItem.quantity}
             </p>
           </div>
 
-          <p className='font-semibold text-muted-foreground '>
+          <p className='font-semibold text-muted-foreground text-sm'>
             {formatCurrency(orderItem.productPrice * orderItem.quantity)}
           </p>
         </div>

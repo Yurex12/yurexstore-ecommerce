@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import OrderStatus from '../components/OrderStatus';
 
 import type { Order } from '../types';
@@ -38,9 +39,16 @@ export default function OrderCard({ order }: { order: Order }) {
                 className='size-12 rounded-md border object-cover'
               />
               <div className='flex flex-col'>
-                <p className='text-sm font-medium text-foreground/90'>
-                  {orderItem.productName}
+                <p className='text-sm font-medium text-foreground/90 flex gap-2 items-center'>
+                  <span className='line-clamp-1'>{orderItem.productName}</span>
+
+                  {orderItem.productVariantValue && (
+                    <Badge variant='outline'>
+                      {orderItem.productVariantValue}
+                    </Badge>
+                  )}
                 </p>
+
                 <p className='text-xs text-muted-foreground'>
                   Qty: {orderItem.quantity}
                 </p>

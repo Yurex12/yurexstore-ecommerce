@@ -55,8 +55,8 @@ export default function CheckoutPage() {
         paymentMethod: selectedMethod,
       },
       {
-        onSuccess(data) {
-          navigate(`/account/orders/${data?.orderId}`);
+        onSuccess(orderId) {
+          navigate(`/account/orders/${orderId}`);
         },
       }
     );
