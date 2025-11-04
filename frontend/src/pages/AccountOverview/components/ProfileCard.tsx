@@ -1,13 +1,13 @@
+import InlineError from '@/components/InlineError';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Spinner } from '@/components/ui/spinner';
 import useUser from '@/features/auth/hooks/useUser';
 
 export default function ProfileCard() {
   const { user, isPending, error } = useUser();
 
-  if (isPending) return <Spinner />;
+  if (isPending) return <p>Loading</p>;
 
-  if (error) return <p>{error.message}</p>;
+  if (error) return <InlineError message='Unable to load user data' />;
 
   if (!user) return null;
 

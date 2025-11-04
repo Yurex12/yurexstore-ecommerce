@@ -1,9 +1,23 @@
 import { Edit, MapPin } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import InlineError from '@/components/InlineError';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import useAddresses from '@/features/address/hooks/useAddresses';
 
 export default function AddressCard() {
+  const { addresses, isPending, error } = useAddresses();
+
+  if (isPending) return <p>Loading</p>;
+
+  if (error) return <InlineError message='Unable to load address' />;
+
+  if (!addresses?.length) return null;
+
+  const address = addresses.find((addr) => addr.default);
+
+  if (!address) return null;
+
   return (
     <Card className='border border-input rounded-xl hover:shadow-md transition-shadow shadow-none duration-200 flex-1'>
       <CardHeader className='flex flex-row items-center justify-between'>
@@ -22,10 +36,12 @@ export default function AddressCard() {
             <p className='text-base font-medium text-foreground/90'>
               Default Shipping Address
             </p>
-            <p>Ekungomi Adeyemi</p>
-            <p>06, Peace Street, Aanuolwapo Estate, Igbe Laara, Ikorodu</p>
-            <p>Ikorodu-Garage, Lagos</p>
-            <p className='mt-1'>+234 9016758057</p>
+            <p>{`${address.firstName} ${address.lastName}`}</p>
+            <p>{address.deliveryAddress}</p>
+            <p>
+              {address.city}, {address.state}
+            </p>
+            <p className='mt-1'>{address.phone}</p>
           </div>
         </div>
       </CardContent>

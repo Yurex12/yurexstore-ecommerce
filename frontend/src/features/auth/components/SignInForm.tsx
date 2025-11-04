@@ -53,6 +53,7 @@ export default function SignInForm() {
               <FormControl>
                 <Input
                   placeholder='johndoe@gmail.com'
+                  className='py-5 shadow-none placeholder:text-sm'
                   type='text'
                   {...field}
                   disabled={isSubmitting}
@@ -71,6 +72,7 @@ export default function SignInForm() {
               <FormControl>
                 <Input
                   placeholder='********'
+                  className='py-5 shadow-none placeholder:text-sm'
                   type='password'
                   {...field}
                   disabled={isSubmitting}

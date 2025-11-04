@@ -1,20 +1,26 @@
-import { Spinner } from '@/components/ui/spinner';
+import WishlistItem from './WishlistItem';
+
 import useWishlist from '../hooks/useWishlist';
-import WishlistItem from './wishlistItem';
+
+import EmptyState from '@/components/EmptyState';
+import InlineError from '@/components/InlineError';
+import WishlistItemsSkeleton from './WishlistItemsSkeleton';
 
 export default function WishlistItemsList() {
   const { isPending, wishlist, error } = useWishlist();
-  if (isPending) return <Spinner />;
 
-  if (error) return <p>{error.message}</p>;
+  if (isPending) return <WishlistItemsSkeleton />;
 
-  if (!wishlist?.length) {
-    return <p>There are currently no products in your wishlist</p>;
-  }
+  if (error) return <InlineError message='Unable to load wishlist' />;
+
+  if (!wishlist?.length)
+    return (
+      <EmptyState message='There are currently no products in your wishlist' />
+    );
   return (
     <div className='space-y-4'>
-      {wishlist.map((wishlistItem) => (
-        <WishlistItem key={wishlistItem.id} {...wishlistItem} />
+      {wishlist.map((wishlist) => (
+        <WishlistItem key={wishlist.id} {...wishlist} />
       ))}
     </div>
   );

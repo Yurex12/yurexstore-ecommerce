@@ -58,6 +58,7 @@ export default function UpdatePasswordForm() {
                     <Input
                       type='password'
                       placeholder='Enter current password'
+                      className='py-5 shadow-none placeholder:text-sm'
                       disabled={isSubmitting}
                       {...field}
                     />
@@ -78,6 +79,7 @@ export default function UpdatePasswordForm() {
                       type='password'
                       disabled={isSubmitting}
                       placeholder='Enter new password'
+                      className='py-5 shadow-none placeholder:text-sm'
                       {...field}
                     />
                   </FormControl>
@@ -97,6 +99,7 @@ export default function UpdatePasswordForm() {
                       type='password'
                       disabled={isSubmitting}
                       placeholder='Confirm new password'
+                      className='py-5 shadow-none placeholder:text-sm'
                       {...field}
                     />
                   </FormControl>

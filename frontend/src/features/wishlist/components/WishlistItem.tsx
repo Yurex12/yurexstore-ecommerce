@@ -1,13 +1,17 @@
-import { Button } from '@/components/ui/button';
-import useAddToCart from '@/features/cart/hooks/useAddToCart';
-import ProductVariantDialog from '@/features/product/components/ProductVariantDialog';
-import { formatCurrency } from '@/lib/helpers';
-import { Separator } from '@radix-ui/react-dropdown-menu';
-import useRemoveFromWishlist from '../hooks/useRemoveFromWishlist';
-import type { WishlistItem } from '../types';
 import { useState } from 'react';
-import useCart from '@/features/cart/hooks/useCart';
 import { useNavigate } from 'react-router-dom';
+
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+
+import useAddToCart from '@/features/cart/hooks/useAddToCart';
+import useCart from '@/features/cart/hooks/useCart';
+import ProductVariantDialog from '@/features/product/components/ProductVariantDialog';
+import useRemoveFromWishlist from '../hooks/useRemoveFromWishlist';
+
+import { formatCurrency } from '@/lib/helpers';
+
+import type { WishlistItem } from '../types';
 
 export default function WishlistItem({
   id: wishlistItemId,
@@ -44,11 +48,12 @@ export default function WishlistItem({
           <img
             src={product.images[0].url}
             alt={product.name}
-            className='w-20 h-20 rounded-md object-cover'
+            className='size-20 rounded-md object-cover'
           />
 
           <div>
-            <h3 className='font-medium'>{product.name}</h3>
+            <h3 className='font-medium text-sm line-clamp-1'>{product.name}</h3>
+
             <p className='text-sm text-muted-foreground'>
               {formatCurrency(product.price)}
             </p>

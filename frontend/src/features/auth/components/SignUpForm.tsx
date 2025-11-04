@@ -41,6 +41,7 @@ export default function SignUpForm() {
               <FormControl>
                 <Input
                   placeholder='john doe'
+                  className='py-5 shadow-none placeholder:text-sm'
                   type='text'
                   {...field}
                   disabled={form.formState.isSubmitting}
@@ -59,6 +60,7 @@ export default function SignUpForm() {
               <FormControl>
                 <Input
                   placeholder='johndoe@gmail.com'
+                  className='py-5 shadow-none placeholder:text-sm'
                   type='email'
                   {...field}
                   disabled={form.formState.isSubmitting}
@@ -78,6 +80,7 @@ export default function SignUpForm() {
                 <Input
                   placeholder='********'
                   type='password'
+                  className='py-5 shadow-none placeholder:text-sm'
                   {...field}
                   disabled={form.formState.isSubmitting}
                 />
@@ -96,6 +99,7 @@ export default function SignUpForm() {
                 <Input
                   placeholder='********'
                   type='password'
+                  className='py-5 shadow-none placeholder:text-sm'
                   {...field}
                   disabled={form.formState.isSubmitting}
                 />
