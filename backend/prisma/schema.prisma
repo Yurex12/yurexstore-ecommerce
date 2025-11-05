@@ -78,6 +78,14 @@ model Category {
   updatedAt DateTime @updatedAt
 }
 
+model Color {
+  id   String @id @default(cuid())
+  name String
+  code String
+
+  product Product[]
+}
+
 model Product {
   id              String           @id @default(cuid())
   name            String
@@ -86,6 +94,7 @@ model Product {
   gender          GENDER           @default(BOTH)
   description     String           @db.Text
   categoryId      String
+  colorId         String
   variantTypeName String?
   cartItems       CartItem[]
   wishListItems   WishListItem[]
@@ -96,6 +105,7 @@ model Product {
 
   buyers   User[]   @relation("UserPurchases")
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  color    Color    @relation(fields: [colorId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

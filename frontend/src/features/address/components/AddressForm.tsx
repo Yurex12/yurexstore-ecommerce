@@ -191,7 +191,7 @@ export function AddressForm() {
             Cancel
           </Button>
           <Button type='submit' className='w-34'>
-            {isSubmitting ? <Spinner /> : <span>Use for Delivery</span>}
+            {isSubmitting ? <Spinner /> : <span>Save</span>}
           </Button>
         </div>
       </form>

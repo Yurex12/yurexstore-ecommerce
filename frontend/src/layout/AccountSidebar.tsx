@@ -1,15 +1,6 @@
-import { NavLink, useLocation } from 'react-router-dom';
-import {
-  LogOut,
-  Package,
-  Star,
-  Home,
-  Heart,
-  User,
-  Key,
-  MapPin,
-} from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { Heart, Home, Key, LogOut, MapPin, Package, Star } from 'lucide-react';
+import { NavLink, useLocation } from 'react-router-dom';
 
 export default function AccountSidebar() {
   const { pathname } = useLocation();
@@ -26,11 +17,6 @@ export default function AccountSidebar() {
   ];
 
   const accountManagementLinks = [
-    {
-      name: 'Profile Info',
-      path: '/account/profile',
-      icon: <User size={16} />,
-    },
     {
       name: 'Update Password',
       path: '/account/update-password',

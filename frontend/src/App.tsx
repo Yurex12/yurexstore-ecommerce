@@ -3,8 +3,10 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AppLayout from './layout/AppLayout';
 
 import AccountLayout from './layout/AccountLayout';
+import AccountMobileMenu from './layout/AccountMobileMenu';
 import AboutPage from './pages/About/AboutPage';
 import AccountOverviewPage from './pages/AccountOverview/AccountOverviewPage';
+import AddressPage from './pages/Address/AddressPage';
 import CartPage from './pages/Cart/CartPage';
 import ContactPage from './pages/Contact/ContactPage';
 import HomePage from './pages/Home/HomePage';
@@ -15,12 +17,9 @@ import SettingsPage from './pages/Settings/SettingsPage';
 import ShopPage from './pages/Shop/ShopPage';
 import SignInPage from './pages/SignIn/SignInPage';
 import SignUpPage from './pages/SignUp/SignUpPage';
+import UpdatePasswordPage from './pages/UpdatePassword/UpdatePasswordPage';
 import WishlistPage from './pages/Wishlist/WishlistPage';
 import WriteReviewPage from './pages/WriteReview/WriteReviewPage';
-import ProfilePage from './pages/Profile/ProfilePage';
-import UpdatePasswordPage from './pages/UpdatePassword/UpdatePasswordPage';
-import AddressPage from './pages/Address/AddressPage';
-import AccountMobileMenu from './layout/AccountMobileMenu';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -53,7 +52,7 @@ export default function App() {
                 path='/account/orders/:id'
                 element={<OrderDetailsPage />}
               />
-              <Route path='/account/profile' element={<ProfilePage />} />
+
               <Route
                 path='/account/update-password'
                 element={<UpdatePasswordPage />}

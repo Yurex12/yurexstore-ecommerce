@@ -14,6 +14,7 @@ import cartRoutes from './routes/cartRoutes';
 import wishlistRoutes from './routes/wishlistRoutes';
 import addressRoutes from './routes/addressRoutes';
 import orderRoutes from './routes/orderRoutes';
+import colorRoutes from './routes/colorRoutes';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler';
 
 const PORT = process.env.PORT || 9000;
@@ -45,6 +46,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/addresses', addressRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/colors', colorRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
