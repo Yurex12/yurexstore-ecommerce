@@ -70,6 +70,7 @@ model Category {
   name        String @unique
   slug        String @unique
   image       String
+  fileId      String @unique
   description String
 
   products Product[]

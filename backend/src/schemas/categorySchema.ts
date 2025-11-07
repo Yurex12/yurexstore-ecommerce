@@ -4,6 +4,7 @@ export const categorySchema = z.object({
   name: z.string().trim().nonempty('Name is required'),
   image: z.url().nonempty('Please provide an image url'),
   description: z.string().nonempty('Description is required'),
+  fileId: z.string().nonempty('FileId is required'),
 });
 
 export const categoryUpdateSchema = categorySchema

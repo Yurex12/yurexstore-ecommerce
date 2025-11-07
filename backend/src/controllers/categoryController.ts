@@ -7,6 +7,7 @@ import {
   CategoryUpdateSchema,
 } from '../schemas/categorySchema';
 import { slugify } from '../utils/helpers';
+import { client } from '../config/imagekit';
 
 //@desc fetch categories
 //@route GET api/category
@@ -127,14 +128,14 @@ export const updateCategory = expressAsyncHandler(
 //@route DELETE api/category/:id
 //@access private(ADMIN ONLY)
 export const deleteCategory = expressAsyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     const { id: categoryId } = req.params;
 
-    await prisma.category.delete({
-      where: {
-        id: categoryId,
-      },
+    const { fileId } = await prisma.category.delete({
+      where: { id: categoryId },
     });
+
+    client.files.delete(fileId).catch(() => {});
 
     res.json({
       success: true,
