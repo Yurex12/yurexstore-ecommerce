@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getCategories } from '../api';
 
-export default function useCategories() {
+export function useCategories() {
   const {
     data: categories,
     isPending,

@@ -220,3 +220,7 @@
     background: transparent;
   }
 }
+
+.responsive .react-colorful {
+  width: auto;
+}

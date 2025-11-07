@@ -14,9 +14,11 @@ export const productSchema = z.object({
   gender: z.enum(['MALE', 'FEMALE', 'BOTH'], {
     error: 'Gender must be male, female or both.',
   }),
+
   price: z.coerce.number().positive('Price must be greater than 0'),
   quantity: z.coerce.number().positive('Quantity must be greater than 0'),
   categoryId: z.string().trim().nonempty('Category is required'),
+  colorId: z.string().trim().nonempty('Category is required'),
   variantTypeName: z.string().trim().optional(),
   productVariants: z
     .array(

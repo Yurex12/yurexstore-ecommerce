@@ -24,7 +24,10 @@ import WriteReviewPage from './pages/WriteReview/WriteReviewPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from 'react-hot-toast';
+import AdminLayout from './layout/AdminLayout';
+import AdminCategoriesPage from './pages/AdminCategoriesPage.tsx/AdminCategoriesPage';
 import CheckoutPage from './pages/checkout/CheckoutPage';
+import AdminColorsPage from './pages/Color/AdminColorsPage';
 
 const queryClient = new QueryClient();
 
@@ -42,6 +45,7 @@ export default function App() {
             <Route path='/about-us' element={<AboutPage />} />
             <Route path='/contact-us' element={<ContactPage />} />
             <Route path='/checkout' element={<CheckoutPage />} />
+            {/* Account */}
             <Route element={<AccountLayout />}>
               <Route path='/account' element={<AccountOverviewPage />} />
               <Route path='/account/orders' element={<OrdersPage />} />
@@ -52,7 +56,6 @@ export default function App() {
                 path='/account/orders/:id'
                 element={<OrderDetailsPage />}
               />
-
               <Route
                 path='/account/update-password'
                 element={<UpdatePasswordPage />}
@@ -62,6 +65,14 @@ export default function App() {
                 element={<WriteReviewPage />}
               />
               <Route path='/account/addresses' element={<AddressPage />} />
+            </Route>
+            {/* Admin */}
+            <Route element={<AdminLayout />}>
+              <Route path='/admin/colors' element={<AdminColorsPage />} />
+              <Route
+                path='/admin/categories'
+                element={<AdminCategoriesPage />}
+              />
             </Route>
             <Route path='/account/menu' element={<AccountMobileMenu />} />
           </Route>

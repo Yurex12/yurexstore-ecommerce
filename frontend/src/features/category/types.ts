@@ -8,6 +8,9 @@ export type Category = {
   slug: string;
 };
 
-export type CategoryListResponse = ApiResponseBase & {
+export type GetCategoriesResponse = ApiResponseBase & {
   categories: Category[];
+};
+export type CategoryResponse = ApiResponseBase & {
+  category: Category;
 };

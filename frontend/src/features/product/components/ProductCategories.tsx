@@ -3,7 +3,7 @@ import { useSearchQuery } from '@/hooks/useSearchQuery';
 import EmptyState from '@/components/EmptyState';
 import InlineError from '@/components/InlineError';
 
-import useCategories from '@/features/category/hook/useCategories';
+import { useCategories } from '@/features/category/hook/useCategories';
 import ProductCategoriesSkeleton from './ProductCategoriesSkeleton';
 
 export default function ProductCategories() {

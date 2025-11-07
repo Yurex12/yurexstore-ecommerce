@@ -7,8 +7,10 @@ import {
   getColors,
   updateColor,
 } from '../controllers/colorController';
+
 import { validateData } from '../middlewares/validation';
 import { requireAdmin } from '../middlewares/requireAdmin';
+
 import { colorSchema, updateColorSchema } from '../schemas/colorSchema';
 
 const router = express.Router();

@@ -8,7 +8,11 @@ import { ColorSchema, UpdateColorSchema } from '../schemas/colorSchema';
 //@access PUBLIC
 export const getColors = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const colors = await prisma.color.findMany();
+    const colors = await prisma.color.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
     res.json({
       success: true,
