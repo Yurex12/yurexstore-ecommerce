@@ -1,16 +1,16 @@
 import { create } from 'zustand';
 import type { Category } from '../types';
 
-type CategoryState = {
-  open: boolean;
-  setOpen: (open: boolean) => void;
+type CategoryFormState = {
+  isFormOpen: boolean;
+  setFormOpen: (isOpen: boolean) => void;
   editingCategory: Category | null;
   setEditingCategory: (category: Category | null) => void;
 };
 
-export const useCategoryStore = create<CategoryState>((set) => ({
-  open: false,
+export const useCategoryEditStore = create<CategoryFormState>((set) => ({
+  isFormOpen: false,
   editingCategory: null,
-  setOpen: (open) => set({ open }),
+  setFormOpen: (isOpen) => set({ isFormOpen: isOpen }),
   setEditingCategory: (category) => set({ editingCategory: category }),
 }));

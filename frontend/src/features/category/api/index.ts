@@ -1,5 +1,9 @@
 import { api, handleApiError } from '@/services/api';
-import type { CategoryResponse, GetCategoriesResponse } from '../types';
+import type {
+  Category,
+  CategoryResponse,
+  GetCategoriesResponse,
+} from '../types';
 import type { ApiResponseBase } from '@/services/types';
 
 export async function getCategories() {
@@ -11,11 +15,9 @@ export async function getCategories() {
   }
 }
 
-export async function createCategory(categoryData: {
-  name: string;
-  image: string;
-  description: string;
-}) {
+export async function createCategory(
+  categoryData: Omit<Category, 'slug' | 'id'>
+) {
   try {
     const { data } = await api.post<CategoryResponse>(
       '/categories',
@@ -24,6 +26,26 @@ export async function createCategory(categoryData: {
     return data.category;
   } catch (error) {
     handleApiError(error, 'Failed to create category');
+  }
+}
+
+export async function updateCategory({
+  categoryData,
+  categoryId,
+}: {
+  categoryData: Partial<Omit<Category, 'slug' | 'id'>>;
+  categoryId: string;
+}) {
+  try {
+    console.log(categoryData);
+
+    const { data } = await api.patch<CategoryResponse>(
+      `/categories/${categoryId}`,
+      categoryData
+    );
+    return data.category;
+  } catch (error) {
+    handleApiError(error, 'Failed to update category');
   }
 }
 

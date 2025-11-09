@@ -1,5 +1,6 @@
 import InlineError from '@/components/InlineError';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import useUser from '@/features/auth/hooks/useUser';
 
 export default function ProfileCard() {

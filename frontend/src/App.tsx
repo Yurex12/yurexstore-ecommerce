@@ -25,9 +25,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from 'react-hot-toast';
 import AdminLayout from './layout/AdminLayout';
-import AdminCategoriesPage from './pages/AdminCategoriesPage.tsx/AdminCategoriesPage';
+
 import CheckoutPage from './pages/checkout/CheckoutPage';
 import AdminColorsPage from './pages/Color/AdminColorsPage';
+import AdminCategoriesPage from './pages/CategoriesPage/AdminCategoriesPage';
 
 const queryClient = new QueryClient();
 

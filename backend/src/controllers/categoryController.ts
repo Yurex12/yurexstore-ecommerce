@@ -94,7 +94,7 @@ export const updateCategory = expressAsyncHandler(
     const { name, ...rest } = req.body as CategoryUpdateSchema;
     const { id: categoryId } = req.params;
 
-    const updateData: CategoryUpdateSchema = { ...rest };
+    const updateData: CategoryUpdateSchema & { slug?: string } = { ...rest };
 
     if (name) {
       const category = await prisma.category.findUnique({
@@ -107,6 +107,7 @@ export const updateCategory = expressAsyncHandler(
       }
 
       updateData.name = name.toLowerCase();
+      updateData.slug = slugify(name);
     }
 
     const updatedCategory = await prisma.category.update({

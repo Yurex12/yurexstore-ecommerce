@@ -28,7 +28,7 @@ import { useColorFormStore } from '../store/useColorFormStore';
 
 import { colorSchema, type ColorFormValues } from '../schemas/colorSchema';
 
-export default function ColorFormDialog() {
+export default function AdminColorFormDialog() {
   const { isFormOpen, setFormOpen, editingColor, setEditingColor } =
     useColorFormStore();
   const { createColor, isPending: isCreating } = useCreateColor();
@@ -61,7 +61,6 @@ export default function ColorFormDialog() {
         { colorData: data, colorId: editingColor.id },
         {
           onSuccess() {
-            form.reset();
             setFormOpen(false);
             setEditingColor(null);
           },
@@ -80,7 +79,6 @@ export default function ColorFormDialog() {
   function handleCancel() {
     setFormOpen(false);
     setEditingColor(null);
-    form.reset();
   }
 
   function handleOpen(isOpen: boolean) {

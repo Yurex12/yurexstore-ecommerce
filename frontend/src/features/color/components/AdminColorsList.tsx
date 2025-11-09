@@ -1,3 +1,5 @@
+import { Ellipsis } from 'lucide-react';
+
 import EmptyState from '@/components/EmptyState';
 import {
   DropdownMenu,
@@ -14,12 +16,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Ellipsis } from 'lucide-react';
-import { useColors } from '../hooks/useColors';
-import { useColorFormStore } from '../store/useColorFormStore';
-import { useColorDeleteStore } from '../store/useColorDeleteStore';
 
-export default function ColorsList() {
+import { useColors } from '../hooks/useColors';
+
+import { useColorDeleteStore } from '../store/useColorDeleteStore';
+import { useColorFormStore } from '../store/useColorFormStore';
+
+import type { Color } from '../types';
+
+export default function AdminColorsList() {
   const { colors, error, isPending: isFetchingColor } = useColors();
 
   const { setSelectedColorId, setDeleteDialogOpen } = useColorDeleteStore();
@@ -30,6 +35,16 @@ export default function ColorsList() {
   if (error) return <p>{error.message}</p>;
 
   if (!colors?.length) return <EmptyState />;
+
+  function handleDelete(colorId: string) {
+    setDeleteDialogOpen(true);
+    setSelectedColorId(colorId);
+  }
+
+  function handleEdit(color: Color) {
+    setFormOpen(true);
+    setEditingColor(color);
+  }
 
   return (
     <div>
@@ -61,20 +76,10 @@ export default function ColorsList() {
                     <Ellipsis className='text-2xl' />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setFormOpen(true);
-                        setEditingColor(color);
-                      }}
-                    >
+                    <DropdownMenuItem onClick={() => handleEdit(color)}>
                       Edit
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setDeleteDialogOpen(true);
-                        setSelectedColorId(color.id);
-                      }}
-                    >
+                    <DropdownMenuItem onClick={() => handleDelete(color.id)}>
                       Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>

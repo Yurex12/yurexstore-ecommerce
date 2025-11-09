@@ -4,7 +4,10 @@ import { validateToken } from '../middlewares/validateTokenHandler';
 import { requireAdmin } from '../middlewares/requireAdmin';
 import { validateData } from '../middlewares/validation';
 
-import { categorySchema } from '../schemas/categorySchema';
+import {
+  categorySchema,
+  categoryUpdateSchema,
+} from '../schemas/categorySchema';
 
 import {
   createCategory,
@@ -32,7 +35,7 @@ router.patch(
   '/:id',
   validateToken,
   requireAdmin,
-  validateData(categorySchema),
+  validateData(categoryUpdateSchema),
   updateCategory
 );
 

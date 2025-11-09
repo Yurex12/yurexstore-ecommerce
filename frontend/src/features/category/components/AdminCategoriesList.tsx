@@ -1,9 +1,11 @@
+import EmptyState from '@/components/EmptyState';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Spinner } from '@/components/ui/spinner';
 import {
   Table,
   TableBody,
@@ -13,21 +15,32 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Ellipsis } from 'lucide-react';
-import { Spinner } from '@/components/ui/spinner';
-import EmptyState from '@/components/EmptyState';
 
 import { useCategories } from '../hook/useCategories';
-import { useCategoryStore } from '../store/useCategoryStore';
-import useDeleteCategory from '../hook/useDeleteCategory';
+
+import { useCategoryDeleteStore } from '../store/useCategoryDeleteStore';
+
+import type { Category } from '../types';
+import { useCategoryEditStore } from '../store/useCategoryEditStore';
 
 export default function AdminCategoriesList() {
   const { categories, error, isPending: isFetching } = useCategories();
-  const { deleteCategory, isPending: isDeleting } = useDeleteCategory();
-  const { setEditingCategory, setOpen } = useCategoryStore();
+  const { setEditingCategory, setFormOpen } = useCategoryEditStore();
+  const { setDeleteDialogOpen, setSelectedColorId } = useCategoryDeleteStore();
 
   if (isFetching) return <Spinner />;
   if (error) return <p>{error.message}</p>;
   if (!categories?.length) return <EmptyState />;
+
+  function handleDelete(categoryId: string) {
+    setSelectedColorId(categoryId);
+    setDeleteDialogOpen(true);
+  }
+
+  function handleEdit(category: Category) {
+    setEditingCategory(category);
+    setFormOpen(true);
+  }
 
   return (
     <div className='overflow-x-auto'>
@@ -57,7 +70,7 @@ export default function AdminCategoriesList() {
               <TableCell className='font-medium'>{category.name}</TableCell>
 
               <TableCell className='truncate max-w-[200px] text-muted-foreground'>
-                {category.description || 'No description'}
+                {category.description}
               </TableCell>
 
               <TableCell className='text-right'>
@@ -66,18 +79,10 @@ export default function AdminCategoriesList() {
                     <Ellipsis className='text-2xl' />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setOpen(true);
-                        setEditingCategory(category);
-                      }}
-                    >
+                    <DropdownMenuItem onClick={() => handleEdit(category)}>
                       Edit
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => deleteCategory(category.id)}
-                      disabled={isDeleting}
-                    >
+                    <DropdownMenuItem onClick={() => handleDelete(category.id)}>
                       Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>
