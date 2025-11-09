@@ -55,3 +55,10 @@ export type ProductVariantProps = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   product: Product;
 };
+
+export type ProductDeleteState = {
+  isDeleteDialogOpen: boolean;
+  selectedProductId: string;
+  setDeleteDialogOpen: (isOpen: boolean) => void;
+  setSelectedProductId: (id: string) => void;
+};

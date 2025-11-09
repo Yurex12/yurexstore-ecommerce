@@ -1,6 +1,6 @@
 import EmptyState from '@/components/EmptyState';
 import InlineError from '@/components/InlineError';
-import useProducts from '../hooks/useProducts';
+import { useProducts } from '../hooks/useProducts';
 import ProductPreviewCard from './ProductPreviewCard';
 import ProductPreviewSkeletonGrid from './ProductPreviewSkeletonGrid';
 

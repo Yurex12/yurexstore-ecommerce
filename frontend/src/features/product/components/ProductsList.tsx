@@ -3,7 +3,7 @@ import InlineError from '@/components/InlineError';
 import ProductCard from './ProductCard';
 import ProductListSkeleton from './ProductListSkeleton';
 
-import useProducts from '../hooks/useProducts';
+import { useProducts } from '../hooks/useProducts';
 
 export default function ProductsList() {
   const { products, isPending, error } = useProducts();

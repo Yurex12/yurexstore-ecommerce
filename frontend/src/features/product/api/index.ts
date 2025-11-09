@@ -11,3 +11,13 @@ export async function getProducts() {
     handleApiError(error, 'Failed to fetch products');
   }
 }
+
+export async function deleteProduct(productId: string) {
+  try {
+    const { data } = await api.delete(`/products/${productId}`);
+
+    return data;
+  } catch (error) {
+    handleApiError(error, 'Failed to delete');
+  }
+}

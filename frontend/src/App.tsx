@@ -29,6 +29,7 @@ import AdminLayout from './layout/AdminLayout';
 import CheckoutPage from './pages/checkout/CheckoutPage';
 import AdminColorsPage from './pages/Color/AdminColorsPage';
 import AdminCategoriesPage from './pages/CategoriesPage/AdminCategoriesPage';
+import AdminProductsPage from './pages/Product/AdminProductsPage';
 
 const queryClient = new QueryClient();
 
@@ -74,6 +75,7 @@ export default function App() {
                 path='/admin/categories'
                 element={<AdminCategoriesPage />}
               />
+              <Route path='/admin/products' element={<AdminProductsPage />} />
             </Route>
             <Route path='/account/menu' element={<AccountMobileMenu />} />
           </Route>

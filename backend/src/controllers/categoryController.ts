@@ -106,6 +106,10 @@ export const updateCategory = expressAsyncHandler(
         throw new Error('This category name already exists.');
       }
 
+      //   if (category && updateData.image && updateData.fileId) {
+      //   client.files.delete(category.fileId).catch(() => {});
+      // }
+
       updateData.name = name.toLowerCase();
       updateData.slug = slugify(name);
     }
