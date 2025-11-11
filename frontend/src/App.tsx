@@ -30,6 +30,8 @@ import CheckoutPage from './pages/checkout/CheckoutPage';
 import AdminColorsPage from './pages/Color/AdminColorsPage';
 import AdminCategoriesPage from './pages/CategoriesPage/AdminCategoriesPage';
 import AdminProductsPage from './pages/Product/AdminProductsPage';
+import AdminProductCreatePage from './pages/ProductCreate/AdminProductCreatePage';
+import AdminProductEditPage from './pages/ProductEdit/AdminProductEditPage';
 
 const queryClient = new QueryClient();
 
@@ -76,6 +78,14 @@ export default function App() {
                 element={<AdminCategoriesPage />}
               />
               <Route path='/admin/products' element={<AdminProductsPage />} />
+              <Route
+                path='/admin/products/new'
+                element={<AdminProductCreatePage />}
+              />
+              <Route
+                path='/admin/products/edit/:productId'
+                element={<AdminProductEditPage />}
+              />
             </Route>
             <Route path='/account/menu' element={<AccountMobileMenu />} />
           </Route>
