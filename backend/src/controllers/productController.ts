@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 
 import prisma from '../lib/prisma';
-import { ProductSchema, ProductUpdateSchema } from '../schemas/productSchema';
+import { ProductSchema } from '../schemas/productSchema';
 
 //@desc fetch all products
 //@route GET api/products/
@@ -81,8 +81,7 @@ export const getProduct = expressAsyncHandler(
 //@access private(ADMINS ONLY)
 export const createProduct = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { categoryId, images, productVariants, ...productData } =
-      req.body as ProductSchema;
+    const { categoryId, images, ...productData } = req.body as ProductSchema;
 
     const category = await prisma.category.findUnique({
       where: {
@@ -95,20 +94,47 @@ export const createProduct = expressAsyncHandler(
       throw new Error('The category does not exist.');
     }
 
+    let totalQuantity: number;
+    let price: number;
+    let productVariants: any[] | undefined;
+
+    if (productData.hasVariants) {
+      totalQuantity = productData.productVariants.reduce(
+        (sum, variant) => sum + Number(variant.quantity),
+        0
+      );
+      price = Number(productData.productVariants[0].price);
+      productVariants = productData.productVariants;
+    } else {
+      totalQuantity = Number(productData.quantity);
+      price = Number(productData.price);
+      productVariants = undefined;
+    }
+
     const newProduct = await prisma.product.create({
       data: {
-        ...productData,
+        name: productData.name,
+        description: productData.description,
+        gender: productData.gender,
+        colorId: productData.colorId,
+        variantTypeName: productData.hasVariants
+          ? productData.variantTypeName
+          : undefined,
+        quantity: totalQuantity,
+        price,
         categoryId,
         images: {
           createMany: {
             data: images,
           },
         },
-        productVariants: {
-          createMany: {
-            data: productVariants || [],
-          },
-        },
+        productVariants: productVariants
+          ? {
+              createMany: {
+                data: productVariants,
+              },
+            }
+          : undefined,
       },
     });
 
@@ -123,49 +149,49 @@ export const createProduct = expressAsyncHandler(
 //@desc Update a product
 //@route PATCH api/products/:id
 //@access private(ADMINS ONLY)
-export const updateProduct = expressAsyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { images, categoryId, ...rest } = req.body as ProductUpdateSchema;
-    const { id: productId } = req.params;
+// export const updateProduct = expressAsyncHandler(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const { images, categoryId, ...rest } = req.body as ProductUpdateSchema;
+//     const { id: productId } = req.params;
 
-    const updateData: any = { ...rest };
+//     const updateData: any = { ...rest };
 
-    if (categoryId) {
-      const category = await prisma.category.findUnique({
-        where: {
-          id: categoryId,
-        },
-      });
+//     if (categoryId) {
+//       const category = await prisma.category.findUnique({
+//         where: {
+//           id: categoryId,
+//         },
+//       });
 
-      if (!category) {
-        res.status(400);
-        throw new Error('This category does not exist.');
-      }
+//       if (!category) {
+//         res.status(400);
+//         throw new Error('This category does not exist.');
+//       }
 
-      updateData.categoryId = categoryId;
-    }
+//       updateData.categoryId = categoryId;
+//     }
 
-    if (images && images.length > 0) {
-      updateData.images = {
-        deleteMany: {},
-        createMany: { data: images },
-      };
-    }
+//     if (images && images.length > 0) {
+//       updateData.images = {
+//         deleteMany: {},
+//         createMany: { data: images },
+//       };
+//     }
 
-    const updatedProduct = await prisma.product.update({
-      where: {
-        id: productId,
-      },
-      data: updateData,
-    });
+//     const updatedProduct = await prisma.product.update({
+//       where: {
+//         id: productId,
+//       },
+//       data: updateData,
+//     });
 
-    res.json({
-      success: true,
-      message: 'Product updated Successfully.',
-      data: { product: updatedProduct },
-    });
-  }
-);
+//     res.json({
+//       success: true,
+//       message: 'Product updated Successfully.',
+//       data: { product: updatedProduct },
+//     });
+//   }
+// );
 
 //@desc delete a product
 //@route DELETE api/products/:id

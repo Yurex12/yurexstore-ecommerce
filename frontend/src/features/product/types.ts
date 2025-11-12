@@ -1,3 +1,5 @@
+import type { ApiResponseBase } from '@/services/types';
+
 export type SortOption = {
   id: string;
   name: string;
@@ -44,12 +46,6 @@ export type Product = {
   variantTypeName: string | null;
 };
 
-export type ProductListResponse = {
-  success: boolean;
-  message: string;
-  products: Product[];
-};
-
 export type ProductVariantProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -61,4 +57,12 @@ export type ProductDeleteState = {
   selectedProductId: string;
   setDeleteDialogOpen: (isOpen: boolean) => void;
   setSelectedProductId: (id: string) => void;
+};
+
+export type GetProductsResponse = ApiResponseBase & {
+  products: Product[];
+};
+
+export type ProductResponse = ApiResponseBase & {
+  product: Product;
 };

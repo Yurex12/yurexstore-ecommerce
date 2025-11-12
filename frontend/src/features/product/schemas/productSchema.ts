@@ -1,4 +1,5 @@
 import z from 'zod';
+import { MAX_IMAGE_SIZE } from '../constants';
 
 const variantsSchema = z.discriminatedUnion('hasVariants', [
   z.object({
@@ -12,7 +13,7 @@ const variantsSchema = z.discriminatedUnion('hasVariants', [
 
   z.object({
     hasVariants: z.literal(true),
-    variantTypeName: z.string().nonempty('Variant type name is required'),
+    variantTypeName: z.string().nonempty('Variant Name is required'),
     productVariants: z
       .array(
         z.object({
@@ -40,15 +41,13 @@ export const productSchema = z
     categoryId: z.string().min(1, 'Category is required'),
     colorId: z.string().min(1, 'Color is required'),
     images: z
-      .array(
-        z.object({
-          url: z.string().url('Invalid image URL'),
-          fileId: z.string().nonempty('File ID is required'),
-        })
-      )
+      .array(z.instanceof(File))
       .min(1, 'At least one image is required')
-      .max(4, 'Maximum 4 images allowed'),
+      .max(4, 'Maximum 4 images allowed')
+      .refine((files) => files.every((file) => file.size <= MAX_IMAGE_SIZE), {
+        message: 'Each file should be less than 1MB',
+      }),
   })
   .and(variantsSchema);
 
-export type ProductSchema = z.input<typeof productSchema>;
+export type ProductSchema = z.infer<typeof productSchema>;

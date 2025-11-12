@@ -68,7 +68,10 @@ export default function AdminCategoryEditDialog() {
 
       if (data.image) {
         const res = await uploadImage(data.image, 'categories');
-        if (!res) return null;
+        if (!res) {
+          toast.error('something went wrong, Try again');
+          return;
+        }
         updateData.image = res.url;
         updateData.fileId = res.fileId;
       }

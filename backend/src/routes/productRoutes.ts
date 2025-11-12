@@ -4,14 +4,14 @@ import { validateToken } from '../middlewares/validateTokenHandler';
 import { requireAdmin } from '../middlewares/requireAdmin';
 import { validateData } from '../middlewares/validation';
 
-import { productSchema, productUpdateSchema } from '../schemas/productSchema';
+import { productSchema } from '../schemas/productSchema';
 
 import {
   createProduct,
   deleteProduct,
   getProduct,
   getProducts,
-  updateProduct,
+  // updateProduct,
 } from '../controllers/productController';
 
 const router = express.Router();
@@ -28,13 +28,13 @@ router.post(
   createProduct
 );
 
-router.patch(
-  '/:id',
-  validateToken,
-  requireAdmin,
-  validateData(productUpdateSchema),
-  updateProduct
-);
+// router.patch(
+//   '/:id',
+//   validateToken,
+//   requireAdmin,
+//   validateData(productUpdateSchema),
+//   updateProduct
+// );
 
 router.delete('/:id', validateToken, requireAdmin, deleteProduct);
 

@@ -118,12 +118,17 @@ export default function ProductCard(product: Product) {
             <Button
               className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
               variant='outline'
+              disabled={product.quantity === 0}
               onClick={(e) => {
                 e.stopPropagation();
                 setOpen(true);
               }}
             >
-              Add to cart
+              {product.quantity === 0 ? (
+                <span>Out of stock</span>
+              ) : (
+                <span> Add to cart</span>
+              )}
             </Button>
           ) : inCart ? (
             <div className='flex flex-col gap-1'>
