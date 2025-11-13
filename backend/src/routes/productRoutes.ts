@@ -11,8 +11,9 @@ import {
   deleteProduct,
   getProduct,
   getProducts,
-  // updateProduct,
+  updateProduct,
 } from '../controllers/productController';
+import { productEditSchema } from '../schemas/productEditSchema';
 
 const router = express.Router();
 
@@ -28,13 +29,13 @@ router.post(
   createProduct
 );
 
-// router.patch(
-//   '/:id',
-//   validateToken,
-//   requireAdmin,
-//   validateData(productUpdateSchema),
-//   updateProduct
-// );
+router.patch(
+  '/:id',
+  validateToken,
+  requireAdmin,
+  validateData(productEditSchema),
+  updateProduct
+);
 
 router.delete('/:id', validateToken, requireAdmin, deleteProduct);
 

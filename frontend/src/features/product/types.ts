@@ -38,8 +38,9 @@ export type Product = {
   price: number;
   quantity: number;
   images: Images[];
-  gender: string;
+  gender: 'MALE' | 'FEMALE' | 'BOTH';
   categoryId: string;
+  colorId: string;
   category: { name: string };
   reviews: Review[];
   productVariants: productVariant[];
@@ -61,6 +62,9 @@ export type ProductDeleteState = {
 
 export type GetProductsResponse = ApiResponseBase & {
   products: Product[];
+};
+export type GetProductResponse = ApiResponseBase & {
+  product: Product;
 };
 
 export type ProductResponse = ApiResponseBase & {

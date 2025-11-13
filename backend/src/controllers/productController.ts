@@ -54,6 +54,7 @@ export const getProduct = expressAsyncHandler(
       include: {
         images: true,
         reviews: true,
+        productVariants: true,
         category: {
           select: {
             id: true,
@@ -71,7 +72,7 @@ export const getProduct = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Successful.',
-      data: { product },
+      product,
     });
   }
 );

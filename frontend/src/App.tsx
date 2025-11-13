@@ -86,6 +86,10 @@ export default function App() {
                 path='/admin/products/edit/:productId'
                 element={<AdminProductEditPage />}
               />
+              <Route
+                path='/admin/products/edit/:productId'
+                element={<AdminProductEditPage />}
+              />
             </Route>
             <Route path='/account/menu' element={<AccountMobileMenu />} />
           </Route>

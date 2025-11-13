@@ -29,7 +29,7 @@ const variantsSchema = z.discriminatedUnion('hasVariants', [
   }),
 ]);
 
-export const productSchema = z
+export const productCreateSchema = z
   .object({
     name: z.string().nonempty('Product name is required.'),
     description: z
@@ -50,4 +50,4 @@ export const productSchema = z
   })
   .and(variantsSchema);
 
-export type ProductSchema = z.infer<typeof productSchema>;
+export type ProductCreateSchema = z.infer<typeof productCreateSchema>;

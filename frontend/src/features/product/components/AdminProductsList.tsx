@@ -17,16 +17,17 @@ import {
 import { Ellipsis } from 'lucide-react';
 
 import { useProducts } from '../hooks/useProducts';
-// import { useProductDeleteStore } from '../store/useProductDeleteStore';
-// import { useProductEditStore } from '../store/useProductEditStore';
 
 import { formatCurrency } from '@/lib/helpers';
+import { useNavigate } from 'react-router-dom';
 import { useProductDeleteStore } from '../store/useProductDeleteStore';
 
 export default function AdminProductsList() {
   const { products, error, isPending: isFetching } = useProducts();
-  //   const { setEditingProduct, setFormOpen } = useProductEditStore();
+
   const { setDeleteDialogOpen, setSelectedProductId } = useProductDeleteStore();
+
+  const navigate = useNavigate();
 
   if (isFetching) return <Spinner />;
   if (error) return <p>{error.message}</p>;
@@ -36,11 +37,6 @@ export default function AdminProductsList() {
     setSelectedProductId(productId);
     setDeleteDialogOpen(true);
   }
-
-  //   function handleEdit(product: Product) {
-  //     setEditingProduct(product);
-  //     setFormOpen(true);
-  //   }
 
   function getStockStatus(quantity: number) {
     if (quantity === 0) return { text: 'Out of Stock', color: 'text-red-600' };
@@ -99,8 +95,9 @@ export default function AdminProductsList() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuItem
-                        //    onClick={() => handleEdit(product)}
-                        onClick={() => {}}
+                        onClick={() =>
+                          navigate(`/admin/products/edit/${product.id}`)
+                        }
                       >
                         Edit
                       </DropdownMenuItem>

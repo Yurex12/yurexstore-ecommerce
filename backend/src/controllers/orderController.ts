@@ -197,10 +197,16 @@ export const createOrder = expressAsyncHandler(
         await Promise.all(
           validatedItems.map((item) => {
             if (item.productVariantId) {
-              return tx.productVariant.update({
-                where: { id: item.productVariantId },
-                data: { quantity: { decrement: item.quantity } },
-              });
+              return Promise.all([
+                tx.productVariant.update({
+                  where: { id: item.productVariantId },
+                  data: { quantity: { decrement: item.quantity } },
+                }),
+                tx.product.update({
+                  where: { id: item.productId },
+                  data: { quantity: { decrement: item.quantity } },
+                }),
+              ]);
             } else {
               return tx.product.update({
                 where: { id: item.productId },

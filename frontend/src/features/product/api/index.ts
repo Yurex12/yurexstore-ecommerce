@@ -1,7 +1,12 @@
 import { api, handleApiError } from '@/services/api';
 
-import type { GetProductsResponse, ProductResponse } from '../types';
-import type { ProductSchema } from '../schemas/productSchema';
+import type {
+  GetProductResponse,
+  GetProductsResponse,
+  ProductResponse,
+} from '../types';
+import type { ProductCreateSchema } from '../schemas/productCreateSchema';
+import type { ProductEditSchema } from '../schemas/productEditSchema';
 
 export async function getProducts() {
   try {
@@ -13,8 +18,20 @@ export async function getProducts() {
   }
 }
 
+export async function getProduct(productId: string) {
+  try {
+    const { data } = await api.get<GetProductResponse>(
+      `/products/${productId}`
+    );
+
+    return data.product;
+  } catch (error) {
+    handleApiError(error, 'Failed to fetch product');
+  }
+}
+
 export async function createProduct(
-  productData: Omit<ProductSchema, 'images'> & {
+  productData: Omit<ProductCreateSchema, 'images'> & {
     images: { url: string; fileId: string }[];
   }
 ) {
@@ -24,6 +41,27 @@ export async function createProduct(
     return data.product;
   } catch (error) {
     handleApiError(error, 'Failed to create products');
+  }
+}
+
+export async function updateProduct({
+  productData,
+  productId,
+}: {
+  productData: Omit<ProductEditSchema, 'images'> & {
+    images: { url: string; fileId: string }[];
+  };
+  productId: string;
+}) {
+  try {
+    const { data } = await api.patch<ProductResponse>(
+      `/products/${productId}`,
+      productData
+    );
+
+    return data.product;
+  } catch (error) {
+    handleApiError(error, 'Failed to edit products');
   }
 }
 

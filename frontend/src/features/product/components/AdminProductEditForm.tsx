@@ -1,11 +1,9 @@
-import { useEffect } from 'react';
-import { Plus, X } from 'lucide-react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useFieldArray, useForm, useWatch } from 'react-hook-form';
-import toast from 'react-hot-toast';
-
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useProduct } from '../hooks/useProduct';
+
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -14,10 +12,21 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+
+import { Textarea } from '@/components/ui/textarea';
+import { useCategories } from '@/features/category/hook/useCategories';
+import { useColors } from '@/features/color/hooks/useColors';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Plus, X } from 'lucide-react';
+import { useEffect } from 'react';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+import {
+  productEditSchema,
+  type ProductEditSchema,
+} from '../schemas/productEditSchema';
 import {
   Select,
   SelectContent,
@@ -25,25 +34,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-
-import { useCategories } from '@/features/category/hook/useCategories';
-import { useColors } from '@/features/color/hooks/useColors';
-import { useUploadImage } from '@/hooks/useUploadImage';
-import { useCreateProduct } from '../hooks/useCreateProduct';
-
 import { MAX_IMAGE_SIZE } from '../constants';
-import {
-  productCreateSchema,
-  type ProductCreateSchema,
-} from '../schemas/productCreateSchema';
+import { useUploadImage } from '@/hooks/useUploadImage';
+import toast from 'react-hot-toast';
+import { useUpdateProduct } from '../hooks/useUpdateProduct';
 
-export default function AdminProductCreateForm() {
+export default function AdminProductEditForm() {
+  const { productId } = useParams();
+
   const form = useForm({
-    resolver: zodResolver(productCreateSchema),
+    resolver: zodResolver(productEditSchema),
     defaultValues: {
       name: '',
-      hasVariants: false,
       price: 0,
       quantity: 0,
       categoryId: '',
@@ -51,6 +53,8 @@ export default function AdminProductCreateForm() {
       description: '',
       gender: 'BOTH',
       images: [],
+      productVariants: [],
+      variantTypeName: '',
     },
   });
 
@@ -64,11 +68,37 @@ export default function AdminProductCreateForm() {
     isPending: isFetchingColors,
     error: colorsError,
   } = useColors();
-  const { createProduct, isPending: isCreating } = useCreateProduct();
+
+  const {
+    product,
+    isPending: isFetchingProduct,
+    error: productError,
+  } = useProduct(productId);
 
   const { uploadImage } = useUploadImage();
+  const { updateProduct, isPending: isEditing } = useUpdateProduct();
+  const navigate = useNavigate();
 
-  const hasVariants = useWatch({ control: form.control, name: 'hasVariants' });
+  useEffect(() => {
+    if (product) {
+      form.reset({
+        name: product.name,
+        description: product.description,
+        gender: product.gender,
+        categoryId: product.categoryId,
+        colorId: product.colorId,
+        images: product.images,
+        price: product.price,
+        quantity: product.quantity,
+        variantTypeName: product.variantTypeName || '',
+        productVariants: product.productVariants || [],
+      });
+    }
+  }, [product, form]);
+
+  const hasVariants =
+    !!product?.variantTypeName || (product?.productVariants?.length ?? 0) > 0;
+
   const images = useWatch({ control: form.control, name: 'images' });
 
   const { append, fields, remove } = useFieldArray({
@@ -76,45 +106,54 @@ export default function AdminProductCreateForm() {
     name: 'productVariants',
   });
 
-  useEffect(() => {
-    if (hasVariants) {
-      if (fields.length === 0) {
-        append({ value: '', price: '', quantity: 1 });
-      }
-    } else {
-      form.setValue('variantTypeName', '');
-      form.setValue('productVariants', []);
-    }
-  }, [hasVariants, fields.length, append, form]);
-
-  if (isFetchingCategories || isFetchingColors) return <p>Loading</p>;
-  if (categoriesError || colorsError) return <p>Error occurred</p>;
+  if (isFetchingCategories || isFetchingColors || isFetchingProduct)
+    return <p>Loading...</p>;
+  if (categoriesError || colorsError) return <p>Error loading data</p>;
+  if (productError) return <p>{productError.message}</p>;
+  if (!product) return <p>No product found</p>;
   if (!categories?.length || !colors?.length) return <p>No categories found</p>;
 
-  async function onSubmit(data: ProductCreateSchema) {
-    const res = await Promise.all(
-      data.images.map((image) => uploadImage(image, 'products'))
-    );
+  async function onSubmit(data: ProductEditSchema) {
+    const needsUpload = data.images?.filter((image) => image instanceof File);
 
-    const failed = res.some((item) => item === null);
+    let res;
 
-    if (failed) {
-      toast.error('something went wrong, Try again');
-      return;
+    if (needsUpload?.length) {
+      res = await Promise.all(
+        needsUpload.map((image) => uploadImage(image, 'products'))
+      );
+
+      const failed = res.some((item) => item === null);
+
+      if (failed) {
+        toast.error('something went wrong, Try again');
+        return;
+      }
     }
 
-    const uploadedImages = res.filter(
-      (item): item is { url: string; fileId: string } => item !== null
+    const existingImages = (data.images || []).filter(
+      (img): img is { url: string; fileId: string } => !(img instanceof File)
     );
 
-    createProduct(
+    const uploadedImages =
+      res?.filter(
+        (item): item is { url: string; fileId: string } => item !== null
+      ) || [];
+
+    const allImages = [...existingImages, ...uploadedImages];
+
+    updateProduct(
       {
-        ...data,
-        images: uploadedImages,
+        productData: {
+          ...data,
+          images: allImages,
+        },
+        productId: product!.id,
       },
       {
         onSuccess() {
           form.reset();
+          navigate('/admin/products');
         },
       }
     );
@@ -124,7 +163,7 @@ export default function AdminProductCreateForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
         <div className='grid grid-cols-1 gap-6 lg:grid-cols-5'>
-          {/* Left column - 60% (3 cols) */}
+          {/* Left column*/}
           <div className='lg:col-span-3 space-y-6'>
             {/*  Product Details*/}
             <div className='rounded-md bg-background p-4 border'>
@@ -178,7 +217,6 @@ export default function AdminProductCreateForm() {
                       <FormLabel>Gender</FormLabel>
                       <FormControl>
                         <RadioGroup
-                          defaultValue='BOTH'
                           onValueChange={field.onChange}
                           value={field.value}
                           className='flex gap-4'
@@ -204,25 +242,25 @@ export default function AdminProductCreateForm() {
               </div>
             </div>
 
-            {/* Variants */}
             <div className='rounded-md bg-background p-4 border space-y-4'>
               <h3 className='text-lg font-medium'>Product Variants</h3>
-              <FormField
-                control={form.control}
-                name='hasVariants'
-                render={({ field }) => (
-                  <FormItem className='flex items-center'>
-                    <FormLabel>Has Variants?</FormLabel>
-                    <FormControl>
-                      <Checkbox
-                        className='border-primary'
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+
+              {/* Show disabled checkbox with info if product has variants */}
+              <div className='flex items-center gap-2'>
+                <Checkbox
+                  className='border-primary'
+                  checked={hasVariants}
+                  disabled={true}
+                />
+                <Label className='text-sm text-muted-foreground'>
+                  Has Variants?
+                  {hasVariants && (
+                    <span className='ml-2 text-xs'>
+                      (Cannot change variant type for existing products)
+                    </span>
+                  )}
+                </Label>
+              </div>
 
               {!hasVariants && (
                 <div className='grid grid-cols-2 gap-4'>
@@ -382,7 +420,7 @@ export default function AdminProductCreateForm() {
                       variant='default'
                       size='sm'
                       onClick={() =>
-                        append({ value: '', price: '', quantity: 1 })
+                        append({ value: '', price: 0, quantity: 1 })
                       }
                     >
                       <Plus size={16} />
@@ -394,7 +432,6 @@ export default function AdminProductCreateForm() {
             </div>
           </div>
 
-          {/* Right column */}
           <div className='lg:col-span-2 space-y-6'>
             {/* Category & Color */}
             <div className='rounded-md bg-background p-4 border space-y-4'>
@@ -462,7 +499,7 @@ export default function AdminProductCreateForm() {
 
             {/* Images */}
             <div className='rounded-md bg-background p-4 border space-y-4'>
-              <div className='flex items-center  gap-2'>
+              <div className='flex items-center gap-2'>
                 <h3 className='text-lg font-medium'>Images</h3>
                 <p className='text-sm text-gray-500'>(Max 4)</p>
               </div>
@@ -472,7 +509,7 @@ export default function AdminProductCreateForm() {
                 name='images'
                 render={({ field }) => (
                   <FormItem>
-                    {images.length === 0 ? (
+                    {!images || images.length === 0 ? (
                       <label className='flex flex-col items-center justify-center h-40 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/40 w-full'>
                         <span className='text-2xl font-bold'>+</span>
                         <span className='text-sm text-muted-foreground'>
@@ -492,15 +529,21 @@ export default function AdminProductCreateForm() {
                       </label>
                     ) : (
                       <div className='grid grid-cols-2 gap-3'>
-                        {images.map((file, index) => {
-                          const url = URL.createObjectURL(file);
-                          const isLarge = file.size > MAX_IMAGE_SIZE;
+                        {images.map((image, index) => {
+                          const isFile = image instanceof File;
+                          const url = isFile
+                            ? URL.createObjectURL(image)
+                            : image.url;
+                          const isLarge = isFile && image.size > MAX_IMAGE_SIZE;
+
                           return (
                             <div key={index} className='relative w-full h-40'>
                               <img
                                 src={url}
                                 alt={`Preview ${index + 1}`}
-                                onLoad={() => URL.revokeObjectURL(url)}
+                                onLoad={() => {
+                                  if (isFile) URL.revokeObjectURL(url);
+                                }}
                                 className={`object-cover rounded-lg size-full border ${
                                   isLarge ? 'opacity-40' : ''
                                 }`}
@@ -570,8 +613,8 @@ export default function AdminProductCreateForm() {
           >
             Cancel
           </Button>
-          <Button type='submit'>
-            {isCreating ? <Spinner /> : <span>Create Product</span>}
+          <Button type='submit' className='w-30'>
+            {isEditing ? <Spinner /> : <span>Edit Product</span>}
           </Button>
         </div>
       </form>
