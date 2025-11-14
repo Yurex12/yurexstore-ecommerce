@@ -41,7 +41,7 @@ export type Product = {
   gender: 'MALE' | 'FEMALE' | 'BOTH';
   categoryId: string;
   colorId: string;
-  category: { name: string };
+  category: { name: string; id: string };
   reviews: Review[];
   productVariants: productVariant[];
   variantTypeName: string | null;

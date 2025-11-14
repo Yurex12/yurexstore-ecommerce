@@ -1,9 +1,13 @@
+import { useEffect } from 'react';
+import toast from 'react-hot-toast';
+import { Plus, X } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useProduct } from '../hooks/useProduct';
 
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -15,18 +19,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-
-import { Textarea } from '@/components/ui/textarea';
-import { useCategories } from '@/features/category/hook/useCategories';
-import { useColors } from '@/features/color/hooks/useColors';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, X } from 'lucide-react';
-import { useEffect } from 'react';
-import { useFieldArray, useForm, useWatch } from 'react-hook-form';
-import {
-  productEditSchema,
-  type ProductEditSchema,
-} from '../schemas/productEditSchema';
 import {
   Select,
   SelectContent,
@@ -34,10 +26,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { MAX_IMAGE_SIZE } from '../constants';
+import { Textarea } from '@/components/ui/textarea';
+
+import { useCategories } from '@/features/category/hook/useCategories';
+import { useColors } from '@/features/color/hooks/useColors';
+
 import { useUploadImage } from '@/hooks/useUploadImage';
-import toast from 'react-hot-toast';
 import { useUpdateProduct } from '../hooks/useUpdateProduct';
+import { useProduct } from '../hooks/useProduct';
+
+import {
+  productEditSchema,
+  type ProductEditSchema,
+} from '../schemas/productEditSchema';
+
+import { MAX_IMAGE_SIZE } from '../constants';
 
 export default function AdminProductEditForm() {
   const { productId } = useParams();
@@ -105,6 +108,8 @@ export default function AdminProductEditForm() {
     control: form.control,
     name: 'productVariants',
   });
+
+  const isWorking = form.formState.isSubmitting || isEditing;
 
   if (isFetchingCategories || isFetchingColors || isFetchingProduct)
     return <p>Loading...</p>;
@@ -179,6 +184,7 @@ export default function AdminProductEditForm() {
                       <FormLabel>Product Name</FormLabel>
                       <FormControl>
                         <Input
+                          disabled={isWorking}
                           placeholder='e.g. Classic White Cotton Shirt'
                           className='py-5 shadow-none placeholder:text-sm'
                           {...field}
@@ -198,6 +204,7 @@ export default function AdminProductEditForm() {
                       <FormLabel>Description</FormLabel>
                       <FormControl>
                         <Textarea
+                          disabled={isWorking}
                           placeholder='Write a short description...'
                           className='h-32 resize-none shadow-none placeholder:text-sm'
                           {...field}
@@ -217,20 +224,33 @@ export default function AdminProductEditForm() {
                       <FormLabel>Gender</FormLabel>
                       <FormControl>
                         <RadioGroup
+                          disabled={isWorking}
                           onValueChange={field.onChange}
                           value={field.value}
                           className='flex gap-4'
                         >
                           <div className='flex items-center gap-2'>
-                            <RadioGroupItem value='MALE' id='r1' />
+                            <RadioGroupItem
+                              disabled={isWorking}
+                              value='MALE'
+                              id='r1'
+                            />
                             <Label htmlFor='r1'>Male</Label>
                           </div>
                           <div className='flex items-center gap-2'>
-                            <RadioGroupItem value='FEMALE' id='r2' />
+                            <RadioGroupItem
+                              disabled={isWorking}
+                              value='FEMALE'
+                              id='r2'
+                            />
                             <Label htmlFor='r2'>Female</Label>
                           </div>
                           <div className='flex items-center gap-2'>
-                            <RadioGroupItem value='BOTH' id='r3' />
+                            <RadioGroupItem
+                              disabled={isWorking}
+                              value='BOTH'
+                              id='r3'
+                            />
                             <Label htmlFor='r3'>Both</Label>
                           </div>
                         </RadioGroup>
@@ -245,25 +265,8 @@ export default function AdminProductEditForm() {
             <div className='rounded-md bg-background p-4 border space-y-4'>
               <h3 className='text-lg font-medium'>Product Variants</h3>
 
-              {/* Show disabled checkbox with info if product has variants */}
-              <div className='flex items-center gap-2'>
-                <Checkbox
-                  className='border-primary'
-                  checked={hasVariants}
-                  disabled={true}
-                />
-                <Label className='text-sm text-muted-foreground'>
-                  Has Variants?
-                  {hasVariants && (
-                    <span className='ml-2 text-xs'>
-                      (Cannot change variant type for existing products)
-                    </span>
-                  )}
-                </Label>
-              </div>
-
               {!hasVariants && (
-                <div className='grid grid-cols-2 gap-4'>
+                <div className='grid grid-cols-2 gap-4 items-start'>
                   <FormField
                     control={form.control}
                     name='price'
@@ -272,6 +275,7 @@ export default function AdminProductEditForm() {
                         <FormLabel>Price</FormLabel>
                         <FormControl>
                           <Input
+                            disabled={isWorking}
                             placeholder='0.00'
                             className='py-5 shadow-none placeholder:text-sm'
                             {...field}
@@ -291,6 +295,7 @@ export default function AdminProductEditForm() {
                         <FormLabel>Quantity</FormLabel>
                         <FormControl>
                           <Input
+                            disabled={isWorking}
                             placeholder='0'
                             className='py-5 shadow-none placeholder:text-sm'
                             {...field}
@@ -316,6 +321,7 @@ export default function AdminProductEditForm() {
                         </FormLabel>
                         <FormControl>
                           <Input
+                            disabled={isWorking}
                             placeholder='Size'
                             className='py-5 shadow-none placeholder:text-sm'
                             {...field}
@@ -349,6 +355,7 @@ export default function AdminProductEditForm() {
                                   <FormItem>
                                     <FormControl>
                                       <Input
+                                        disabled={isWorking}
                                         placeholder='e.g. Small'
                                         className='shadow-none placeholder:text-sm'
                                         {...field}
@@ -367,6 +374,7 @@ export default function AdminProductEditForm() {
                                   <FormItem>
                                     <FormControl>
                                       <Input
+                                        disabled={isWorking}
                                         placeholder='0.00'
                                         className='shadow-none placeholder:text-sm'
                                         {...field}
@@ -386,6 +394,7 @@ export default function AdminProductEditForm() {
                                   <FormItem>
                                     <FormControl>
                                       <Input
+                                        disabled={isWorking}
                                         placeholder='0'
                                         className='shadow-none placeholder:text-sm'
                                         {...field}
@@ -403,7 +412,7 @@ export default function AdminProductEditForm() {
                                 size='sm'
                                 variant='ghost'
                                 onClick={() => remove(index)}
-                                disabled={fields.length === 1}
+                                disabled={fields.length === 1 || isWorking}
                               >
                                 <X className='text-destructive' />
                               </Button>
@@ -420,8 +429,9 @@ export default function AdminProductEditForm() {
                       variant='default'
                       size='sm'
                       onClick={() =>
-                        append({ value: '', price: 0, quantity: 1 })
+                        append({ value: '', price: '', quantity: 1 })
                       }
+                      disabled={isWorking}
                     >
                       <Plus size={16} />
                       Add variant
@@ -440,19 +450,27 @@ export default function AdminProductEditForm() {
                 control={form.control}
                 name='categoryId'
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem key={field.value}>
                     <FormLabel>Category</FormLabel>
                     <FormControl>
                       <Select
+                        disabled={isWorking}
                         onValueChange={field.onChange}
                         value={field.value}
                       >
-                        <SelectTrigger className='shadow-none w-full'>
+                        <SelectTrigger
+                          disabled={isWorking}
+                          className='shadow-none w-full'
+                        >
                           <SelectValue placeholder='Select category' />
                         </SelectTrigger>
                         <SelectContent>
                           {categories.map((category) => (
-                            <SelectItem key={category.id} value={category.id}>
+                            <SelectItem
+                              key={category.id}
+                              value={category.id}
+                              disabled={isWorking}
+                            >
                               {category.name}
                             </SelectItem>
                           ))}
@@ -468,19 +486,27 @@ export default function AdminProductEditForm() {
                 control={form.control}
                 name='colorId'
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem key={field.value}>
                     <FormLabel>Color</FormLabel>
                     <FormControl>
                       <Select
+                        disabled={isWorking}
                         onValueChange={field.onChange}
                         value={field.value}
                       >
-                        <SelectTrigger className='shadow-none w-full'>
+                        <SelectTrigger
+                          disabled={isWorking}
+                          className='shadow-none w-full'
+                        >
                           <SelectValue placeholder='Select color' />
                         </SelectTrigger>
                         <SelectContent>
                           {colors.map((color) => (
-                            <SelectItem key={color.id} value={color.id}>
+                            <SelectItem
+                              key={color.id}
+                              value={color.id}
+                              disabled={isWorking}
+                            >
                               {color.name}
                               <span
                                 className='inline-block size-4 rounded-full border-b'
@@ -516,6 +542,7 @@ export default function AdminProductEditForm() {
                           Upload image
                         </span>
                         <input
+                          disabled={isWorking}
                           type='file'
                           accept='image/png'
                           multiple
@@ -557,6 +584,7 @@ export default function AdminProductEditForm() {
                               )}
                               <button
                                 type='button'
+                                disabled={isWorking}
                                 onClick={() =>
                                   field.onChange(
                                     images.filter((_, i) => i !== index)
@@ -577,6 +605,7 @@ export default function AdminProductEditForm() {
                               Upload
                             </span>
                             <input
+                              disabled={isWorking}
                               type='file'
                               accept='image/png'
                               multiple
@@ -607,14 +636,15 @@ export default function AdminProductEditForm() {
         <div className='flex justify-end gap-4'>
           <Button
             type='button'
-            onClick={() => form.reset()}
+            onClick={() => form.reset({ ...product, variantTypeName: '' })}
             variant='outline'
             className='w-25'
+            disabled={isWorking}
           >
             Cancel
           </Button>
-          <Button type='submit' className='w-30'>
-            {isEditing ? <Spinner /> : <span>Edit Product</span>}
+          <Button type='submit' className='w-30' disabled={isWorking}>
+            {isWorking ? <Spinner /> : <span>Edit Product</span>}
           </Button>
         </div>
       </form>

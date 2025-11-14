@@ -33,6 +33,7 @@ import { useUploadImage } from '@/hooks/useUploadImage';
 import { useCreateProduct } from '../hooks/useCreateProduct';
 
 import { MAX_IMAGE_SIZE } from '../constants';
+
 import {
   productCreateSchema,
   type ProductCreateSchema,
@@ -75,6 +76,8 @@ export default function AdminProductCreateForm() {
     control: form.control,
     name: 'productVariants',
   });
+
+  const isWorking = isCreating || form.formState.isSubmitting;
 
   useEffect(() => {
     if (hasVariants) {
@@ -143,6 +146,7 @@ export default function AdminProductCreateForm() {
                           placeholder='e.g. Classic White Cotton Shirt'
                           className='py-5 shadow-none placeholder:text-sm'
                           {...field}
+                          disabled={isWorking}
                         />
                       </FormControl>
                       <FormMessage />
@@ -162,6 +166,7 @@ export default function AdminProductCreateForm() {
                           placeholder='Write a short description...'
                           className='h-32 resize-none shadow-none placeholder:text-sm'
                           {...field}
+                          disabled={isWorking}
                         />
                       </FormControl>
                       <FormMessage />
@@ -184,15 +189,27 @@ export default function AdminProductCreateForm() {
                           className='flex gap-4'
                         >
                           <div className='flex items-center gap-2'>
-                            <RadioGroupItem value='MALE' id='r1' />
+                            <RadioGroupItem
+                              value='MALE'
+                              id='r1'
+                              disabled={isWorking}
+                            />
                             <Label htmlFor='r1'>Male</Label>
                           </div>
                           <div className='flex items-center gap-2'>
-                            <RadioGroupItem value='FEMALE' id='r2' />
+                            <RadioGroupItem
+                              value='FEMALE'
+                              id='r2'
+                              disabled={isWorking}
+                            />
                             <Label htmlFor='r2'>Female</Label>
                           </div>
                           <div className='flex items-center gap-2'>
-                            <RadioGroupItem value='BOTH' id='r3' />
+                            <RadioGroupItem
+                              value='BOTH'
+                              id='r3'
+                              disabled={isWorking}
+                            />
                             <Label htmlFor='r3'>Both</Label>
                           </div>
                         </RadioGroup>
@@ -218,6 +235,7 @@ export default function AdminProductCreateForm() {
                         className='border-primary'
                         checked={field.value}
                         onCheckedChange={field.onChange}
+                        disabled={isWorking}
                       />
                     </FormControl>
                   </FormItem>
@@ -238,6 +256,7 @@ export default function AdminProductCreateForm() {
                             className='py-5 shadow-none placeholder:text-sm'
                             {...field}
                             value={field.value as number}
+                            disabled={isWorking}
                           />
                         </FormControl>
                         <FormMessage />
@@ -257,6 +276,7 @@ export default function AdminProductCreateForm() {
                             className='py-5 shadow-none placeholder:text-sm'
                             {...field}
                             value={field.value as number}
+                            disabled={isWorking}
                           />
                         </FormControl>
                         <FormMessage />
@@ -281,6 +301,7 @@ export default function AdminProductCreateForm() {
                             placeholder='Size'
                             className='py-5 shadow-none placeholder:text-sm'
                             {...field}
+                            disabled={isWorking}
                           />
                         </FormControl>
                         <FormMessage />
@@ -314,6 +335,7 @@ export default function AdminProductCreateForm() {
                                         placeholder='e.g. Small'
                                         className='shadow-none placeholder:text-sm'
                                         {...field}
+                                        disabled={isWorking}
                                       />
                                     </FormControl>
                                     <FormMessage />
@@ -333,6 +355,7 @@ export default function AdminProductCreateForm() {
                                         className='shadow-none placeholder:text-sm'
                                         {...field}
                                         value={field.value as number}
+                                        disabled={isWorking}
                                       />
                                     </FormControl>
                                     <FormMessage />
@@ -352,6 +375,7 @@ export default function AdminProductCreateForm() {
                                         className='shadow-none placeholder:text-sm'
                                         {...field}
                                         value={field.value as number}
+                                        disabled={isWorking}
                                       />
                                     </FormControl>
                                     <FormMessage />
@@ -365,7 +389,7 @@ export default function AdminProductCreateForm() {
                                 size='sm'
                                 variant='ghost'
                                 onClick={() => remove(index)}
-                                disabled={fields.length === 1}
+                                disabled={fields.length === 1 || isWorking}
                               >
                                 <X className='text-destructive' />
                               </Button>
@@ -384,6 +408,7 @@ export default function AdminProductCreateForm() {
                       onClick={() =>
                         append({ value: '', price: '', quantity: 1 })
                       }
+                      disabled={isWorking}
                     >
                       <Plus size={16} />
                       Add variant
@@ -409,8 +434,12 @@ export default function AdminProductCreateForm() {
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
+                        disabled={isWorking}
                       >
-                        <SelectTrigger className='shadow-none w-full'>
+                        <SelectTrigger
+                          className='shadow-none w-full'
+                          disabled={isWorking}
+                        >
                           <SelectValue placeholder='Select category' />
                         </SelectTrigger>
                         <SelectContent>
@@ -437,8 +466,12 @@ export default function AdminProductCreateForm() {
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
+                        disabled={isWorking}
                       >
-                        <SelectTrigger className='shadow-none w-full'>
+                        <SelectTrigger
+                          className='shadow-none w-full'
+                          disabled={isWorking}
+                        >
                           <SelectValue placeholder='Select color' />
                         </SelectTrigger>
                         <SelectContent>
@@ -462,7 +495,7 @@ export default function AdminProductCreateForm() {
 
             {/* Images */}
             <div className='rounded-md bg-background p-4 border space-y-4'>
-              <div className='flex items-center  gap-2'>
+              <div className='flex items-center gap-2'>
                 <h3 className='text-lg font-medium'>Images</h3>
                 <p className='text-sm text-gray-500'>(Max 4)</p>
               </div>
@@ -488,6 +521,7 @@ export default function AdminProductCreateForm() {
                             field.onChange(newFiles.slice(0, 4));
                             e.target.value = '';
                           }}
+                          disabled={isWorking}
                         />
                       </label>
                     ) : (
@@ -520,6 +554,7 @@ export default function AdminProductCreateForm() {
                                   )
                                 }
                                 className='absolute top-1 right-1 bg-black/50 rounded-full p-1'
+                                disabled={isWorking}
                               >
                                 <X className='w-4 h-4 text-white' />
                               </button>
@@ -547,6 +582,7 @@ export default function AdminProductCreateForm() {
                                 );
                                 e.target.value = '';
                               }}
+                              disabled={isWorking}
                             />
                           </label>
                         )}
@@ -567,11 +603,12 @@ export default function AdminProductCreateForm() {
             onClick={() => form.reset()}
             variant='outline'
             className='w-25'
+            disabled={isWorking}
           >
             Cancel
           </Button>
-          <Button type='submit'>
-            {isCreating ? <Spinner /> : <span>Create Product</span>}
+          <Button type='submit' className='w-25'>
+            {isWorking ? <Spinner /> : <span>Create Product</span>}
           </Button>
         </div>
       </form>

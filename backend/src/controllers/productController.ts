@@ -3,6 +3,7 @@ import expressAsyncHandler from 'express-async-handler';
 
 import prisma from '../lib/prisma';
 import { ProductSchema } from '../schemas/productSchema';
+import { ProductEditSchema } from '../schemas/productEditSchema';
 
 //@desc fetch all products
 //@route GET api/products/
@@ -150,49 +151,136 @@ export const createProduct = expressAsyncHandler(
 //@desc Update a product
 //@route PATCH api/products/:id
 //@access private(ADMINS ONLY)
-// export const updateProduct = expressAsyncHandler(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const { images, categoryId, ...rest } = req.body as ProductUpdateSchema;
-//     const { id: productId } = req.params;
+export const updateProduct = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { images, categoryId, productVariants, variantTypeName, ...rest } =
+      req.body as ProductEditSchema;
+    const { id: productId } = req.params;
 
-//     const updateData: any = { ...rest };
+    if (categoryId) {
+      const category = await prisma.category.findUnique({
+        where: { id: categoryId },
+      });
 
-//     if (categoryId) {
-//       const category = await prisma.category.findUnique({
-//         where: {
-//           id: categoryId,
-//         },
-//       });
+      if (!category) {
+        res.status(400);
+        throw new Error('This category does not exist.');
+      }
+    }
 
-//       if (!category) {
-//         res.status(400);
-//         throw new Error('This category does not exist.');
-//       }
+    const hasVariants = !!variantTypeName || (productVariants?.length ?? 0) > 0;
 
-//       updateData.categoryId = categoryId;
-//     }
+    let totalQuantity: number = 0;
+    let price: number = 0;
 
-//     if (images && images.length > 0) {
-//       updateData.images = {
-//         deleteMany: {},
-//         createMany: { data: images },
-//       };
-//     }
+    if (hasVariants && productVariants && productVariants.length > 0) {
+      totalQuantity = productVariants.reduce(
+        (sum, variant) => sum + Number(variant.quantity),
+        0
+      );
 
-//     const updatedProduct = await prisma.product.update({
-//       where: {
-//         id: productId,
-//       },
-//       data: updateData,
-//     });
+      // Use first variant's price as product price
+      price = Number(productVariants[0].price);
 
-//     res.json({
-//       success: true,
-//       message: 'Product updated Successfully.',
-//       data: { product: updatedProduct },
-//     });
-//   }
-// );
+      // Get existing variants from database
+      const existingVariants = await prisma.productVariant.findMany({
+        where: { productId },
+        select: { id: true },
+      });
+
+      const existingVariantIds = existingVariants.map((v) => v.id);
+      const submittedVariantIds = productVariants
+        .filter((v) => v.id)
+        .map((v) => v.id!);
+
+      const variantsToUpdate = productVariants.filter((v) => v.id);
+      for (const variant of variantsToUpdate) {
+        await prisma.productVariant.update({
+          where: { id: variant.id },
+          data: {
+            value: variant.value,
+            price: Number(variant.price),
+            quantity: Number(variant.quantity),
+          },
+        });
+      }
+
+      // 2. CREATE new variants
+      const variantsToCreate = productVariants.filter((v) => !v.id);
+      if (variantsToCreate.length > 0) {
+        await prisma.productVariant.createMany({
+          data: variantsToCreate.map((v) => ({
+            value: v.value,
+            price: Number(v.price),
+            quantity: Number(v.quantity),
+            productId: productId,
+          })),
+        });
+      }
+
+      // 3. DELETE removed variants
+      const variantsToDelete = existingVariantIds.filter(
+        (id) => !submittedVariantIds.includes(id)
+      );
+      if (variantsToDelete.length > 0) {
+        await prisma.productVariant.deleteMany({
+          where: {
+            id: { in: variantsToDelete },
+          },
+        });
+      }
+    } else {
+      totalQuantity = Number(rest.quantity ?? 0);
+      price = Number(rest.price ?? 0);
+
+      // Clear all variants if product no longer has variants
+      await prisma.productVariant.deleteMany({
+        where: { productId },
+      });
+    }
+
+    // Prepare update data
+    const updateData: any = {
+      ...rest,
+      quantity: totalQuantity,
+      price: price,
+      variantTypeName: hasVariants ? variantTypeName : null,
+    };
+
+    if (categoryId) {
+      updateData.categoryId = categoryId;
+    }
+
+    if (images && images.length > 0) {
+      updateData.images = {
+        deleteMany: {},
+        createMany: {
+          data: images.map((img) => ({
+            url: img.url,
+            fileId: img.fileId,
+          })),
+        },
+      };
+    }
+
+    const updatedProduct = await prisma.product.update({
+      where: { id: productId },
+      data: updateData,
+      include: {
+        images: true,
+        productVariants: true,
+        category: true,
+        color: true,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: 'Product updated successfully.',
+      data: { product: updatedProduct },
+    });
+  }
+);
 
 //@desc delete a product
 //@route DELETE api/products/:id
