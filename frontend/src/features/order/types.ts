@@ -1,25 +1,8 @@
 import type { ApiResponseBase } from '@/services/types';
 
-type OrderItemData = {
-  productId: string;
-  productVariantId: string | null;
-  quantity: number;
-};
-
-export type PaymentInfoProps = {
-  paymentMethod: string;
-  deliveryFee: number;
-  totalPrice: number;
-};
-
+export type PaymentMethod = 'CASH_ON_DELIVERY' | 'STRIPE';
 export type OrderStatus = 'PENDING' | 'CANCELLED' | 'DELIVERED';
-
-export type OrderData = {
-  deliveryAddress: string;
-  phone: string;
-  paymentMethod: 'CASH_ON_DELIVERY' | 'STRIPE';
-  orderItems: OrderItemData[];
-};
+export type PaymentStatus = 'PENDING' | 'CONFIRMED';
 
 export type OrderItem = {
   id: string;
@@ -33,22 +16,40 @@ export type OrderItem = {
   orderId: string;
 };
 
-export type CreateOrderResponse = ApiResponseBase & {
-  orderId: string;
-};
-
 export type Order = {
   id: string;
-  totalPrice: number;
-  orderStatus: OrderStatus;
+  orderNumber: number;
+
   userId: string;
+
   deliveryAddress: string;
   phone: string;
-  paymentMethod: 'CASH_ON_DELIVERY' | 'STRIPE';
+
+  totalPrice: number;
   deliveryFee: number;
+
+  paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
+
+  orderStatus: OrderStatus;
+
   orderItems: OrderItem[];
-  updatedAt: Date;
+
   createdAt: Date;
+  updatedAt: Date;
+};
+
+export type CreateOrderItemInput = {
+  productId: string;
+  productVariantId: string | null;
+  quantity: number;
+};
+
+export type CreateOrderInput = {
+  deliveryAddress: string;
+  phone: string;
+  paymentMethod: PaymentMethod;
+  orderItems: CreateOrderItemInput[];
 };
 
 export type OrderResponse = ApiResponseBase & {
@@ -57,4 +58,20 @@ export type OrderResponse = ApiResponseBase & {
 
 export type OrdersResponse = ApiResponseBase & {
   orders: Order[];
+};
+
+export type CreateOrderResponse = ApiResponseBase & {
+  orderId: string;
+};
+
+export type AdminOrderDetails = Order & {
+  user: { name: string };
+};
+
+export type AdminOrdersResponse = ApiResponseBase & {
+  orders: AdminOrderDetails[];
+};
+
+export type AdminOrderResponse = ApiResponseBase & {
+  order: AdminOrderDetails;
 };

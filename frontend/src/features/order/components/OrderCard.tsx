@@ -18,7 +18,7 @@ export default function OrderCard({ order }: { order: Order }) {
       <CardHeader className='flex flex-row items-center justify-between gap-2 pb-3 border-b border-border/30'>
         <div className='space-y-2'>
           <CardTitle className='text-sm text-foreground/90'>
-            Order #{`{${order.id}}`}
+            ORD-{order.orderNumber}
           </CardTitle>
 
           <p className='text-sm text-muted-foreground'>

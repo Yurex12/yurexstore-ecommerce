@@ -1,10 +1,12 @@
+import { useNavigate } from 'react-router-dom';
+
 import AddBtn from '@/components/AddBtn';
-import { ConfirmDelete } from '@/components/ConfirmDelete';
 import { Separator } from '@/components/ui/separator';
+import { ConfirmDelete } from '@/components/ConfirmDelete';
+
 import AdminProductsList from '@/features/product/components/AdminProductsList';
 import { useDeleteProduct } from '@/features/product/hooks/useDeleteProduct';
 import { useProductDeleteStore } from '@/features/product/store/useProductDeleteStore';
-import { useNavigate } from 'react-router-dom';
 
 export default function AdminProductsPage() {
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ export default function AdminProductsPage() {
   return (
     <section className='space-y-6'>
       <div className='flex items-center justify-between'>
-        <h1 className='heading'>Categories</h1>
+        <h1 className='heading'>Products</h1>
         <AddBtn onClick={() => navigate('/admin/products/new')} />
       </div>
 

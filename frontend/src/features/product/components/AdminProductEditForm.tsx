@@ -30,7 +30,6 @@ import { Textarea } from '@/components/ui/textarea';
 
 import { useCategories } from '@/features/category/hook/useCategories';
 import { useColors } from '@/features/color/hooks/useColors';
-
 import { useUploadImage } from '@/hooks/useUploadImage';
 import { useUpdateProduct } from '../hooks/useUpdateProduct';
 import { useProduct } from '../hooks/useProduct';
@@ -599,7 +598,7 @@ export default function AdminProductEditForm() {
                         })}
 
                         {images.length < 4 && (
-                          <label className='flex flex-col items-center justify-center aspect-square border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/40'>
+                          <label className='flex flex-col items-center justify-center h-40 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/40'>
                             <span className='text-2xl font-bold'>+</span>
                             <span className='text-sm text-muted-foreground'>
                               Upload

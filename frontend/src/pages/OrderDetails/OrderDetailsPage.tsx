@@ -41,7 +41,7 @@ export default function OrderDetailsPage() {
       <div className='flex flex-col md:flex-row justify-between gap-y-1'>
         <div>
           <h2 className='text-md font-semibold text-foreground/80'>
-            Order #{order.id}
+            ORD-{order.orderNumber}
           </h2>
           <span className='text-sm text-muted-foreground'>
             Placed on {format(new Date(order.createdAt), 'PPP')}

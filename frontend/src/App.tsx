@@ -1,3 +1,6 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import AppLayout from './layout/AppLayout';
@@ -21,17 +24,16 @@ import UpdatePasswordPage from './pages/UpdatePassword/UpdatePasswordPage';
 import WishlistPage from './pages/Wishlist/WishlistPage';
 import WriteReviewPage from './pages/WriteReview/WriteReviewPage';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Toaster } from 'react-hot-toast';
 import AdminLayout from './layout/AdminLayout';
 
+import AdminOrderDetailsPage from './pages/AdminOrderDetails/AdminOrderDetailsPage';
+import AdminOrdersPage from './pages/AdminOrders/AdminOrdersPage';
+import AdminProductCreatePage from './pages/AdminProductCreate/AdminProductCreatePage';
+import AdminProductEditPage from './pages/AdminProductEdit/AdminProductEditPage';
+import AdminProductsPage from './pages/AdminProducts/AdminProductsPage';
+import AdminCategoriesPage from './pages/CategoriesPage/AdminCategoriesPage';
 import CheckoutPage from './pages/checkout/CheckoutPage';
 import AdminColorsPage from './pages/Color/AdminColorsPage';
-import AdminCategoriesPage from './pages/CategoriesPage/AdminCategoriesPage';
-import AdminProductsPage from './pages/Product/AdminProductsPage';
-import AdminProductCreatePage from './pages/ProductCreate/AdminProductCreatePage';
-import AdminProductEditPage from './pages/ProductEdit/AdminProductEditPage';
 
 const queryClient = new QueryClient();
 
@@ -89,6 +91,11 @@ export default function App() {
               <Route
                 path='/admin/products/edit/:productId'
                 element={<AdminProductEditPage />}
+              />
+              <Route path='/admin/orders' element={<AdminOrdersPage />} />
+              <Route
+                path='/admin/orders/:orderId'
+                element={<AdminOrderDetailsPage />}
               />
             </Route>
             <Route path='/account/menu' element={<AccountMobileMenu />} />

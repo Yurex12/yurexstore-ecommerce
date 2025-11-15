@@ -15,6 +15,7 @@ import wishlistRoutes from './routes/wishlistRoutes';
 import addressRoutes from './routes/addressRoutes';
 import orderRoutes from './routes/orderRoutes';
 import colorRoutes from './routes/colorRoutes';
+import adminRoutes from './routes/adminRoutes';
 import imagekitRoutes from './routes/imagekitRoutes';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler';
 
@@ -49,6 +50,7 @@ app.use('/api/addresses', addressRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/colors', colorRoutes);
 app.use('/api/imagekit', imagekitRoutes);
+app.use('/api/admin', adminRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 

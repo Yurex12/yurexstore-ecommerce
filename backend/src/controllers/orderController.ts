@@ -20,7 +20,6 @@ export const getOrders = expressAsyncHandler(
         orderItems: true,
       },
       omit: {
-        paymentStatus: true,
         stripePaymentId: true,
       },
       orderBy: {
@@ -28,10 +27,32 @@ export const getOrders = expressAsyncHandler(
       },
     });
 
-    if (!orders) {
-      res.status(404);
-      throw new Error('Orders not found');
-    }
+    res.json({
+      success: true,
+      message: 'Successful.',
+      orders,
+    });
+  }
+);
+
+//@desc fetch an order
+//@route GET api/admin/orders/
+//@access Private(ADMINS ONLY)
+export const getAllOrders = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const orders = await prisma.order.findMany({
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
     res.json({
       success: true,
@@ -70,7 +91,43 @@ export const getOrder = expressAsyncHandler(
 
     if (userId !== order.userId && req.user.role !== 'ADMIN') {
       res.status(403);
-      throw new Error('Forbidden');
+      throw new Error('Not allowed');
+    }
+
+    res.json({
+      success: true,
+      message: 'Successful.',
+      order,
+    });
+  }
+);
+
+//@desc fetch an order
+//@route GET api/admin/orders/:id
+//@access Private
+export const getOrderById = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user.userId;
+
+    const { id } = req.params;
+
+    const order = await prisma.order.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        orderItems: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    if (!order) {
+      res.status(404);
+      throw new Error('Order not found');
     }
 
     res.json({
@@ -237,6 +294,91 @@ export const createOrder = expressAsyncHandler(
       success: true,
       message: 'Successful.',
       orderId: order.id,
+    });
+  }
+);
+
+//@desc Mark order as completed
+//@route PATCH api/admin/orders/:id/complete
+//@access Private
+export const markOrderAsComplete = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+    const order = await prisma.order.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!order) {
+      res.status(404);
+      throw new Error('Order not found');
+    }
+
+    await prisma.order.update({
+      where: {
+        id,
+      },
+      data: {
+        paymentStatus: 'CONFIRMED',
+        orderStatus: 'DELIVERED',
+      },
+    });
+
+    await prisma.notification.create({
+      data: {
+        content: `Your order ORD-${order.orderNumber} has been delivered successfully `,
+        orderId: order.id,
+        userId: order.userId,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Order marked as completed',
+    });
+  }
+);
+
+//@desc Mark order as completed
+//@route PATCH api/admin/orders/:id/cancel
+//@access Private
+export const cancelOrder = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+    const order = await prisma.order.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!order) {
+      res.status(404);
+      throw new Error('Order not found');
+    }
+
+    await prisma.order.update({
+      where: {
+        id,
+      },
+      data: {
+        orderStatus: 'CANCELLED',
+      },
+    });
+
+    await prisma.notification.create({
+      data: {
+        content: `Your order ORD-${order.orderNumber} has been canceled `,
+        orderId: order.id,
+        userId: order.userId,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Order cancelled',
     });
   }
 );

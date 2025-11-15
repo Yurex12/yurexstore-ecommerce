@@ -198,6 +198,7 @@ model Order {
   userId          String
   deliveryAddress String
   phone           String
+  orderNumber     Int            @default(autoincrement())
   paymentMethod   PAYMENT_METHOD
   paymentStatus   PAYMENT_STATUS @default(PENDING)
   deliveryFee     Float
