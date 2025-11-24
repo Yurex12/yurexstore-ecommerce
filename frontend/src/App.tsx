@@ -24,7 +24,7 @@ import UpdatePasswordPage from './pages/UpdatePassword/UpdatePasswordPage';
 import WishlistPage from './pages/Wishlist/WishlistPage';
 import WriteReviewPage from './pages/WriteReview/WriteReviewPage';
 
-import AdminLayout from './layout/AdminLayout';
+import AdminLayout from './layout/AdminLayout2';
 
 import AdminOrderDetailsPage from './pages/AdminOrderDetails/AdminOrderDetailsPage';
 import AdminOrdersPage from './pages/AdminOrders/AdminOrdersPage';
@@ -72,36 +72,34 @@ export default function App() {
               />
               <Route path='/account/addresses' element={<AddressPage />} />
             </Route>
-            {/* Admin */}
-            <Route element={<AdminLayout />}>
-              <Route path='/admin/colors' element={<AdminColorsPage />} />
-              <Route
-                path='/admin/categories'
-                element={<AdminCategoriesPage />}
-              />
-              <Route path='/admin/products' element={<AdminProductsPage />} />
-              <Route
-                path='/admin/products/new'
-                element={<AdminProductCreatePage />}
-              />
-              <Route
-                path='/admin/products/edit/:productId'
-                element={<AdminProductEditPage />}
-              />
-              <Route
-                path='/admin/products/edit/:productId'
-                element={<AdminProductEditPage />}
-              />
-              <Route path='/admin/orders' element={<AdminOrdersPage />} />
-              <Route
-                path='/admin/orders/:orderId'
-                element={<AdminOrderDetailsPage />}
-              />
-            </Route>
+
             <Route path='/account/menu' element={<AccountMobileMenu />} />
           </Route>
           <Route path='/login' element={<SignInPage />} />
           <Route path='/register' element={<SignUpPage />} />
+          {/* Admin */}
+          <Route element={<AdminLayout />}>
+            <Route path='/admin/colors' element={<AdminColorsPage />} />
+            <Route path='/admin/categories' element={<AdminCategoriesPage />} />
+            <Route path='/admin/products' element={<AdminProductsPage />} />
+            <Route
+              path='/admin/products/new'
+              element={<AdminProductCreatePage />}
+            />
+            <Route
+              path='/admin/products/edit/:productId'
+              element={<AdminProductEditPage />}
+            />
+            <Route
+              path='/admin/products/edit/:productId'
+              element={<AdminProductEditPage />}
+            />
+            <Route path='/admin/orders' element={<AdminOrdersPage />} />
+            <Route
+              path='/admin/orders/:orderId'
+              element={<AdminOrderDetailsPage />}
+            />
+          </Route>
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

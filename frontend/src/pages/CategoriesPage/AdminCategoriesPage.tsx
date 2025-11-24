@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import AddBtn from '@/components/AddBtn';
 import { ConfirmDelete } from '@/components/ConfirmDelete';
 import { Separator } from '@/components/ui/separator';
@@ -7,7 +9,7 @@ import AdminCategoryEditDialog from '@/features/category/components/AdminCategor
 
 import useDeleteCategory from '@/features/category/hook/useDeleteCategory';
 import { useCategoryDeleteStore } from '@/features/category/store/useCategoryDeleteStore';
-import { useState } from 'react';
+import AdminCategoriesTable from '@/features/category/components/AdminCategoriesTable';
 
 export default function AdminCategoriesPage() {
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -21,15 +23,16 @@ export default function AdminCategoriesPage() {
   }
 
   return (
-    <section className='space-y-6'>
+    <section>
       <div className='flex items-center justify-between'>
         <h1 className='heading'>Categories</h1>
-        <AddBtn onClick={() => setOpenCreateDialog(true)} />
+        <AddBtn
+          onClick={() => setOpenCreateDialog(true)}
+          title='Add Category'
+        />
       </div>
 
-      <Separator />
-
-      <AdminCategoriesList />
+      <AdminCategoriesTable />
 
       <AdminCreateCategoryDialog
         open={openCreateDialog}

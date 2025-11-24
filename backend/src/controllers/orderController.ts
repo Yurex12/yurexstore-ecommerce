@@ -301,7 +301,7 @@ export const createOrder = expressAsyncHandler(
 //@desc Mark order as completed
 //@route PATCH api/admin/orders/:id/complete
 //@access Private
-export const markOrderAsComplete = expressAsyncHandler(
+export const completeOrder = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
@@ -316,41 +316,59 @@ export const markOrderAsComplete = expressAsyncHandler(
       throw new Error('Order not found');
     }
 
-    await prisma.order.update({
-      where: {
-        id,
-      },
-      data: {
-        paymentStatus: 'CONFIRMED',
-        orderStatus: 'DELIVERED',
-      },
-    });
+    if (order.orderStatus === 'CANCELLED') {
+      res.status(400);
+      throw new Error('Cannot complete a cancelled order');
+    }
 
-    await prisma.notification.create({
-      data: {
-        content: `Your order ORD-${order.orderNumber} has been delivered successfully `,
-        orderId: order.id,
-        userId: order.userId,
-      },
+    await prisma.$transaction(async (tx) => {
+      await tx.order.update({
+        where: {
+          id,
+        },
+        data: {
+          paymentStatus: 'CONFIRMED',
+          orderStatus: 'DELIVERED',
+        },
+      });
+
+      await tx.notification.create({
+        data: {
+          content: `Your order ORD-${order.orderNumber} has been delivered successfully `,
+          orderId: order.id,
+          userId: order.userId,
+        },
+      });
     });
 
     res.status(200).json({
       success: true,
       message: 'Order marked as completed',
+      orderId: order.id,
     });
   }
 );
 
-//@desc Mark order as completed
+//@desc Cancel order
 //@route PATCH api/admin/orders/:id/cancel
 //@access Private
 export const cancelOrder = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
+    const { id: orderId } = req.params;
 
     const order = await prisma.order.findUnique({
       where: {
-        id,
+        id: orderId,
+      },
+      include: {
+        orderItems: {
+          select: {
+            id: true,
+            quantity: true,
+            productId: true,
+            productVariantId: true,
+          },
+        },
       },
     });
 
@@ -359,26 +377,66 @@ export const cancelOrder = expressAsyncHandler(
       throw new Error('Order not found');
     }
 
-    await prisma.order.update({
-      where: {
-        id,
-      },
-      data: {
-        orderStatus: 'CANCELLED',
-      },
-    });
+    await prisma.$transaction(
+      async (tx) => {
+        await tx.order.update({
+          where: {
+            id: orderId,
+          },
+          data: {
+            orderStatus: 'CANCELLED',
+          },
+        });
 
-    await prisma.notification.create({
-      data: {
-        content: `Your order ORD-${order.orderNumber} has been canceled `,
-        orderId: order.id,
-        userId: order.userId,
+        await tx.notification.create({
+          data: {
+            content: `Your order ORD-${order.orderNumber} has been canceled `,
+            orderId: order.id,
+            userId: order.userId,
+          },
+        });
+
+        await Promise.all(
+          order.orderItems.map(async (orderItem) => {
+            if (orderItem.productVariantId) {
+              return Promise.all([
+                tx.product.update({
+                  where: {
+                    id: orderItem.productId,
+                  },
+                  data: {
+                    quantity: { increment: orderItem.quantity },
+                  },
+                }),
+                tx.productVariant.update({
+                  where: {
+                    id: orderItem.productVariantId,
+                  },
+                  data: {
+                    quantity: { increment: orderItem.quantity },
+                  },
+                }),
+              ]);
+            } else {
+              return tx.product.update({
+                where: {
+                  id: orderItem.productId,
+                },
+                data: {
+                  quantity: { increment: orderItem.quantity },
+                },
+              });
+            }
+          })
+        );
       },
-    });
+      { timeout: 10000 }
+    );
 
     res.status(200).json({
       success: true,
       message: 'Order cancelled',
+      orderId: order.id,
     });
   }
 );

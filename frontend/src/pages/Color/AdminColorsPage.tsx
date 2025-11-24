@@ -1,8 +1,7 @@
 import AddBtn from '@/components/AddBtn';
 import { ConfirmDelete } from '@/components/ConfirmDelete';
-import { Separator } from '@/components/ui/separator';
 import AdminColorFormDialog from '@/features/color/components/AdminColorFormDialog';
-import AdminColorsList from '@/features/color/components/AdminColorsList';
+import AdminColorsTable from '@/features/color/components/AdminColorsTable';
 
 import { useDeleteColor } from '@/features/color/hooks/useDeleteColor';
 import { useColorDeleteStore } from '@/features/color/store/useColorDeleteStore';
@@ -20,16 +19,13 @@ export default function AdminColorsPage() {
   }
 
   return (
-    <section className='space-y-6'>
+    <section>
       <div className='flex items-center justify-between'>
         <h1 className='heading'>Colors</h1>
-        <AddBtn onClick={() => setFormOpen(true)} />
+        <AddBtn onClick={() => setFormOpen(true)} title='Add color' />
       </div>
 
-      <Separator />
-
-      <AdminColorsList />
-
+      <AdminColorsTable />
       <AdminColorFormDialog />
 
       <ConfirmDelete

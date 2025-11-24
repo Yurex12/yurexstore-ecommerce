@@ -9,20 +9,19 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 
+import useAdminCancelOrder from '../hooks/useAdminCancelOrder';
+import useAdminCompleteOrder from '../hooks/useAdminCompleteOrder';
 import useAdminOrder from '../hooks/useAdminOrder';
 import { getPaymentColor, getStatusColor } from '../utils/helpers';
 
 export default function AdminOrderDetails() {
   const { orderId } = useParams<{ orderId: string }>();
 
-  const {
-    order,
-    isPending,
-    error,
-    // mutateMarkCompleted,
-    // mutateCancelOrder,
-    // isSubmitting,
-  } = useAdminOrder(orderId);
+  const { order, isPending, error } = useAdminOrder(orderId);
+  const { completeOrder, isPending: isDelivering } = useAdminCompleteOrder();
+  const { cancelOrder, isPending: isCancelling } = useAdminCancelOrder();
+
+  const isWorking = isDelivering || isCancelling;
 
   if (isPending) return <Spinner />;
   if (error) return <InlineError message='Unable to load order' />;
@@ -212,33 +211,38 @@ export default function AdminOrderDetails() {
         </div>
       </div>
 
-      {/* Actions Panel */}
       <div className='border rounded-lg p-5'>
         <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
           <div>
             <h3 className='font-semibold text-gray-900 mb-1'>Order Actions</h3>
             <p className='text-sm text-gray-500'>
-              Update order status or cancel the order
+              {order.orderStatus === 'CANCELLED'
+                ? 'This order has been cancelled. No actions available.'
+                : order.orderStatus === 'DELIVERED'
+                ? 'This order has been delivered. No further actions available.'
+                : 'Update order status or cancel the order'}
             </p>
           </div>
 
           <div className='flex gap-3 w-full sm:w-auto'>
-            <Button
-              className='flex-1 sm:flex-none'
-              size='lg'
-              // disabled={isSubmitting}
-              // onClick={() => mutateMarkCompleted(orderId)}
-            >
-              <Truck className='w-4 h-4 mr-2' />
-              Mark as Completed
-            </Button>
+            {order.paymentStatus !== 'CONFIRMED' && (
+              <Button
+                className='flex-1 sm:flex-none'
+                size='lg'
+                disabled={isWorking}
+                onClick={() => completeOrder(order.id)}
+              >
+                <Truck className='w-4 h-4 mr-2' />
+                Mark as Delivered
+              </Button>
+            )}
 
             <Button
               variant='destructive'
               className='flex-1 sm:flex-none'
               size='lg'
-              // disabled={isSubmitting || order.orderStatus === 'CANCELLED'}
-              // onClick={() => mutateCancelOrder(orderId)}
+              disabled={isWorking}
+              onClick={() => cancelOrder(order.id)}
             >
               Cancel Order
             </Button>
