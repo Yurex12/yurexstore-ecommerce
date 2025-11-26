@@ -12,8 +12,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import AdminSidebar from './AdminSidebar2';
 import { Outlet, useLocation } from 'react-router-dom';
+import AdminSidebar from './AdminSidebar2';
 
 export default function AdminLayout() {
   const { pathname } = useLocation();
@@ -27,15 +27,33 @@ export default function AdminLayout() {
             <Separator orientation='vertical' className='mr-2 h-4' />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className='hidden md:block'>
-                  <BreadcrumbLink href='#'>
-                    {pathname.split('/').at(-1)}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className='hidden md:block' />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
+                {pathname
+                  .split('/')
+                  .filter(Boolean)
+                  .map((segment, index, array) => {
+                    if (segment === 'admin') return;
+                    const isLast = index === array.length - 1;
+                    const href = '/' + array.slice(0, index + 1).join('/');
+                    const label =
+                      segment.charAt(0).toUpperCase() + segment.slice(1);
+
+                    return (
+                      <>
+                        <BreadcrumbItem key={href}>
+                          {isLast ? (
+                            <BreadcrumbPage className='font-semibold'>
+                              {label}
+                            </BreadcrumbPage>
+                          ) : (
+                            <BreadcrumbLink href={href}>{label}</BreadcrumbLink>
+                          )}
+                        </BreadcrumbItem>
+                        {!isLast && (
+                          <BreadcrumbSeparator key={`sep-${index}`} />
+                        )}
+                      </>
+                    );
+                  })}
               </BreadcrumbList>
             </Breadcrumb>
           </div>

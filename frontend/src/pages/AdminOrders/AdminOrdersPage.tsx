@@ -1,15 +1,11 @@
-import { Separator } from '@/components/ui/separator';
-
-import AdminOrdersList from '@/features/order/components/AdminOrdersList';
+import AdminOrdersTable from '@/features/order/components/AdminOrdersTable';
 
 export default function AdminOrdersPage() {
   return (
-    <section className='space-y-6'>
-      <h1 className='heading'>All Orders</h1>
+    <section>
+      <h1 className='heading'>Orders</h1>
 
-      <Separator />
-
-      <AdminOrdersList />
+      <AdminOrdersTable />
     </section>
   );
 }

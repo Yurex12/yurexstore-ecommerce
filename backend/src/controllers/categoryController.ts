@@ -148,3 +148,23 @@ export const deleteCategory = expressAsyncHandler(
     });
   }
 );
+
+//@desc delete Many category
+//@route DELETE api/category/
+//@access private(ADMIN ONLY)
+export const deleteCategories = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { categoryIds } = req.body;
+
+    const categories = await prisma.color.deleteMany({
+      where: {
+        id: { in: categoryIds },
+      },
+    });
+
+    res.json({
+      success: true,
+      message: `Successfully deleted ${categories.count} products.`,
+    });
+  }
+);

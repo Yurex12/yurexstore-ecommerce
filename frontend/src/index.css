@@ -188,9 +188,9 @@
     @apply text-2xl font-semibold leading-snug;
   } */
 
-  .active span {
+  /* .active span {
     @apply bg-foreground/5 text-foreground px-3;
-  }
+  } */
 
   .heading {
     @apply text-xl sm:text-3xl  lg:text-4xl;

@@ -2,14 +2,12 @@ import { useState } from 'react';
 
 import AddBtn from '@/components/AddBtn';
 import { ConfirmDelete } from '@/components/ConfirmDelete';
-import { Separator } from '@/components/ui/separator';
-import AdminCategoriesList from '@/features/category/components/AdminCategoriesList';
 import AdminCreateCategoryDialog from '@/features/category/components/AdminCategoryCreateDialog';
 import AdminCategoryEditDialog from '@/features/category/components/AdminCategoryEditDialog';
 
+import AdminCategoriesTable from '@/features/category/components/AdminCategoriesTable';
 import useDeleteCategory from '@/features/category/hook/useDeleteCategory';
 import { useCategoryDeleteStore } from '@/features/category/store/useCategoryDeleteStore';
-import AdminCategoriesTable from '@/features/category/components/AdminCategoriesTable';
 
 export default function AdminCategoriesPage() {
   const [openCreateDialog, setOpenCreateDialog] = useState(false);

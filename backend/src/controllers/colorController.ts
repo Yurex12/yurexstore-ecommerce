@@ -83,3 +83,23 @@ export const deleteColor = expressAsyncHandler(
     });
   }
 );
+
+//@desc delete many color
+//@route DELETE api/colors/
+//@access PRIVATE(ADMINS ONLY)
+export const deleteColors = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { colorIds } = req.body;
+
+    const colors = await prisma.color.deleteMany({
+      where: {
+        id: { in: colorIds },
+      },
+    });
+
+    res.json({
+      success: true,
+      message: `Successfully deleted ${colors.count} products.`,
+    });
+  }
+);

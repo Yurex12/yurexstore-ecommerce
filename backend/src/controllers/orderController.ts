@@ -69,11 +69,12 @@ export const getOrder = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user.userId;
 
-    const { id } = req.params;
+    const { id: orderId } = req.params;
 
     const order = await prisma.order.findUnique({
       where: {
-        id,
+        id: orderId,
+        userId,
       },
       omit: {
         stripePaymentId: true,
@@ -89,11 +90,6 @@ export const getOrder = expressAsyncHandler(
       throw new Error('Order not found');
     }
 
-    if (userId !== order.userId && req.user.role !== 'ADMIN') {
-      res.status(403);
-      throw new Error('Not allowed');
-    }
-
     res.json({
       success: true,
       message: 'Successful.',
@@ -107,8 +103,6 @@ export const getOrder = expressAsyncHandler(
 //@access Private
 export const getOrderById = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.user.userId;
-
     const { id } = req.params;
 
     const order = await prisma.order.findUnique({

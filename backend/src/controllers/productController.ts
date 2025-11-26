@@ -289,17 +289,6 @@ export const deleteProduct = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id: productId } = req.params;
 
-    const product = await prisma.product.findUnique({
-      where: {
-        id: productId,
-      },
-    });
-
-    if (!product) {
-      res.status(404);
-      throw new Error('Product not found.');
-    }
-
     await prisma.product.delete({
       where: {
         id: productId,
@@ -309,6 +298,26 @@ export const deleteProduct = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Product deleted successfully',
+    });
+  }
+);
+
+//@desc delete many product
+//@route DELETE api/products/:id
+//@access private(ADMINS ONLY)
+export const deleteProducts = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { productIds } = req.body as { productIds: string[] };
+
+    const products = await prisma.product.deleteMany({
+      where: {
+        id: { in: productIds },
+      },
+    });
+
+    res.json({
+      success: true,
+      message: `Successfully deleted ${products.count} products.`,
     });
   }
 );
