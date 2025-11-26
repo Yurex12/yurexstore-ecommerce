@@ -8,10 +8,10 @@ import { columns } from './AdminColorColumns';
 
 export default function AdminColorsTable() {
   const { colors, error: fetchError, isPending: isFetching } = useColors();
-  const { isPending: isDeleting } = useDeleteColors();
+  const { isPending: isDeletingColors } = useDeleteColors();
   const { setDeleteDialogOpen, setSelectedColorIds } = useColorDeleteStore();
 
-  function handleDelete(colorIds: string[]) {
+  function handleDeleteColors(colorIds: string[]) {
     setDeleteDialogOpen(true);
     setSelectedColorIds(colorIds);
   }
@@ -26,8 +26,8 @@ export default function AdminColorsTable() {
       <DataTable
         columns={columns}
         data={colors}
-        onDeleteSelected={handleDelete}
-        isDeleting={isDeleting}
+        onDeleteSelected={handleDeleteColors}
+        isDeleting={isDeletingColors}
       />
     </div>
   );

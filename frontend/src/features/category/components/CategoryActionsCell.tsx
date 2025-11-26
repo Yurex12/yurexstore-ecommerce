@@ -15,9 +15,10 @@ export default function CategoryActionsCell({
   category: Category;
 }) {
   const { setEditingCategory, setFormOpen } = useCategoryEditStore();
-  const { setDeleteDialogOpen, setSelectedColorId } = useCategoryDeleteStore();
+  const { setDeleteDialogOpen, setSelectedCategoryId } =
+    useCategoryDeleteStore();
   function handleDelete(categoryId: string) {
-    setSelectedColorId(categoryId);
+    setSelectedCategoryId(categoryId);
     setDeleteDialogOpen(true);
   }
 

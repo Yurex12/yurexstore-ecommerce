@@ -6,18 +6,28 @@ import AdminCreateCategoryDialog from '@/features/category/components/AdminCateg
 import AdminCategoryEditDialog from '@/features/category/components/AdminCategoryEditDialog';
 
 import AdminCategoriesTable from '@/features/category/components/AdminCategoriesTable';
+import useDeleteCategories from '@/features/category/hook/useDeleteCategories';
 import useDeleteCategory from '@/features/category/hook/useDeleteCategory';
 import { useCategoryDeleteStore } from '@/features/category/store/useCategoryDeleteStore';
 
 export default function AdminCategoriesPage() {
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
-  const { deleteCategory, isPending: isDeleting } = useDeleteCategory();
-  const { isDeleteDialogOpen, setDeleteDialogOpen, selectedColorId } =
-    useCategoryDeleteStore();
+  const { deleteCategory, isPending: isDeletingCategory } = useDeleteCategory();
+  const {
+    isDeleteDialogOpen,
+    selectedCategoryIds,
+    setDeleteDialogOpen,
+    selectedCategoryId,
+  } = useCategoryDeleteStore();
+
+  const { deleteCategories, isPending: isDeletingCategories } =
+    useDeleteCategories();
 
   function handleDelete() {
     setDeleteDialogOpen(false);
-    deleteCategory(selectedColorId);
+    if (selectedCategoryId) deleteCategory(selectedCategoryId);
+
+    if (selectedCategoryIds) deleteCategories(selectedCategoryIds);
   }
 
   return (
@@ -42,7 +52,7 @@ export default function AdminCategoriesPage() {
       <ConfirmDelete
         resourceName='categories'
         onConfirm={handleDelete}
-        disabled={isDeleting}
+        disabled={isDeletingCategory || isDeletingCategories}
         open={isDeleteDialogOpen}
         handleOpen={setDeleteDialogOpen}
       />

@@ -2,9 +2,11 @@ import type { ApiResponseBase } from '@/services/types';
 
 export type CategoryDeleteState = {
   isDeleteDialogOpen: boolean;
-  selectedColorId: string;
+  selectedCategoryId: string;
+  selectedCategoryIds: string[];
   setDeleteDialogOpen: (isOpen: boolean) => void;
-  setSelectedColorId: (id: string) => void;
+  setSelectedCategoryId: (id: string) => void;
+  setSelectedCategoryIds: (ids: string[]) => void;
 };
 
 export type Category = {

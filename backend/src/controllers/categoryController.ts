@@ -156,7 +156,7 @@ export const deleteCategories = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { categoryIds } = req.body;
 
-    const categories = await prisma.color.deleteMany({
+    const categories = await prisma.category.deleteMany({
       where: {
         id: { in: categoryIds },
       },
@@ -164,7 +164,7 @@ export const deleteCategories = expressAsyncHandler(
 
     res.json({
       success: true,
-      message: `Successfully deleted ${categories.count} products.`,
+      message: `Successfully deleted ${categories.count} category(s).`,
     });
   }
 );

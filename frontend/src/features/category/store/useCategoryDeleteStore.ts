@@ -3,7 +3,9 @@ import type { CategoryDeleteState } from '../types';
 
 export const useCategoryDeleteStore = create<CategoryDeleteState>((set) => ({
   isDeleteDialogOpen: false,
-  selectedColorId: '',
+  selectedCategoryId: '',
+  selectedCategoryIds: [],
   setDeleteDialogOpen: (isOpen) => set({ isDeleteDialogOpen: isOpen }),
-  setSelectedColorId: (id) => set({ selectedColorId: id }),
+  setSelectedCategoryId: (id) => set({ selectedCategoryId: id }),
+  setSelectedCategoryIds: (ids) => set({ selectedCategoryIds: ids }),
 }));

@@ -1,9 +1,7 @@
 import z from 'zod';
 
 export const productsDeleteSchema = z.object({
-  productIds: z.array(
-    z.object({ id: z.string().nonempty('Product Id is required') })
-  ),
+  productIds: z.array(z.string().nonempty('Color Id is required')),
 });
 
 export const colorsDeleteSchema = z.object({
@@ -11,9 +9,7 @@ export const colorsDeleteSchema = z.object({
 });
 
 export const categoriesDeleteSchema = z.object({
-  categoryIds: z.array(
-    z.object({ id: z.string().nonempty('Category Id is required') })
-  ),
+  categoryIds: z.array(z.string().nonempty('Color Id is required')),
 });
 
 export type ProductsDeleteSchema = z.infer<typeof productsDeleteSchema>;

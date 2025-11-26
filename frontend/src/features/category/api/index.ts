@@ -59,3 +59,17 @@ export async function deleteCategory(categoryId: string) {
     handleApiError(error, 'Failed to create category');
   }
 }
+
+export async function deleteCategories(categoryIds: string[]) {
+  try {
+    const { data } = await api.delete<ApiResponseBase>(`/admin/categories`, {
+      data: {
+        categoryIds,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    handleApiError(error, 'Failed to delete categories');
+  }
+}
