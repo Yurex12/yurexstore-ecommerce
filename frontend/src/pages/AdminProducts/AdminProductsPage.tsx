@@ -43,7 +43,7 @@ export default function AdminProductsPage() {
       <AdminProductsTable />
 
       <ConfirmDelete
-        resourceName='categories'
+        resourceName='product(s)'
         onConfirm={handleDelete}
         disabled={isDeleting}
         open={isDeleteDialogOpen}

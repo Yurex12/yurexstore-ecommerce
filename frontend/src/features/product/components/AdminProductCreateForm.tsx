@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
-import { Plus, X } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Plus, X } from 'lucide-react';
+import { useEffect } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -14,7 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -25,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 
 import { useCategories } from '@/features/category/hook/useCategories';
@@ -34,10 +34,14 @@ import { useCreateProduct } from '../hooks/useCreateProduct';
 
 import { MAX_IMAGE_SIZE } from '../constants';
 
+import ErrorState from '@/components/ErrorState';
+import NoData from '@/components/NoData';
+import { PageLoader } from '@/components/PageLoader';
 import {
   productCreateSchema,
   type ProductCreateSchema,
 } from '../schemas/productCreateSchema';
+import { useNavigate } from 'react-router-dom';
 
 export default function AdminProductCreateForm() {
   const form = useForm({
@@ -45,8 +49,8 @@ export default function AdminProductCreateForm() {
     defaultValues: {
       name: '',
       hasVariants: false,
-      price: 0,
-      quantity: 0,
+      price: '',
+      quantity: 1,
       categoryId: '',
       colorId: '',
       description: '',
@@ -77,6 +81,8 @@ export default function AdminProductCreateForm() {
     name: 'productVariants',
   });
 
+  const navigate = useNavigate();
+
   const isWorking = isCreating || form.formState.isSubmitting;
 
   useEffect(() => {
@@ -90,9 +96,12 @@ export default function AdminProductCreateForm() {
     }
   }, [hasVariants, fields.length, append, form]);
 
-  if (isFetchingCategories || isFetchingColors) return <p>Loading</p>;
-  if (categoriesError || colorsError) return <p>Error occurred</p>;
-  if (!categories?.length || !colors?.length) return <p>No categories found</p>;
+  if (isFetchingCategories || isFetchingColors) return <PageLoader />;
+  if (categoriesError || colorsError) return <ErrorState />;
+  if (!categories?.length || !colors?.length)
+    return (
+      <NoData content='You need at least one category and one color set up before you can add products. Please create them first.' />
+    );
 
   async function onSubmit(data: ProductCreateSchema) {
     const res = await Promise.all(
@@ -118,6 +127,7 @@ export default function AdminProductCreateForm() {
       {
         onSuccess() {
           form.reset();
+          navigate('/admin/products');
         },
       }
     );
@@ -243,7 +253,7 @@ export default function AdminProductCreateForm() {
               />
 
               {!hasVariants && (
-                <div className='grid grid-cols-2 gap-4'>
+                <div className='grid grid-cols-2 gap-4 items-start'>
                   <FormField
                     control={form.control}
                     name='price'
@@ -607,7 +617,7 @@ export default function AdminProductCreateForm() {
           >
             Cancel
           </Button>
-          <Button type='submit' className='w-25'>
+          <Button type='submit' className='w-35'>
             {isWorking ? <Spinner /> : <span>Create Product</span>}
           </Button>
         </div>

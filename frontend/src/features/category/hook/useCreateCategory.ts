@@ -12,7 +12,7 @@ export function useCreateCategory() {
   } = useMutation({
     mutationFn: categoryApi,
     onSuccess() {
-      toast.success('Categories created successfully');
+      toast.success('Category created successfully');
       queryClient.invalidateQueries({ queryKey: ['categories'] });
     },
     onError(error) {
