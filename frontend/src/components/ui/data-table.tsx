@@ -96,7 +96,9 @@ export function DataTable<TData extends { id: string }, TValue>({
               variant='destructive'
               className='bg-destructive/70'
               size='sm'
-              onClick={() => onDeleteSelected?.(selectedIds)}
+              onClick={() => {
+                onDeleteSelected?.(selectedIds);
+              }}
               disabled={isDeleting}
             >
               Delete ({selectedIds.length})

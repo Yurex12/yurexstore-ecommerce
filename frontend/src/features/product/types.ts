@@ -56,8 +56,10 @@ export type ProductVariantProps = {
 export type ProductDeleteState = {
   isDeleteDialogOpen: boolean;
   selectedProductId: string;
+  selectedProductIds: string[];
   setDeleteDialogOpen: (isOpen: boolean) => void;
   setSelectedProductId: (id: string) => void;
+  setSelectedProductIds: (ids: string[]) => void;
 };
 
 export type GetProductsResponse = ApiResponseBase & {

@@ -136,11 +136,9 @@ export const deleteCategory = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const { id: categoryId } = req.params;
 
-    const { fileId } = await prisma.category.delete({
+    await prisma.category.delete({
       where: { id: categoryId },
     });
-
-    client.files.delete(fileId).catch(() => {});
 
     res.json({
       success: true,

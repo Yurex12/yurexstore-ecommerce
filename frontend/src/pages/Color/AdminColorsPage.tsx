@@ -17,18 +17,23 @@ export default function AdminColorsPage() {
     selectedColorIds,
     isDeleteDialogOpen,
     setDeleteDialogOpen,
+    setSelectedColorId,
+    setSelectedColorIds,
   } = useColorDeleteStore();
 
   function handleDeleteColor() {
     setDeleteDialogOpen(false);
 
     if (selectedColorId) {
-      deleteColor(selectedColorId);
+      deleteColor(selectedColorId, { onSuccess() {} });
     }
 
-    if (selectedColorIds) {
+    if (selectedColorIds.length > 0) {
       deleteColors(selectedColorIds);
     }
+
+    setSelectedColorId('');
+    setSelectedColorIds([]);
   }
 
   return (

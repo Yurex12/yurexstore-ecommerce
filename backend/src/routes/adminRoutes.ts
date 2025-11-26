@@ -17,6 +17,7 @@ import {
   colorsDeleteSchema,
   productsDeleteSchema,
 } from '../schemas/adminSchema';
+import { getUsersData } from '../controllers/authController';
 
 const router = express.Router();
 
@@ -41,5 +42,9 @@ router.delete(
 
 // Color
 router.delete('/colors', validateData(colorsDeleteSchema), deleteColors);
+
+// Users
+
+router.get('/users', getUsersData);
 
 export default router;

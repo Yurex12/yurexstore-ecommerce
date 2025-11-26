@@ -11,7 +11,7 @@ export function useDeleteColors() {
     isPending,
     error,
   } = useMutation({
-    mutationFn: (colorIds: string[]) => deleteColorsApi(colorIds),
+    mutationFn: deleteColorsApi,
 
     onMutate: async (colorIds: string[]) => {
       await queryClient.cancelQueries({ queryKey: ['colors'] });

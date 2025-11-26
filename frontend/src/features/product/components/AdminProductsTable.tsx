@@ -1,24 +1,36 @@
-import EmptyState from '@/components/EmptyState';
-
+import ErrorState from '@/components/ErrorState';
+import NoData from '@/components/NoData';
+import { PageLoader } from '@/components/PageLoader';
 import { DataTable } from '@/components/ui/data-table';
-import { Spinner } from '@/components/ui/spinner';
+import { useDeleteProducts } from '../hooks/useDeleteProducts';
 import { useProducts } from '../hooks/useProducts';
+import { useProductDeleteStore } from '../store/useProductDeleteStore';
 import { columns } from './AdminProductsColumns';
 
 export default function AdminProductsTable() {
-  const { products, error, isPending: isFetching } = useProducts();
-  if (isFetching) return <Spinner />;
-  if (error) return <p>{error.message}</p>;
-  if (!products?.length) return <EmptyState />;
+  const { products, error, isPending } = useProducts();
+  const { isPending: isDeletingProducts } = useDeleteProducts();
+  const { setSelectedProductIds, setDeleteDialogOpen } =
+    useProductDeleteStore();
 
-  if (isFetching) return <Spinner />;
+  if (isPending) return <PageLoader message='Loading products...' />;
 
-  if (error) return <p>{error}</p>;
+  if (error) return <ErrorState message={error.message} />;
 
-  if (!products) return <EmptyState />;
+  if (!products?.length) return <NoData title='Product' />;
+
+  function handleDeleteProducts(productIds: string[]) {
+    setDeleteDialogOpen(true);
+    setSelectedProductIds(productIds);
+  }
   return (
     <div className='container mx-auto'>
-      <DataTable columns={columns} data={products} />
+      <DataTable
+        columns={columns}
+        data={products}
+        onDeleteSelected={handleDeleteProducts}
+        isDeleting={isDeletingProducts}
+      />
     </div>
   );
 }

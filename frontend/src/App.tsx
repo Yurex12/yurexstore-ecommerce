@@ -34,6 +34,7 @@ import AdminProductsPage from './pages/AdminProducts/AdminProductsPage';
 import AdminCategoriesPage from './pages/CategoriesPage/AdminCategoriesPage';
 import CheckoutPage from './pages/checkout/CheckoutPage';
 import AdminColorsPage from './pages/Color/AdminColorsPage';
+import AdminUsersPage from './pages/AdminUsers/AdminUsersPage';
 
 const queryClient = new QueryClient();
 
@@ -99,6 +100,8 @@ export default function App() {
               path='/admin/orders/:orderId'
               element={<AdminOrderDetailsPage />}
             />
+
+            <Route path='/admin/users' element={<AdminUsersPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

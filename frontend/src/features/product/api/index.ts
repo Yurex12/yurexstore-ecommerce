@@ -71,6 +71,19 @@ export async function deleteProduct(productId: string) {
 
     return data;
   } catch (error) {
-    handleApiError(error, 'Failed to delete');
+    handleApiError(error, 'Failed to delete product');
+  }
+}
+export async function deleteProducts(productIds: string[]) {
+  try {
+    const { data } = await api.delete(`/admin/products`, {
+      data: {
+        productIds,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    handleApiError(error, 'Failed to delete Product(s)');
   }
 }

@@ -6,16 +6,28 @@ import { ConfirmDelete } from '@/components/ConfirmDelete';
 import AdminProductsTable from '@/features/product/components/AdminProductsTable';
 import { useDeleteProduct } from '@/features/product/hooks/useDeleteProduct';
 import { useProductDeleteStore } from '@/features/product/store/useProductDeleteStore';
+import { useDeleteProducts } from '@/features/product/hooks/useDeleteProducts';
 
 export default function AdminProductsPage() {
   const navigate = useNavigate();
   const { deleteProduct, isPending: isDeleting } = useDeleteProduct();
-  const { isDeleteDialogOpen, setDeleteDialogOpen, selectedProductId } =
-    useProductDeleteStore();
+  const {
+    isDeleteDialogOpen,
+    setDeleteDialogOpen,
+    selectedProductId,
+    selectedProductIds,
+    setSelectedProductId,
+    setSelectedProductIds,
+  } = useProductDeleteStore();
+  const { deleteProducts } = useDeleteProducts();
 
   function handleDelete() {
     setDeleteDialogOpen(false);
-    deleteProduct(selectedProductId);
+    if (selectedProductId) deleteProduct(selectedProductId);
+    if (selectedProductIds.length > 0) deleteProducts(selectedProductIds);
+
+    setSelectedProductId('');
+    setSelectedProductIds([]);
   }
 
   return (

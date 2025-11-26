@@ -18,6 +18,8 @@ export default function AdminCategoriesPage() {
     selectedCategoryIds,
     setDeleteDialogOpen,
     selectedCategoryId,
+    setSelectedCategoryId,
+    setSelectedCategoryIds,
   } = useCategoryDeleteStore();
 
   const { deleteCategories, isPending: isDeletingCategories } =
@@ -25,9 +27,16 @@ export default function AdminCategoriesPage() {
 
   function handleDelete() {
     setDeleteDialogOpen(false);
-    if (selectedCategoryId) deleteCategory(selectedCategoryId);
+    if (selectedCategoryId) {
+      deleteCategory(selectedCategoryId);
+    }
 
-    if (selectedCategoryIds) deleteCategories(selectedCategoryIds);
+    if (selectedCategoryIds.length > 0) {
+      deleteCategories(selectedCategoryIds);
+    }
+
+    setSelectedCategoryId('');
+    setSelectedCategoryIds([]);
   }
 
   return (

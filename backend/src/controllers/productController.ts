@@ -317,7 +317,7 @@ export const deleteProducts = expressAsyncHandler(
 
     res.json({
       success: true,
-      message: `Successfully deleted ${products.count} products.`,
+      message: `Successfully deleted ${products.count} product(s).`,
     });
   }
 );

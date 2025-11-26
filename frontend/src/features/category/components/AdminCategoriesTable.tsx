@@ -1,13 +1,14 @@
-import EmptyState from '@/components/EmptyState';
+import ErrorState from '@/components/ErrorState';
+import NoData from '@/components/NoData';
+import { PageLoader } from '@/components/PageLoader';
 import { DataTable } from '@/components/ui/data-table';
-import { Spinner } from '@/components/ui/spinner';
 import { useCategories } from '../hook/useCategories';
-import { columns } from './AdminCategoryColumns';
-import { useCategoryDeleteStore } from '../store/useCategoryDeleteStore';
 import useDeleteCategories from '../hook/useDeleteCategories';
+import { useCategoryDeleteStore } from '../store/useCategoryDeleteStore';
+import { columns } from './AdminCategoryColumns';
 
 export default function AdminCategoriesTable() {
-  const { categories, error, isPending: isFetching } = useCategories();
+  const { categories, error, isPending } = useCategories();
   const { setSelectedCategoryIds, setDeleteDialogOpen } =
     useCategoryDeleteStore();
   const { isPending: isDeletingCategories } = useDeleteCategories();
@@ -17,12 +18,11 @@ export default function AdminCategoriesTable() {
     setSelectedCategoryIds(categoryIds);
   }
 
-  if (isFetching) return <Spinner />;
+  if (isPending) return <PageLoader message='Loading categories...' />;
 
-  if (error) return <p>{error.message}</p>;
+  if (error) return <ErrorState message={error.message} />;
 
-  if (!categories?.length) return <EmptyState />;
-
+  if (!categories?.length) return <NoData title='Category' />;
   return (
     <div className='container mx-auto'>
       <DataTable

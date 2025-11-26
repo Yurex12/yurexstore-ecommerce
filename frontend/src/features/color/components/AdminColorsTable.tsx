@@ -1,13 +1,14 @@
-import EmptyState from '@/components/EmptyState';
+import ErrorState from '@/components/ErrorState';
+import NoData from '@/components/NoData';
+import { PageLoader } from '@/components/PageLoader';
 import { DataTable } from '@/components/ui/data-table';
-import { Spinner } from '@/components/ui/spinner';
 import { useColors } from '../hooks/useColors';
 import { useDeleteColors } from '../hooks/useDeleteColors';
 import { useColorDeleteStore } from '../store/useColorDeleteStore';
 import { columns } from './AdminColorColumns';
 
 export default function AdminColorsTable() {
-  const { colors, error: fetchError, isPending: isFetching } = useColors();
+  const { colors, error, isPending } = useColors();
   const { isPending: isDeletingColors } = useDeleteColors();
   const { setDeleteDialogOpen, setSelectedColorIds } = useColorDeleteStore();
 
@@ -16,11 +17,12 @@ export default function AdminColorsTable() {
     setSelectedColorIds(colorIds);
   }
 
-  if (isFetching) return <Spinner />;
+  if (isPending) return <PageLoader message='Loading colors...' />;
 
-  if (fetchError) return <p>{fetchError.message}</p>;
+  if (error) return <ErrorState message={error.message} />;
 
-  if (!colors?.length) return <EmptyState />;
+  if (!colors?.length) return <NoData title='Color' />;
+
   return (
     <div className='container mx-auto'>
       <DataTable

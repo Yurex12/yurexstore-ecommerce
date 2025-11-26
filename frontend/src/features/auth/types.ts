@@ -3,10 +3,16 @@ export type User = {
   name: string;
   email: string;
   role: string;
+  createdAt: Date;
 };
 
 export type UserData = {
   success: boolean;
   message: string;
   user: User;
+};
+export type UsersData = {
+  success: boolean;
+  message: string;
+  users: User[];
 };

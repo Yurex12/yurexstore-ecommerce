@@ -1,7 +1,7 @@
 import { api, handleApiError } from '@/services/api';
 
 import type { SignInSchema } from '../schemas/signInSchema';
-import type { UserData } from '../types';
+import type { UserData, UsersData } from '../types';
 
 export async function signInUser({
   email,
@@ -36,6 +36,16 @@ export async function getUserData() {
     return data.user;
   } catch (error) {
     handleApiError(error, 'Failed to fetch user data');
+  }
+}
+
+export async function getUsersData() {
+  try {
+    const { data } = await api.get<UsersData>('/admin/users');
+
+    return data.users;
+  } catch (error) {
+    handleApiError(error, 'Failed to fetch users data');
   }
 }
 export async function updatePassword({

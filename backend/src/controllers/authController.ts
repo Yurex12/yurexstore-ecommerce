@@ -127,6 +127,21 @@ export const getUserData = expressAsyncHandler(
   }
 );
 
+//@desc get user data
+//@route POST api/admin/user
+//@access private(ADMINS ONLY)
+export const getUsersData = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const users = await prisma.user.findMany();
+
+    res.json({
+      success: true,
+      message: 'Successful.',
+      users,
+    });
+  }
+);
+
 //@desc Change user password
 //@route PATCH api/auth/update-password/
 //@access private
