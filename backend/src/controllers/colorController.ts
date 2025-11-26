@@ -99,7 +99,7 @@ export const deleteColors = expressAsyncHandler(
 
     res.json({
       success: true,
-      message: `Successfully deleted ${colors.count} products.`,
+      message: `Successfully deleted ${colors.count} color(s).`,
     });
   }
 );

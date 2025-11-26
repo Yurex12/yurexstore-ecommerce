@@ -4,18 +4,31 @@ import AdminColorFormDialog from '@/features/color/components/AdminColorFormDial
 import AdminColorsTable from '@/features/color/components/AdminColorsTable';
 
 import { useDeleteColor } from '@/features/color/hooks/useDeleteColor';
+import { useDeleteColors } from '@/features/color/hooks/useDeleteColors';
 import { useColorDeleteStore } from '@/features/color/store/useColorDeleteStore';
 import { useColorFormStore } from '@/features/color/store/useColorFormStore';
 
 export default function AdminColorsPage() {
   const { setFormOpen } = useColorFormStore();
-  const { deleteColor, isPending: isDeleting } = useDeleteColor();
-  const { selectedColorId, isDeleteDialogOpen, setDeleteDialogOpen } =
-    useColorDeleteStore();
+  const { deleteColor, isPending: isDeletingColor } = useDeleteColor();
+  const { deleteColors, isPending: isDeletingColors } = useDeleteColors();
+  const {
+    selectedColorId,
+    selectedColorIds,
+    isDeleteDialogOpen,
+    setDeleteDialogOpen,
+  } = useColorDeleteStore();
 
-  function handleDelete() {
+  function handleDeleteColor() {
     setDeleteDialogOpen(false);
-    deleteColor(selectedColorId);
+
+    if (selectedColorId) {
+      deleteColor(selectedColorId);
+    }
+
+    if (selectedColorIds) {
+      deleteColors(selectedColorIds);
+    }
   }
 
   return (
@@ -29,9 +42,9 @@ export default function AdminColorsPage() {
       <AdminColorFormDialog />
 
       <ConfirmDelete
-        resourceName='color'
-        onConfirm={handleDelete}
-        disabled={isDeleting}
+        resourceName='color(s)'
+        onConfirm={handleDeleteColor}
+        disabled={isDeletingColor || isDeletingColors}
         open={isDeleteDialogOpen}
         handleOpen={setDeleteDialogOpen}
       />

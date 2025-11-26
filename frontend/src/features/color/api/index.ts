@@ -51,3 +51,17 @@ export async function deleteColor(colorId: string) {
     handleApiError(error, 'Failed to delete color');
   }
 }
+
+export async function deleteColors(colorIds: string[]) {
+  try {
+    const { data } = await api.delete<ApiResponseBase>(`/admin/colors`, {
+      data: {
+        colorIds,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    handleApiError(error, 'Failed to delete colors');
+  }
+}

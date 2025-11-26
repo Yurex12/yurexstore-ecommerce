@@ -1,20 +1,34 @@
 import EmptyState from '@/components/EmptyState';
-import { useColors } from '../hooks/useColors';
-import { columns } from './AdminColorColumns';
 import { DataTable } from '@/components/ui/data-table';
 import { Spinner } from '@/components/ui/spinner';
+import { useColors } from '../hooks/useColors';
+import { useDeleteColors } from '../hooks/useDeleteColors';
+import { useColorDeleteStore } from '../store/useColorDeleteStore';
+import { columns } from './AdminColorColumns';
 
 export default function AdminColorsTable() {
-  const { colors, error, isPending: isFetchingColor } = useColors();
+  const { colors, error: fetchError, isPending: isFetching } = useColors();
+  const { isPending: isDeleting } = useDeleteColors();
+  const { setDeleteDialogOpen, setSelectedColorIds } = useColorDeleteStore();
 
-  if (isFetchingColor) return <Spinner />;
+  function handleDelete(colorIds: string[]) {
+    setDeleteDialogOpen(true);
+    setSelectedColorIds(colorIds);
+  }
 
-  if (error) return <p>{error.message}</p>;
+  if (isFetching) return <Spinner />;
 
-  if (!colors) return <EmptyState />;
+  if (fetchError) return <p>{fetchError.message}</p>;
+
+  if (!colors?.length) return <EmptyState />;
   return (
     <div className='container mx-auto'>
-      <DataTable columns={columns} data={colors} />
+      <DataTable
+        columns={columns}
+        data={colors}
+        onDeleteSelected={handleDelete}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }

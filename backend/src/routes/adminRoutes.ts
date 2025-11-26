@@ -1,14 +1,22 @@
 import express from 'express';
 
+import { deleteCategories } from '../controllers/categoryController';
+import { deleteColors } from '../controllers/colorController';
 import {
   cancelOrder,
   completeOrder,
   getAllOrders,
   getOrderById,
 } from '../controllers/orderController';
+import { deleteProducts } from '../controllers/productController';
 import { requireAdmin } from '../middlewares/requireAdmin';
 import { validateToken } from '../middlewares/validateTokenHandler';
-import { deleteProducts } from '../controllers/productController';
+import { validateData } from '../middlewares/validation';
+import {
+  categoriesDeleteSchema,
+  colorsDeleteSchema,
+  productsDeleteSchema,
+} from '../schemas/adminSchema';
 
 const router = express.Router();
 
@@ -22,5 +30,16 @@ router.patch('/orders/:id/complete', completeOrder);
 router.patch('/orders/:id/cancel', cancelOrder);
 
 // Product
-router.delete('/products', deleteProducts);
+router.delete('/products', validateData(productsDeleteSchema), deleteProducts);
+
+// Category
+router.delete(
+  '/categories',
+  validateData(categoriesDeleteSchema),
+  deleteCategories
+);
+
+// Color
+router.delete('/colors', validateData(colorsDeleteSchema), deleteColors);
+
 export default router;

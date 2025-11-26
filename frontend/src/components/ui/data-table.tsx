@@ -30,11 +30,15 @@ import { X } from 'lucide-react';
 interface DataTableProps<TData extends { id: string }, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onDeleteSelected?: (ids: string[]) => void;
+  isDeleting?: boolean;
 }
 
 export function DataTable<TData extends { id: string }, TValue>({
   columns,
   data,
+  onDeleteSelected,
+  isDeleting,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,7 +96,8 @@ export function DataTable<TData extends { id: string }, TValue>({
               variant='destructive'
               className='bg-destructive/70'
               size='sm'
-              onClick={() => {}}
+              onClick={() => onDeleteSelected?.(selectedIds)}
+              disabled={isDeleting}
             >
               Delete ({selectedIds.length})
             </Button>

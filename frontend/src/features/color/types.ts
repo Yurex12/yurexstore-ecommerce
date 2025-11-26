@@ -9,8 +9,10 @@ export type Color = {
 export type ColorDeleteState = {
   isDeleteDialogOpen: boolean;
   selectedColorId: string;
+  selectedColorIds: string[];
   setDeleteDialogOpen: (isOpen: boolean) => void;
   setSelectedColorId: (id: string) => void;
+  setSelectedColorIds: (ids: string[]) => void;
 };
 
 export type ColorFormState = {
