@@ -12,10 +12,12 @@ export default function useAdminCompleteOrder() {
   } = useMutation({
     mutationFn: completeOrderApi,
     onSuccess(data) {
-      toast.error('Order marked as completed');
+      toast.success('Order marked as completed');
       queryClient.invalidateQueries({
         queryKey: ['admin-orders', data?.orderId],
       });
+
+      queryClient.invalidateQueries({ queryKey: ['admin-orders'] });
     },
     onError(error) {
       toast.error(error.message);

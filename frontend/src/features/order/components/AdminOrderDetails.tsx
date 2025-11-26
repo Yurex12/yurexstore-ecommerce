@@ -3,11 +3,12 @@ import { format } from 'date-fns';
 import { Package, Truck, User } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 
-import EmptyState from '@/components/EmptyState';
-import InlineError from '@/components/InlineError';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
+
+import ErrorState from '@/components/ErrorState';
+import NoData from '@/components/NoData';
+import { PageLoader } from '@/components/PageLoader';
 
 import useAdminCancelOrder from '../hooks/useAdminCancelOrder';
 import useAdminCompleteOrder from '../hooks/useAdminCompleteOrder';
@@ -23,14 +24,57 @@ export default function AdminOrderDetails() {
 
   const isWorking = isDelivering || isCancelling;
 
-  if (isPending) return <Spinner />;
-  if (error) return <InlineError message='Unable to load order' />;
-  if (!order) return <EmptyState message='Order not found' />;
+  if (isPending) return <PageLoader message='Loading order' />;
+  if (error) return <ErrorState message='Unable to load order' />;
+  if (!order) return <NoData content='Order not found' />;
 
   return (
-    <div className='max-w-7xl mx-auto py-6 space-y-6'>
-      {/* Info Cards Grid */}
-      {/* Info Cards Grid */}
+    <div className='mx-auto space-y-4'>
+      <div className='border rounded-xl p-6 bg-gradient-to-br from-slate-50 to-slate-100/50'>
+        <div className='flex flex-col items-start justify-between gap-6 sm:flex-row'>
+          <div className='space-y-2'>
+            <div className='flex items-center gap-2'>
+              <div className='h-8 w-1 rounded-full bg-primary' />
+              <h3 className='text-lg font-semibold text-gray-900'>
+                Order actions
+              </h3>
+            </div>
+
+            <p className='ml-3 text-sm leading-relaxed text-gray-600'>
+              {order.orderStatus === 'CANCELLED'
+                ? 'This order is cancelled and can no longer be updated.'
+                : order.orderStatus === 'DELIVERED'
+                ? 'This order is delivered. No further action is needed.'
+                : 'Choose how to complete this order: mark it as delivered or cancel it.'}
+            </p>
+          </div>
+
+          {order.orderStatus === 'PENDING' && (
+            <div className='flex w-full flex-col gap-3 sm:w-auto sm:min-w-[300px] sm:flex-row'>
+              <Button
+                className='w-full sm:w-auto'
+                size='lg'
+                disabled={isWorking}
+                onClick={() => completeOrder(order.id)}
+              >
+                <Truck className='mr-2 h-4 w-4' />
+                Mark as delivered
+              </Button>
+
+              <Button
+                variant='destructive'
+                className='w-full sm:w-auto'
+                size='lg'
+                disabled={isWorking}
+                onClick={() => cancelOrder(order.id)}
+              >
+                Cancel order
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
         {/* Order Information */}
         <div className='border rounded-lg p-5'>
@@ -65,7 +109,7 @@ export default function AdminOrderDetails() {
 
             <div className='flex justify-between pt-3 border-t'>
               <span className='text-gray-700 font-semibold'>Total Amount</span>
-              <span className='text-lg font-bold text-blue-700'>
+              <span className='text-lg font-bold'>
                 {formatCurrency(order.totalPrice)}
               </span>
             </div>
@@ -118,7 +162,7 @@ export default function AdminOrderDetails() {
               <Badge
                 className={`${getStatusColor(
                   order.orderStatus
-                )} text-xs px-2 py-0.5`}
+                )} w-25 text-center py-1 px-3 rounded-md`}
               >
                 {order.orderStatus}
               </Badge>
@@ -129,7 +173,7 @@ export default function AdminOrderDetails() {
               <Badge
                 className={`${getPaymentColor(
                   order.paymentStatus
-                )} text-xs px-2 py-0.5`}
+                )} w-25 text-center py-1 px-3 rounded-md`}
               >
                 {order.paymentStatus}
               </Badge>
@@ -208,45 +252,6 @@ export default function AdminOrderDetails() {
               ))}
             </tbody>
           </table>
-        </div>
-      </div>
-
-      <div className='border rounded-lg p-5'>
-        <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
-          <div>
-            <h3 className='font-semibold text-gray-900 mb-1'>Order Actions</h3>
-            <p className='text-sm text-gray-500'>
-              {order.orderStatus === 'CANCELLED'
-                ? 'This order has been cancelled. No actions available.'
-                : order.orderStatus === 'DELIVERED'
-                ? 'This order has been delivered. No further actions available.'
-                : 'Update order status or cancel the order'}
-            </p>
-          </div>
-
-          <div className='flex gap-3 w-full sm:w-auto'>
-            {order.paymentStatus !== 'CONFIRMED' && (
-              <Button
-                className='flex-1 sm:flex-none'
-                size='lg'
-                disabled={isWorking}
-                onClick={() => completeOrder(order.id)}
-              >
-                <Truck className='w-4 h-4 mr-2' />
-                Mark as Delivered
-              </Button>
-            )}
-
-            <Button
-              variant='destructive'
-              className='flex-1 sm:flex-none'
-              size='lg'
-              disabled={isWorking}
-              onClick={() => cancelOrder(order.id)}
-            >
-              Cancel Order
-            </Button>
-          </div>
         </div>
       </div>
     </div>

@@ -71,22 +71,25 @@ export type AdminOrderDetails = Order & {
 export type AdminOrdersResponse = ApiResponseBase & {
   orders: {
     id: string;
-    totalPrice: number;
     orderStatus: OrderStatus;
-    userId: string;
-    deliveryAddress: string;
-    phone: string;
     orderNumber: number;
-    paymentMethod: PaymentMethod;
     paymentStatus: PaymentStatus;
-    deliveryFee: number;
-    stripePaymentId: string | null;
     createdAt: Date;
-    updatedAt: Date;
     user: {
       name: string;
     };
   }[];
+};
+
+export type AdminOrder = {
+  id: string;
+  orderStatus: OrderStatus;
+  orderNumber: number;
+  paymentStatus: PaymentStatus;
+  createdAt: Date;
+  user: {
+    name: string;
+  };
 };
 
 export type AdminOrderResponse = ApiResponseBase & {

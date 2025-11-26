@@ -41,7 +41,12 @@ export const getOrders = expressAsyncHandler(
 export const getAllOrders = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const orders = await prisma.order.findMany({
-      include: {
+      select: {
+        id: true,
+        orderNumber: true,
+        orderStatus: true,
+        paymentStatus: true,
+        createdAt: true,
         user: {
           select: {
             name: true,

@@ -1,14 +1,14 @@
-// ColorActionsCell.tsx
-import { Ellipsis } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { Color } from '../types';
+import { Ellipsis, Pencil, Trash2 } from 'lucide-react';
 import { useColorDeleteStore } from '../store/useColorDeleteStore';
 import { useColorFormStore } from '../store/useColorFormStore';
+import type { Color } from '../types';
 
 export function ColorActionsCell({ color }: { color: Color }) {
   const { setSelectedColorId, setDeleteDialogOpen } = useColorDeleteStore();
@@ -26,14 +26,26 @@ export function ColorActionsCell({ color }: { color: Color }) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Ellipsis className='text-2xl' />
+      <DropdownMenuTrigger asChild>
+        <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
+          <Ellipsis className='h-4 w-4' />
+          <span className='sr-only'>Open menu</span>
+        </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem onClick={() => handleEdit(color)}>
+      <DropdownMenuContent align='end'>
+        <DropdownMenuItem
+          onClick={() => handleEdit(color)}
+          className='cursor-pointer'
+        >
+          <Pencil className='h-4 w-4' />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleDelete(color.id)}>
+
+        <DropdownMenuItem
+          onClick={() => handleDelete(color.id)}
+          className='cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10'
+        >
+          <Trash2 className='h-4 w-4 text-destructive/60' />
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

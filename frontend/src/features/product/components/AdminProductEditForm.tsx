@@ -40,6 +40,9 @@ import {
 } from '../schemas/productEditSchema';
 
 import { MAX_IMAGE_SIZE } from '../constants';
+import NoData from '@/components/NoData';
+import ErrorState from '@/components/ErrorState';
+import { PageLoader } from '@/components/PageLoader';
 
 export default function AdminProductEditForm() {
   const { productId } = useParams();
@@ -111,11 +114,17 @@ export default function AdminProductEditForm() {
   const isWorking = form.formState.isSubmitting || isEditing;
 
   if (isFetchingCategories || isFetchingColors || isFetchingProduct)
-    return <p>Loading...</p>;
-  if (categoriesError || colorsError) return <p>Error loading data</p>;
-  if (productError) return <p>{productError.message}</p>;
-  if (!product) return <p>No product found</p>;
-  if (!categories?.length || !colors?.length) return <p>No categories found</p>;
+    return <PageLoader />;
+
+  if (productError) return <ErrorState message={productError.message} />;
+  if (categoriesError || colorsError) return <ErrorState />;
+
+  if (!categories?.length || !colors?.length)
+    return (
+      <NoData content='You need at least one category and one color set up before you can add products. Please create them first.' />
+    );
+
+  if (!product) return <NoData content='Product not found' />;
 
   async function onSubmit(data: ProductEditSchema) {
     const needsUpload = data.images?.filter((image) => image instanceof File);

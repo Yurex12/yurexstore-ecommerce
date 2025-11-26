@@ -2,14 +2,15 @@ import { type ColumnDef } from '@tanstack/react-table';
 
 import { DataTableColumnHeader } from '@/components/ui/data-column-header';
 import { format } from 'date-fns';
-import type { AdminOrderDetails, OrderStatus, PaymentStatus } from '../types';
+import type { AdminOrder, OrderStatus, PaymentStatus } from '../types';
+import { getPaymentColor, getStatusColor } from '../utils/helpers';
 import OrderActionsCell from './OrderActionsCell';
 
-export const columns: ColumnDef<Omit<AdminOrderDetails, 'orderItems'>>[] = [
+export const columns: ColumnDef<AdminOrder>[] = [
   {
     accessorKey: 'orderNumber',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Order ID' />
+      <DataTableColumnHeader column={column} title='Order Number' />
     ),
     cell: ({ cell }) => {
       return <span>ORD-{cell.row.original.orderNumber}</span>;
@@ -39,11 +40,9 @@ export const columns: ColumnDef<Omit<AdminOrderDetails, 'orderItems'>>[] = [
       return (
         <div>
           <p
-            className={`w-25 text-center py-1 px-3 rounded-md ${
-              status === 'CONFIRMED'
-                ? 'bg-green-100 text-green-600'
-                : 'bg-yellow-100 text-yellow-600'
-            }`}
+            className={`w-25 text-center py-1 px-3 rounded-md ${getPaymentColor(
+              status
+            )}`}
           >
             {status}
           </p>
@@ -57,16 +56,12 @@ export const columns: ColumnDef<Omit<AdminOrderDetails, 'orderItems'>>[] = [
     cell: ({ row }) => {
       const status = row.getValue('orderStatus') as OrderStatus;
 
-      const statusConfig = {
-        PENDING: 'bg-yellow-100 text-yellow-600',
-        CANCELLED: 'bg-red-100 text-red-600',
-        DELIVERED: 'bg-green-100 text-green-600',
-      };
-
       return (
         <div>
           <p
-            className={`w-25 text-center py-1 px-3 rounded-md ${statusConfig[status]}`}
+            className={`w-25 text-center py-1 px-3 rounded-md ${getStatusColor(
+              status
+            )}`}
           >
             {status}
           </p>
@@ -77,6 +72,6 @@ export const columns: ColumnDef<Omit<AdminOrderDetails, 'orderItems'>>[] = [
 
   {
     id: 'actions',
-    cell: ({ row }) => <OrderActionsCell orderId={row.original.id} />,
+    cell: ({ row }) => <OrderActionsCell order={row.original} />,
   },
 ];

@@ -1,12 +1,12 @@
+import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Ellipsis } from 'lucide-react';
+import { Ellipsis, Pencil, Trash2 } from 'lucide-react';
 import { useProducts } from '../hooks/useProducts';
 import { useProductDeleteStore } from '../store/useProductDeleteStore';
 import { Spinner } from '@/components/ui/spinner';
@@ -15,9 +15,7 @@ import type { Product } from '../types';
 
 export default function ProductActionsCell({ product }: { product: Product }) {
   const navigate = useNavigate();
-
   const { products, error, isPending: isFetching } = useProducts();
-
   const { setDeleteDialogOpen, setSelectedProductId } = useProductDeleteStore();
 
   if (isFetching) return <Spinner />;
@@ -28,18 +26,30 @@ export default function ProductActionsCell({ product }: { product: Product }) {
     setSelectedProductId(productId);
     setDeleteDialogOpen(true);
   }
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Ellipsis className='text-2xl' />
+      <DropdownMenuTrigger asChild>
+        <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
+          <Ellipsis className='h-4 w-4' />
+          <span className='sr-only'>Open menu</span>
+        </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+
+      <DropdownMenuContent align='end'>
         <DropdownMenuItem
           onClick={() => navigate(`/admin/products/edit/${product.id}`)}
+          className='cursor-pointer flex items-center gap-2'
         >
+          <Pencil className='h-4 w-4' />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleDelete(product.id)}>
+
+        <DropdownMenuItem
+          onClick={() => handleDelete(product.id)}
+          className='cursor-pointer flex items-center gap-2 text-destructive focus:text-destructive focus:bg-destructive/10'
+        >
+          <Trash2 className='h-4 w-4 text-destructive/60' />
           Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

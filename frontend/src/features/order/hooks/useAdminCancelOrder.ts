@@ -17,7 +17,8 @@ export default function useAdminCancelOrder() {
       queryClient.invalidateQueries({
         queryKey: ['admin-orders', data?.orderId],
       });
-      toast.error('Order cancelled');
+      queryClient.invalidateQueries({ queryKey: ['admin-orders'] });
+      toast.success('Order cancelled');
     },
     onError(error) {
       toast.error(error.message);
