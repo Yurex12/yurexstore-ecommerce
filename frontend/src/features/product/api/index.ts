@@ -8,9 +8,29 @@ import type {
 import type { ProductCreateSchema } from '../schemas/productCreateSchema';
 import type { ProductEditSchema } from '../schemas/productEditSchema';
 
-export async function getProducts() {
+interface ProductFilters {
+  category?: string;
+  color?: string;
+  gender?: string;
+  sort?: string;
+}
+
+export async function getProducts(filters: ProductFilters) {
+  const params = new URLSearchParams();
+
+  if (filters?.category) params.append('categorySlug', filters.category);
+  if (filters?.color) params.append('colorName', filters.color);
+  if (filters?.gender) params.append('gender', filters.gender);
+  if (filters?.sort) params.append('sortOption', filters.sort);
+
+  const queryString = params.toString();
+
+  const url = queryString ? `/products?${queryString}` : '/products';
+
+  console.log(url);
+
   try {
-    const { data } = await api.get<GetProductsResponse>('/products');
+    const { data } = await api.get<GetProductsResponse>(url);
 
     return data.products;
   } catch (error) {

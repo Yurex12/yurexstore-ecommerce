@@ -319,6 +319,10 @@ export const completeOrder = expressAsyncHandler(
       res.status(400);
       throw new Error('Cannot complete a cancelled order');
     }
+    if (order.orderStatus === 'DELIVERED') {
+      res.status(400);
+      throw new Error('Order already marked as complete');
+    }
 
     await prisma.$transaction(async (tx) => {
       await tx.order.update({

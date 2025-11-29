@@ -5,12 +5,6 @@ export type SortOption = {
   name: string;
 };
 
-export type Color = {
-  id: string;
-  name: string;
-  ringValue: string;
-};
-
 type Images = {
   id: string;
   url: string;

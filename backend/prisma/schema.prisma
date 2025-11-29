@@ -81,7 +81,7 @@ model Category {
 
 model Color {
   id   String @id @default(cuid())
-  name String
+  name String @unique
   code String
 
   product Product[]
@@ -100,6 +100,8 @@ model Product {
   categoryId      String
   colorId         String
   variantTypeName String?
+  avgRating       Float?           @default(0)
+  reviewCount     Int?             @default(0)
   cartItems       CartItem[]
   wishListItems   WishListItem[]
   images          Image[]
@@ -175,8 +177,8 @@ model Image {
 }
 
 model Review {
-  id        String @id @default(cuid())
-  content   String
+  id        String  @id @default(cuid())
+  content   String?
   // rating should be max 5 and min 1
   rating    Int
   userId    String

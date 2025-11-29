@@ -29,9 +29,9 @@ export default function ProductCategories() {
           <li>
             <button
               className={`hover:cursor-pointer ${
-                queryValue === category.id ? 'text-primary font-medium' : ''
+                queryValue === category.slug ? 'text-primary font-medium' : ''
               }`}
-              onClick={() => handleSearchQuery(category.id)}
+              onClick={() => handleSearchQuery(category.slug)}
             >
               {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
             </button>

@@ -1,7 +1,7 @@
 import z from 'zod';
 
 export const colorSchema = z.object({
-  name: z.string().trim().nonempty('Color name is required'),
+  name: z.string().trim().nonempty('Color name is required').toLowerCase(),
   code: z.string().trim().nonempty('Color name is required'),
 });
 

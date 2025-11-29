@@ -34,6 +34,7 @@ export const columns: ColumnDef<Color>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Name' />
     ),
+    cell: ({ row }) => <span className='capitalize'>{row.original.name}</span>,
   },
   {
     accessorKey: 'code',

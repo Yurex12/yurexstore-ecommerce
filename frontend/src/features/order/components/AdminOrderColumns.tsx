@@ -1,7 +1,7 @@
-import { type ColumnDef } from '@tanstack/react-table';
-
-import { DataTableColumnHeader } from '@/components/ui/data-column-header';
 import { format } from 'date-fns';
+
+import type { ColumnDef } from '@tanstack/react-table';
+import { DataTableColumnHeader } from '@/components/ui/data-column-header';
 import type { AdminOrder, OrderStatus, PaymentStatus } from '../types';
 import { getPaymentColor, getStatusColor } from '../utils/helpers';
 import OrderActionsCell from './OrderActionsCell';

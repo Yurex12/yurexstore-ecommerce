@@ -6,7 +6,6 @@ import NavBar from './Navbar';
 
 import Logo from '@/components/Logo';
 import { Sheet } from '@/components/ui/sheet';
-import Logout from '@/components/Logout';
 
 function Header() {
   const [open, setOpen] = useState(false);
@@ -21,8 +20,6 @@ function Header() {
           <MobileNav onClose={handleClose} />
           <HeaderActions />
         </Sheet>
-
-        <Logout />
       </div>
     </header>
   );

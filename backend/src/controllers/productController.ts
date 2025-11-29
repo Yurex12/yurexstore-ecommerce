@@ -10,7 +10,46 @@ import { ProductEditSchema } from '../schemas/productEditSchema';
 //@access public
 export const getProducts = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+    const { gender, colorName, sortOption, categorySlug } = req.query as {
+      gender: string;
+      colorName: string;
+      sortOption: string;
+      categorySlug: string;
+    };
+
+    const where: any = {};
+
+    let orderBy: any = { createdAt: 'desc' };
+
+    if (categorySlug) {
+      where.category = {
+        slug: categorySlug,
+      };
+    }
+
+    if (gender) {
+      where.gender = gender.toUpperCase();
+    }
+
+    if (colorName) {
+      where.color = {
+        name: colorName,
+      };
+    }
+
+    if (sortOption === 'price-low-to-high') {
+      orderBy = { price: 'asc' };
+    } else if (sortOption === 'price-high-to-low') {
+      orderBy = { price: 'desc' };
+    } else if (sortOption === 'newest') {
+      orderBy = { createdAt: 'desc' };
+    } else if (sortOption === 'best-rating') {
+      orderBy = { avgRating: 'desc' };
+    }
+
     const products = await prisma.product.findMany({
+      where,
+      orderBy,
       include: {
         images: {
           select: {

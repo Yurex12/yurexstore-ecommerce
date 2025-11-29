@@ -29,6 +29,16 @@ export const createColor = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const data = req.body as ColorSchema;
 
+    // Check if color already exists
+    const existingColor = await prisma.color.findUnique({
+      where: { name: data.name },
+    });
+
+    if (existingColor) {
+      res.status(400);
+      throw new Error('A color with this name already exists.');
+    }
+
     const color = await prisma.color.create({
       data,
     });
@@ -49,10 +59,17 @@ export const updateColor = expressAsyncHandler(
     const { id } = req.params;
     const data = req.body as UpdateColorSchema;
 
+    const existingColor = await prisma.color.findUnique({
+      where: { name: data.name },
+    });
+
+    if (existingColor && existingColor.id !== id) {
+      res.status(400);
+      throw new Error('A color with this name already exists.');
+    }
+
     const color = await prisma.color.update({
-      where: {
-        id,
-      },
+      where: { id },
       data,
     });
 
