@@ -65,7 +65,7 @@ export default function ProductVariantDialog({
           <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2'>
             {product.images.map((img) => (
               <div
-                key={img.fileId}
+                key={img.id}
                 className='w-full h-40 bg-muted/70 flex items-center justify-center rounded-md'
               >
                 <img

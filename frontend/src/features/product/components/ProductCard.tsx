@@ -15,8 +15,8 @@ import useAddToWishlist from '@/features/wishlist/hooks/useAddToWishlist';
 import useRemoveFromWishlist from '@/features/wishlist/hooks/useRemoveFromWishlist';
 import useWishlist from '@/features/wishlist/hooks/useWishlist';
 
-import type { Product } from '../types';
 import { formatCurrency } from '@/lib/helpers';
+import type { Product } from '../types';
 
 export default function ProductCard(product: Product) {
   const [open, setOpen] = useState(false);
@@ -33,12 +33,6 @@ export default function ProductCard(product: Product) {
   const { cart } = useCart();
 
   const navigate = useNavigate();
-
-  const totalReviews = product.reviews.length;
-  const rating = totalReviews
-    ? product.reviews.reduce((acc, x) => acc + x.rating, 0)
-    : 0;
-  const avgRating = totalReviews ? (rating / totalReviews).toFixed(1) : 0;
 
   const inCart = cart?.find((cartItem) => cartItem.productId === product.id);
   const productInWishlist = wishlist?.find(
@@ -97,11 +91,11 @@ export default function ProductCard(product: Product) {
             <span className='text-sm text-foreground font-medium'>
               {formatCurrency(product.price)}
             </span>
-            {totalReviews > 0 && (
+            {product.reviewCount > 0 && (
               <div className='flex gap-x-2 items-center'>
                 <Star className='text-amber-400 fill-amber-400' size={18} />
                 <span className='text-xs'>
-                  {avgRating} ({totalReviews})
+                  {product.avgRating.toFixed(1)} ({product.reviewCount})
                 </span>
               </div>
             )}

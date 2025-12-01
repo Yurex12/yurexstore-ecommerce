@@ -1,7 +1,8 @@
 import { formatCurrency } from '@/lib/helpers';
 import { Star } from 'lucide-react';
-import type { Product } from '../types';
+
 import { useNavigate } from 'react-router-dom';
+import type { Product } from '../types';
 
 export default function ProductPreviewCard({
   id,
@@ -9,17 +10,10 @@ export default function ProductPreviewCard({
   images,
   price,
   category,
-  reviews,
+  avgRating,
+  reviewCount,
 }: Product) {
   const navigate = useNavigate();
-
-  const totalReviews = reviews.length;
-
-  const rating = totalReviews
-    ? reviews.reduce((acc, x) => acc + x.rating, 0)
-    : 0;
-
-  const avgRating = totalReviews ? (rating / totalReviews).toFixed(1) : 0;
 
   return (
     <div
@@ -43,11 +37,11 @@ export default function ProductPreviewCard({
           <span className='text-sm text-foreground font-medium'>
             {formatCurrency(price)}
           </span>
-          {totalReviews > 0 && (
+          {reviewCount > 0 && (
             <div className='flex gap-x-2 items-center'>
               <Star className='text-amber-400 fill-amber-400' size={18} />
               <span className='text-xs'>
-                {avgRating} ({totalReviews})
+                {avgRating.toFixed(1)} ({reviewCount})
               </span>
             </div>
           )}

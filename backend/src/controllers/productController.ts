@@ -50,12 +50,19 @@ export const getProducts = expressAsyncHandler(
     const products = await prisma.product.findMany({
       where,
       orderBy,
-      include: {
+      select: {
+        id: true,
+        name: true,
+        avgRating: true,
+        price: true,
+        quantity: true,
+        variantTypeName: true,
+        gender: true,
+        reviewCount: true,
         images: {
           select: {
             id: true,
             url: true,
-            fileId: true,
           },
         },
         category: {
@@ -63,12 +70,14 @@ export const getProducts = expressAsyncHandler(
             name: true,
           },
         },
-        reviews: {
+        productVariants: {
           select: {
-            rating: true,
+            id: true,
+            price: true,
+            quantity: true,
+            value: true,
           },
         },
-        productVariants: true,
       },
     });
 

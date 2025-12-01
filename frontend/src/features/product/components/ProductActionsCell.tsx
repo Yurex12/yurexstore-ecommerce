@@ -1,16 +1,16 @@
+import EmptyState from '@/components/EmptyState';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Spinner } from '@/components/ui/spinner';
 import { Ellipsis, Pencil, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useProducts } from '../hooks/useProducts';
 import { useProductDeleteStore } from '../store/useProductDeleteStore';
-import { Spinner } from '@/components/ui/spinner';
-import EmptyState from '@/components/EmptyState';
 import type { Product } from '../types';
 
 export default function ProductActionsCell({ product }: { product: Product }) {

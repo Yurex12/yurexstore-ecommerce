@@ -96,9 +96,14 @@ export default function ReviewForm() {
           )}
         />
 
-        <Button type='submit' className='flex items-center justify-center w-30'>
-          {isCreating ? <Spinner /> : <span>Submit Review</span>}
-        </Button>
+        <div className='flex justify-end'>
+          <Button
+            type='submit'
+            className='flex items-center justify-center w-30'
+          >
+            {isCreating ? <Spinner /> : <span>Submit Review</span>}
+          </Button>
+        </div>
       </form>
     </Form>
   );

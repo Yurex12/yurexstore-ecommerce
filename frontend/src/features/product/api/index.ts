@@ -1,12 +1,13 @@
 import { api, handleApiError } from '@/services/api';
 
+import type { ProductCreateSchema } from '../schemas/productCreateSchema';
+import type { ProductEditSchema } from '../schemas/productEditSchema';
 import type {
   GetProductResponse,
   GetProductsResponse,
-  ProductResponse,
+  // ProductResponse,
 } from '../types';
-import type { ProductCreateSchema } from '../schemas/productCreateSchema';
-import type { ProductEditSchema } from '../schemas/productEditSchema';
+import type { ApiResponseBase } from '@/services/types';
 
 interface ProductFilters {
   category?: string;
@@ -56,9 +57,9 @@ export async function createProduct(
   }
 ) {
   try {
-    const { data } = await api.post<ProductResponse>('/products', productData);
+    const { data } = await api.post<ApiResponseBase>('/products', productData);
 
-    return data.product;
+    return data;
   } catch (error) {
     handleApiError(error, 'Failed to create products');
   }
@@ -74,12 +75,12 @@ export async function updateProduct({
   productId: string;
 }) {
   try {
-    const { data } = await api.patch<ProductResponse>(
+    const { data } = await api.patch<ApiResponseBase>(
       `/products/${productId}`,
       productData
     );
 
-    return data.product;
+    return data;
   } catch (error) {
     handleApiError(error, 'Failed to edit products');
   }

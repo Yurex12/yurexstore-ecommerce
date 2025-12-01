@@ -1,8 +1,8 @@
 import type { SortOption } from '../types';
 
 export const sortOptions: SortOption[] = [
-  { id: 'best-rating', name: 'Best Rating' },
   { id: 'newest', name: 'Newest' },
+  { id: 'best-rating', name: 'Best Rating' },
   { id: 'price-low-to-high', name: 'Price: Low to High' },
   { id: 'price-high-to-low', name: 'Price: High to Low' },
 ];

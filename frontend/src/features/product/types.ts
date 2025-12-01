@@ -5,21 +5,20 @@ export type SortOption = {
   name: string;
 };
 
-type Images = {
+export type Gender = 'MALE' | 'FEMALE' | 'BOTH';
+
+export type Image = {
   id: string;
   url: string;
   fileId: string;
 };
 
-type Review = {
-  rating: number;
+export type Category = {
+  name: string;
 };
 
-type productVariant = {
+export type ProductVariant = {
   id: string;
-  productId: string;
-  createdAt: Date;
-  updatedAt: Date;
   price: number;
   quantity: number;
   value: string;
@@ -31,14 +30,23 @@ export type Product = {
   description: string;
   price: number;
   quantity: number;
-  images: Images[];
-  gender: 'MALE' | 'FEMALE' | 'BOTH';
+  images: Image[];
+  gender: Gender;
   categoryId: string;
   colorId: string;
-  category: { name: string; id: string };
-  reviews: Review[];
-  productVariants: productVariant[];
+  category: Category;
+  avgRating: number;
+  reviewCount: number;
+  productVariants: ProductVariant[];
   variantTypeName: string | null;
+};
+
+export type GetProductsResponse = ApiResponseBase & {
+  products: Product[];
+};
+
+export type GetProductResponse = ApiResponseBase & {
+  product: Product;
 };
 
 export type ProductVariantProps = {
@@ -54,15 +62,4 @@ export type ProductDeleteState = {
   setDeleteDialogOpen: (isOpen: boolean) => void;
   setSelectedProductId: (id: string) => void;
   setSelectedProductIds: (ids: string[]) => void;
-};
-
-export type GetProductsResponse = ApiResponseBase & {
-  products: Product[];
-};
-export type GetProductResponse = ApiResponseBase & {
-  product: Product;
-};
-
-export type ProductResponse = ApiResponseBase & {
-  product: Product;
 };
