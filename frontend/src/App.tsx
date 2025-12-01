@@ -15,7 +15,6 @@ import ContactPage from './pages/Contact/ContactPage';
 import HomePage from './pages/Home/HomePage';
 import OrderDetailsPage from './pages/OrderDetails/OrderDetailsPage';
 import OrdersPage from './pages/Orders/OrdersPage';
-import ReviewsPage from './pages/Reviews/ReviewsPage';
 import SettingsPage from './pages/Settings/SettingsPage';
 import ShopPage from './pages/Shop/ShopPage';
 import SignInPage from './pages/SignIn/SignInPage';
@@ -31,10 +30,11 @@ import AdminOrdersPage from './pages/AdminOrders/AdminOrdersPage';
 import AdminProductCreatePage from './pages/AdminProductCreate/AdminProductCreatePage';
 import AdminProductEditPage from './pages/AdminProductEdit/AdminProductEditPage';
 import AdminProductsPage from './pages/AdminProducts/AdminProductsPage';
+import AdminUsersPage from './pages/AdminUsers/AdminUsersPage';
 import AdminCategoriesPage from './pages/CategoriesPage/AdminCategoriesPage';
 import CheckoutPage from './pages/checkout/CheckoutPage';
 import AdminColorsPage from './pages/Color/AdminColorsPage';
-import AdminUsersPage from './pages/AdminUsers/AdminUsersPage';
+import PendingReviewsPage from './pages/PendingReviews/PendingReviewsPage';
 
 const queryClient = new QueryClient();
 
@@ -57,7 +57,10 @@ export default function App() {
               <Route path='/account' element={<AccountOverviewPage />} />
               <Route path='/account/orders' element={<OrdersPage />} />
               <Route path='/account/settings' element={<SettingsPage />} />
-              <Route path='/account/reviews' element={<ReviewsPage />} />
+              <Route
+                path='/account/pending-reviews'
+                element={<PendingReviewsPage />}
+              />
               <Route path='/account/wishlist' element={<WishlistPage />} />
               <Route
                 path='/account/orders/:id'
@@ -68,7 +71,7 @@ export default function App() {
                 element={<UpdatePasswordPage />}
               />
               <Route
-                path='/account/reviews/:productId/write'
+                path='/account/pending-reviews/:pendingReviewId/write'
                 element={<WriteReviewPage />}
               />
               <Route path='/account/addresses' element={<AddressPage />} />

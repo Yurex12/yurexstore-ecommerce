@@ -47,19 +47,18 @@ enum PAYMENT_STATUS {
 }
 
 model User {
-  id                String         @id @default(cuid())
-  name              String
-  email             String         @unique
-  password          String
-  image             String?
-  role              ROLE
-  notifications     Notification[]
-  reviews           Review[]
-  orders            Order[]
-  addresses         Address[]
-  wishListItems     WishListItem[]
-  cartItems         CartItem[]
-  purchasedProducts Product[]      @relation("UserPurchases")
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  password      String
+  image         String?
+  role          ROLE
+  notifications Notification[]
+  reviews       Review[]
+  orders        Order[]
+  addresses     Address[]
+  wishListItems WishListItem[]
+  cartItems     CartItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -109,7 +108,6 @@ model Product {
   orderItems      OrderItem[]
   productVariants ProductVariant[]
 
-  buyers   User[]   @relation("UserPurchases")
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   color    Color    @relation(fields: [colorId], references: [id], onDelete: Cascade)
 

@@ -308,6 +308,12 @@ export const completeOrder = expressAsyncHandler(
       where: {
         id,
       },
+      select: {
+        id: true,
+        userId: true,
+        orderStatus: true,
+        orderNumber: true,
+      },
     });
 
     if (!order) {

@@ -5,18 +5,19 @@ import { validateData } from '../middlewares/validation';
 
 import {
   createReview,
-  deleteReview,
+  // createReview,
+  // deleteReview,
   getReviews,
+  getUserPendingReviews,
 } from '../controllers/reviewController';
 
 import { reviewSchema } from '../schemas/reviewSchema';
 
 const router = express.Router();
 
-router.get('/:productId', getReviews);
+router.get('/:productId', validateToken, getReviews);
+router.get('/', validateToken, getUserPendingReviews);
 
 router.post('/', validateToken, validateData(reviewSchema), createReview);
-
-router.delete('/:id', validateToken, deleteReview);
 
 export default router;

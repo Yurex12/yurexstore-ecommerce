@@ -11,7 +11,7 @@ export default function AccountSidebar() {
     { name: 'Wishlist', path: '/account/wishlist', icon: <Heart size={18} /> },
     {
       name: 'Pending Reviews',
-      path: '/account/reviews',
+      path: '/account/pending-reviews',
       icon: <Star size={18} />,
     },
   ];

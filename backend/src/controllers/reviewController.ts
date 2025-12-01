@@ -26,90 +26,159 @@ export const getReviews = expressAsyncHandler(
   }
 );
 
-//@desc create product reviews
-//@route POST api/reviews/
-//@access public
-export const createReview = expressAsyncHandler(
+//@desc fetch user pending reviews
+//@route GET api/reviews/
+//@access PRIVATE
+export const getUserPendingReviews = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { productId, userId, content, rating } = req.body as ReviewSchema;
+    const userId = req.user.userId;
 
-    const userBoughtProduct = await prisma.product.findFirst({
+    const productToOrderDateMap = new Map();
+
+    const deliveredOrders = await prisma.order.findMany({
       where: {
-        id: productId,
-        buyers: {
-          some: {
-            id: userId,
+        userId,
+        orderStatus: 'DELIVERED',
+      },
+      select: {
+        id: true,
+        orderItems: {
+          select: {
+            productId: true,
+            createdAt: true,
           },
         },
       },
     });
 
-    if (!userBoughtProduct) {
-      res.status(403);
-      throw new Error('You must purchase this product before reviewing it');
+    if (deliveredOrders.length < 1) {
+      res.json({
+        success: true,
+        message: 'Successful',
+        pendingReviews: [],
+      });
+
+      return;
     }
 
-    const userAlreadyRated = await prisma.review.findUnique({
+    deliveredOrders.forEach((order) => {
+      order.orderItems.forEach((orderItem) => {
+        if (!productToOrderDateMap.has(orderItem.productId)) {
+          productToOrderDateMap.set(orderItem.productId, orderItem.createdAt);
+        }
+      });
+    });
+
+    const purchasedProductIds = [...productToOrderDateMap.keys()];
+
+    const existingReviews = await prisma.review.findMany({
+      where: { userId },
+      select: { productId: true },
+    });
+
+    const reviewedProductIds = new Set(
+      existingReviews.map((review) => review.productId)
+    );
+
+    const unReviewedProductIds = purchasedProductIds.filter(
+      (productId) => !reviewedProductIds.has(productId)
+    );
+
+    const unReviewedProducts = await prisma.product.findMany({
+      where: {
+        id: { in: unReviewedProductIds },
+      },
+      select: {
+        id: true,
+        name: true,
+        images: {
+          select: {
+            url: true,
+          },
+          take: 1,
+        },
+      },
+    });
+
+    const pendingReviews = unReviewedProducts.map((product) => ({
+      id: product.id,
+      name: product.name,
+      imageUrl: product.images[0]?.url || null,
+      purchasedAt: productToOrderDateMap.get(product.id),
+    }));
+
+    res.json({
+      success: true,
+      message: 'Successfully retrieved pending reviews.',
+      pendingReviews,
+    });
+  }
+);
+
+// //@desc create product reviews
+// //@route POST api/reviews/
+// //@access PRIVATE
+export const createReview = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { productId, content, rating } = req.body as ReviewSchema;
+    const { userId } = req.user;
+
+    const existingReview = await prisma.review.findUnique({
       where: {
         productId_userId: { productId, userId },
       },
     });
 
-    if (userAlreadyRated) {
+    if (existingReview) {
       res.status(403);
-      throw new Error('You already rated this product');
+      throw new Error('You have already reviewed this product');
     }
 
-    const review = await prisma.review.create({
-      data: {
-        content,
-        rating,
-        productId,
-        userId,
+    const hasPurchased = await prisma.orderItem.findFirst({
+      where: {
+        productId: productId,
+        order: {
+          userId: userId,
+          orderStatus: 'DELIVERED',
+        },
       },
+    });
+
+    if (!hasPurchased) {
+      res.status(403);
+      throw new Error('You must purchase this product before reviewing it');
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.review.create({
+        data: {
+          content,
+          rating,
+          productId,
+          userId,
+        },
+      });
+
+      const stats = await tx.review.aggregate({
+        where: { productId },
+        _avg: { rating: true },
+        _count: true,
+      });
+
+      await tx.product.update({
+        where: {
+          id: productId,
+        },
+        data: {
+          avgRating: stats._avg.rating,
+          reviewCount: stats._count,
+        },
+      });
     });
 
     res.status(201).json({
       success: true,
       message: 'Product reviewed Successfully.',
-      data: { review },
-    });
-  }
-);
-
-//@desc delete product review
-//@route DELETE api/reviews/:id
-//@access private
-
-export const deleteReview = expressAsyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { id: reviewId } = req.params;
-
-    const review = await prisma.review.findUnique({
-      where: {
-        id: reviewId,
-      },
-    });
-
-    if (!review) {
-      res.status(404);
-      throw new Error('Review not found');
-    }
-
-    if (req.user.userId !== review.userId && req.user.role !== 'ADMIN') {
-      res.status(401);
-      throw new Error('Unauthorized.');
-    }
-
-    await prisma.review.delete({
-      where: {
-        id: reviewId,
-      },
-    });
-
-    res.json({
-      success: true,
-      message: 'Review deleted successfully',
     });
   }
 );

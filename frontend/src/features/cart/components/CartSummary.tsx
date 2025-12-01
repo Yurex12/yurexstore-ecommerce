@@ -8,7 +8,8 @@ export default function CartSummary() {
   const { cart } = useCart();
 
   const totalPrice = cart?.reduce(
-    (acc, item) => acc + (item.productVariant?.price || item.product.price),
+    (acc, item) =>
+      acc + (item.productVariant?.price || item.product.price) * item.quantity,
     0
   );
 
