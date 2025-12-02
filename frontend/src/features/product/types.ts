@@ -24,6 +24,11 @@ export type ProductVariant = {
   value: string;
 };
 
+export type Color = {
+  name: string;
+  code: string;
+};
+
 export type Product = {
   id: string;
   name: string;
@@ -41,12 +46,14 @@ export type Product = {
   variantTypeName: string | null;
 };
 
+export type ProductDetails = Product & { color: Color };
+
 export type GetProductsResponse = ApiResponseBase & {
   products: Product[];
 };
 
 export type GetProductResponse = ApiResponseBase & {
-  product: Product;
+  product: ProductDetails;
 };
 
 export type ProductVariantProps = {

@@ -4,7 +4,7 @@ import { incrementCartItem as incrementCartItemApi } from '../api';
 import { toast } from 'react-hot-toast';
 import type { CartWithRelation } from '../types';
 
-export default function useIncrementCartItem() {
+export function useIncrementCartItem() {
   const queryClient = useQueryClient();
   const {
     mutate: incrementCartItem,

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getCart } from '../api';
 
-export default function useCart() {
+export function useCart() {
   const {
     data: cart,
     isPending,

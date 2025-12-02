@@ -24,6 +24,8 @@ export async function addToCart(cartData: {
     payload.productVariantId = cartData.productVariantId;
   }
 
+  console.log(payload);
+
   try {
     const { data } = await api.post<CartItemRes>('/cart', payload);
 

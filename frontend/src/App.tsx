@@ -35,6 +35,7 @@ import AdminCategoriesPage from './pages/CategoriesPage/AdminCategoriesPage';
 import CheckoutPage from './pages/checkout/CheckoutPage';
 import AdminColorsPage from './pages/Color/AdminColorsPage';
 import PendingReviewsPage from './pages/PendingReviews/PendingReviewsPage';
+import ProductDetailsPage from './pages/ProductDetails/ProductDetailsPage';
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ export default function App() {
           <Route element={<AppLayout />}>
             <Route path='/' element={<HomePage />} />
             <Route path='/shop' element={<ShopPage />} />
+            <Route path='/shop/:productId' element={<ProductDetailsPage />} />
             <Route path='/cart' element={<CartPage />} />
             <Route path='/about-us' element={<AboutPage />} />
             <Route path='/contact-us' element={<ContactPage />} />

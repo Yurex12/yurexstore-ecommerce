@@ -9,10 +9,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-import useAddToCart from '@/features/cart/hooks/useAddToCart';
-import useCart from '@/features/cart/hooks/useCart';
-import useIncrementCartItem from '@/features/cart/hooks/useIncrementCartItem';
-import useDecrementCartItem from '@/features/cart/hooks/useDecrementCartItem';
+import { useAddToCart } from '@/features/cart/hooks/useAddToCart';
+import { useCart } from '@/features/cart/hooks/useCart';
+import { useIncrementCartItem } from '@/features/cart/hooks/useIncrementCartItem';
+import { useDecrementCartItem } from '@/features/cart/hooks/useDecrementCartItem';
 
 import { formatCurrency } from '@/lib/helpers';
 
@@ -25,7 +25,9 @@ export default function ProductVariantDialog({
   open,
   setOpen,
 }: ProductVariantProps) {
-  const [selectedVariantId, setSelectedVariantId] = useState('');
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
+    product?.productVariants.length > 0 ? product.productVariants[0].id : null
+  );
   const { addToCart, isPending: isAdding } = useAddToCart();
   const { incrementCartItem, isPending: isIncrementing } =
     useIncrementCartItem();

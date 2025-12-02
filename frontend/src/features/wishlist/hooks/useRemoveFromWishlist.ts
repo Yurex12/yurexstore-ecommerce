@@ -3,7 +3,7 @@ import { removeFromWishlist as removeFromWishlistApi } from '../api';
 import type { WishlistItem } from '../types';
 import toast from 'react-hot-toast';
 
-export default function useRemoveFromWishlist() {
+export function useRemoveFromWishlist() {
   const queryClient = useQueryClient();
   const {
     mutate: removeFromWishlist,

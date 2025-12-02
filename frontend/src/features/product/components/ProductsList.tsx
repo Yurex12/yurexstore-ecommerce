@@ -19,7 +19,6 @@ export default function ProductsList() {
   if (!products?.length) {
     return <EmptyState message='No products found.' />;
   }
-  console.log(products);
 
   return (
     <div className='mt-3 grid grid-cols-2 items-center justify-around gap-1 sm:gap-2 md:grid lg:grid-cols-3 '>

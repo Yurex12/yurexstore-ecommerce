@@ -102,14 +102,9 @@ export const getProduct = expressAsyncHandler(
       },
       include: {
         images: true,
-        reviews: true,
         productVariants: true,
-        category: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
+        category: true,
+        color: true,
       },
     });
 

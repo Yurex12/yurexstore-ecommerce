@@ -7,13 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import ProductVariantDialog from './ProductVariantDialog';
 
-import useAddToCart from '@/features/cart/hooks/useAddToCart';
-import useCart from '@/features/cart/hooks/useCart';
-import useDecrementCartItem from '@/features/cart/hooks/useDecrementCartItem';
-import useIncrementCartItem from '@/features/cart/hooks/useIncrementCartItem';
-import useAddToWishlist from '@/features/wishlist/hooks/useAddToWishlist';
-import useRemoveFromWishlist from '@/features/wishlist/hooks/useRemoveFromWishlist';
-import useWishlist from '@/features/wishlist/hooks/useWishlist';
+import { useAddToCart } from '@/features/cart/hooks/useAddToCart';
+import { useCart } from '@/features/cart/hooks/useCart';
+import { useDecrementCartItem } from '@/features/cart/hooks/useDecrementCartItem';
+import { useIncrementCartItem } from '@/features/cart/hooks/useIncrementCartItem';
+import { useAddToWishlist } from '@/features/wishlist/hooks/useAddToWishlist';
+import { useRemoveFromWishlist } from '@/features/wishlist/hooks/useRemoveFromWishlist';
+import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
 
 import { formatCurrency } from '@/lib/helpers';
 import type { Product } from '../types';
@@ -26,11 +26,16 @@ export default function ProductCard(product: Product) {
     useIncrementCartItem();
   const { decrementCartItem, isPending: isDecrementing } =
     useDecrementCartItem();
-  const { wishlist } = useWishlist();
+  const {
+    wishlist,
+    isPending: isFetchingWishlist,
+    error: wishlistError,
+  } = useWishlist();
+  const { cart, isPending: isFetchingCart } = useCart();
+
   const { isPending: isAddingToWishlist, addToWishlist } = useAddToWishlist();
   const { isPending: isRemovingFromWishlist, removeFromWishlist } =
     useRemoveFromWishlist();
-  const { cart } = useCart();
 
   const navigate = useNavigate();
 
@@ -53,26 +58,32 @@ export default function ProductCard(product: Product) {
     <>
       <div
         className='p-1 border border-input/50 pb-2 sm:p-4 space-y-2 flex flex-col h-full justify-between'
-        onClick={() => navigate(`/products/${product.id}`)}
+        onClick={() => navigate(`/shop/${product.id}`)}
       >
         {/* Image + Wishlist */}
         <div className='w-full h-48 sm:h-72 bg-muted/60 flex items-center justify-center relative'>
-          <button
-            className='absolute right-1 top-2 inline-block rounded-full bg-primary/5 p-1 shadow-sm hover:bg-primary/20 sm:right-4 disabled:opacity-50'
-            onClick={(e) => {
-              e.stopPropagation();
-              handleWishlistToggle();
-            }}
-            disabled={isAddingToWishlist || isRemovingFromWishlist}
-          >
-            <Heart
-              className={`text-lg ${
-                productInWishlist
-                  ? 'fill-primary text-primary'
-                  : 'text-foreground/50'
-              }`}
-            />
-          </button>
+          {!wishlistError ? (
+            <button
+              className='absolute right-1 top-2 inline-block rounded-full bg-primary/5 p-1 shadow-sm hover:bg-primary/20 sm:right-4 disabled:opacity-50'
+              onClick={(e) => {
+                e.stopPropagation();
+                handleWishlistToggle();
+              }}
+              disabled={
+                isAddingToWishlist ||
+                isRemovingFromWishlist ||
+                isFetchingWishlist
+              }
+            >
+              <Heart
+                className={`text-lg ${
+                  productInWishlist
+                    ? 'fill-primary text-primary'
+                    : 'text-foreground/50'
+                }`}
+              />
+            </button>
+          ) : null}
           <img
             src={product.images.at(0)?.url}
             alt={product.name}
@@ -112,7 +123,7 @@ export default function ProductCard(product: Product) {
             <Button
               className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
               variant='outline'
-              disabled={product.quantity === 0}
+              disabled={isFetchingCart || product.quantity === 0}
               onClick={(e) => {
                 e.stopPropagation();
                 setOpen(true);
@@ -120,8 +131,10 @@ export default function ProductCard(product: Product) {
             >
               {product.quantity === 0 ? (
                 <span>Out of stock</span>
+              ) : isFetchingCart ? (
+                <Spinner />
               ) : (
-                <span> Add to cart</span>
+                <span>Add to cart</span>
               )}
             </Button>
           ) : inCart ? (
@@ -132,7 +145,7 @@ export default function ProductCard(product: Product) {
                     e.stopPropagation();
                     decrementCartItem(inCart.id);
                   }}
-                  disabled={isWorking}
+                  disabled={isFetchingCart || isWorking}
                 >
                   <Minus className='text-background' />
                 </Button>
@@ -144,7 +157,7 @@ export default function ProductCard(product: Product) {
                     e.stopPropagation();
                     incrementCartItem(inCart.id);
                   }}
-                  disabled={isWorking || hasReachedStockLimit}
+                  disabled={isFetchingCart || isWorking || hasReachedStockLimit}
                 >
                   <Plus className='text-background' />
                 </Button>
@@ -159,6 +172,7 @@ export default function ProductCard(product: Product) {
                 addToCart({ productId: product.id });
               }}
               disabled={
+                isFetchingCart ||
                 isAddingToCart ||
                 isWorking ||
                 hasReachedStockLimit ||
@@ -167,7 +181,7 @@ export default function ProductCard(product: Product) {
             >
               {product.quantity === 0 ? (
                 'Out of stock'
-              ) : isAddingToCart ? (
+              ) : isFetchingCart || isAddingToCart ? (
                 <Spinner />
               ) : (
                 'Add to cart'

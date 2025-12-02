@@ -3,7 +3,7 @@ import { decrementCartItem as decrementCartItemApi } from '../api';
 import { toast } from 'react-hot-toast';
 import type { CartWithRelation } from '../types';
 
-export default function useDecrementCartItem() {
+export function useDecrementCartItem() {
   const queryClient = useQueryClient();
 
   const {

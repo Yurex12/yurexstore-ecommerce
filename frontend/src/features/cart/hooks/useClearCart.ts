@@ -5,7 +5,7 @@ import { clearCart as clearCartApi } from '../api';
 
 import type { CartWithRelation } from '../types';
 
-export default function useClearCart() {
+export function useClearCart() {
   const queryClient = useQueryClient();
   const {
     mutate: clearCart,

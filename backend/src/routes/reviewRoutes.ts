@@ -16,7 +16,7 @@ import { reviewSchema } from '../schemas/reviewSchema';
 const router = express.Router();
 
 router.get('/:productId', validateToken, getReviews);
-router.get('/', validateToken, getUserPendingReviews);
+router.get('/pending-reviews', validateToken, getUserPendingReviews);
 
 router.post('/', validateToken, validateData(reviewSchema), createReview);
 

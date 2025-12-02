@@ -3,7 +3,7 @@ import { addToWishlist as addToWishlistApi } from '../api';
 
 import toast from 'react-hot-toast';
 
-export default function useAddToWishlist() {
+export function useAddToWishlist() {
   const queryClient = useQueryClient();
   const {
     mutate: addToWishlist,

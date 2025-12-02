@@ -4,7 +4,7 @@ import { removeItemFromCart as removeFromCartApi } from '../api';
 import { toast } from 'react-hot-toast';
 import type { CartWithRelation } from '../types';
 
-export default function useRemoveItemFromCart() {
+export function useRemoveItemFromCart() {
   const queryClient = useQueryClient();
   const {
     mutate: removeFromCart,

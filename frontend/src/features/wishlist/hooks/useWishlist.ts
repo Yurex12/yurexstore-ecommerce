@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getWishlist } from '../api';
 
-export default function useWishlist() {
+export function useWishlist() {
   const {
     data: wishlist,
     isPending,

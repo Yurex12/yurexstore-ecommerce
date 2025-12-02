@@ -3,7 +3,7 @@ import { addToCart as addToCartApi } from '../api';
 
 import { toast } from 'react-hot-toast';
 
-export default function useAddToCart() {
+export function useAddToCart() {
   const queryClient = useQueryClient();
   const {
     mutate: addToCart,

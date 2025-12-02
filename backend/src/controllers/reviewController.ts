@@ -14,20 +14,30 @@ export const getReviews = expressAsyncHandler(
 
     const reviews = await prisma.review.findMany({
       where: {
-        id: productId,
+        productId,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
 
     res.json({
       success: true,
       message: 'Successful.',
-      data: { reviews },
+      reviews,
     });
   }
 );
 
 //@desc fetch user pending reviews
-//@route GET api/reviews/
+//@route GET api/reviews/pending-reviews/
 //@access PRIVATE
 export const getUserPendingReviews = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
