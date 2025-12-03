@@ -5,21 +5,28 @@ import prisma from '../lib/prisma';
 import { ProductSchema, SimilarProductsSchema } from '../schemas/productSchema';
 import { ProductEditSchema } from '../schemas/productEditSchema';
 
+const ITEMS_PER_PAGE = 1;
+
 //@desc fetch all products
 //@route GET api/products/
 //@access public
 export const getProducts = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { gender, colorName, sortOption, categorySlug } = req.query as {
+    const { gender, colorName, sortOption, categorySlug, page } = req.query as {
       gender: string;
       colorName: string;
       sortOption: string;
       categorySlug: string;
+      page: string;
     };
 
     const where: any = {};
 
     let orderBy: any = { createdAt: 'desc' };
+
+    const pageNumber = Number(page) || 1;
+    const skip = (pageNumber - 1) * ITEMS_PER_PAGE;
+    const take = ITEMS_PER_PAGE;
 
     if (categorySlug) {
       where.category = {
@@ -50,6 +57,8 @@ export const getProducts = expressAsyncHandler(
     const products = await prisma.product.findMany({
       where,
       orderBy,
+      skip,
+      take,
       select: {
         id: true,
         name: true,
@@ -77,6 +86,40 @@ export const getProducts = expressAsyncHandler(
             quantity: true,
             value: true,
           },
+        },
+      },
+    });
+
+    const totalProducts = await prisma.product.count();
+
+    res.json({
+      success: true,
+      message: 'Successful.',
+      products,
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE),
+    });
+  }
+);
+
+//@desc fetch all products
+//@route GET api/admin/products/
+//@access PRIVATE(ADMINS ONLY)
+export const getAdminProducts = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const products = await prisma.product.findMany({
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        quantity: true,
+        gender: true,
+        images: {
+          select: {
+            id: true,
+            url: true,
+          },
+          take: 1,
         },
       },
     });

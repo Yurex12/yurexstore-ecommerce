@@ -4,6 +4,7 @@ import type { ApiResponseBase } from '@/services/types';
 import type { ProductCreateSchema } from '../schemas/productCreateSchema';
 import type { ProductEditSchema } from '../schemas/productEditSchema';
 import type {
+  GetAdminProductsResponse,
   GetProductResponse,
   GetProductsResponse,
   SimilarProductsQuery,
@@ -14,6 +15,7 @@ interface ProductFilters {
   color?: string;
   gender?: string;
   sort?: string;
+  page?: number;
 }
 
 export async function getProducts(filters: ProductFilters) {
@@ -23,6 +25,7 @@ export async function getProducts(filters: ProductFilters) {
   if (filters?.color) params.append('colorName', filters.color);
   if (filters?.gender) params.append('gender', filters.gender);
   if (filters?.sort) params.append('sortOption', filters.sort);
+  if (filters?.page) params.append('page', filters.page.toString());
 
   const queryString = params.toString();
 
@@ -46,6 +49,16 @@ export async function getProduct(productId: string) {
     return data.product;
   } catch (error) {
     handleApiError(error, 'Failed to fetch product');
+  }
+}
+
+export async function getAdminProducts() {
+  try {
+    const { data } = await api.get<GetAdminProductsResponse>(`/admin/products`);
+
+    return data.products;
+  } catch (error) {
+    handleApiError(error, 'Failed to fetch products');
   }
 }
 

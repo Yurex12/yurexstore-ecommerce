@@ -11,9 +11,13 @@ import { Ellipsis, Pencil, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useProducts } from '../hooks/useProducts';
 import { useProductDeleteStore } from '../store/useProductDeleteStore';
-import type { Product } from '../types';
+import type { AdminProduct } from '../types';
 
-export default function ProductActionsCell({ product }: { product: Product }) {
+export default function ProductActionsCell({
+  product,
+}: {
+  product: AdminProduct;
+}) {
   const navigate = useNavigate();
   const { products, error, isPending: isFetching } = useProducts();
   const { setDeleteDialogOpen, setSelectedProductId } = useProductDeleteStore();

@@ -2,13 +2,15 @@ import ErrorState from '@/components/ErrorState';
 import NoData from '@/components/NoData';
 import { PageLoader } from '@/components/PageLoader';
 import { DataTable } from '@/components/ui/data-table';
+
+import { useAdminProducts } from '../hooks/useAdminProducts';
 import { useDeleteProducts } from '../hooks/useDeleteProducts';
-import { useProducts } from '../hooks/useProducts';
 import { useProductDeleteStore } from '../store/useProductDeleteStore';
+
 import { columns } from './AdminProductsColumns';
 
 export default function AdminProductsTable() {
-  const { products, error, isPending } = useProducts();
+  const { products, error, isPending } = useAdminProducts();
   const { isPending: isDeletingProducts } = useDeleteProducts();
   const { setSelectedProductIds, setDeleteDialogOpen } =
     useProductDeleteStore();

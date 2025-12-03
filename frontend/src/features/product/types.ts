@@ -46,6 +46,15 @@ export type Product = {
   variantTypeName: string | null;
 };
 
+export type AdminProduct = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  gender: Gender;
+  images: Image[];
+};
+
 export type ProductDetails = Product & { color: Color };
 
 export type GetProductsResponse = ApiResponseBase & {
@@ -54,6 +63,10 @@ export type GetProductsResponse = ApiResponseBase & {
 
 export type GetProductResponse = ApiResponseBase & {
   product: ProductDetails;
+};
+
+export type GetAdminProductsResponse = ApiResponseBase & {
+  products: AdminProduct[];
 };
 
 export type ProductVariantProps = {

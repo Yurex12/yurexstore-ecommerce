@@ -9,6 +9,7 @@ export function useProducts() {
   const color = searchParams.get('color') || undefined;
   const gender = searchParams.get('gender')?.toUpperCase() || undefined;
   const sort = searchParams.get('sort') || undefined;
+  const page = Number(searchParams.get('page') || 1);
 
   const {
     data: products,
@@ -16,7 +17,7 @@ export function useProducts() {
     error,
   } = useQuery({
     queryKey: ['products', category, color, gender, sort],
-    queryFn: () => getProducts({ category, color, gender, sort }),
+    queryFn: () => getProducts({ category, color, gender, sort, page }),
   });
   return { products, isPending, error };
 }

@@ -8,7 +8,10 @@ import {
   getAllOrders,
   getOrderById,
 } from '../controllers/orderController';
-import { deleteProducts } from '../controllers/productController';
+import {
+  deleteProducts,
+  getAdminProducts,
+} from '../controllers/productController';
 import { requireAdmin } from '../middlewares/requireAdmin';
 import { validateToken } from '../middlewares/validateTokenHandler';
 import { validateData } from '../middlewares/validation';
@@ -32,6 +35,7 @@ router.patch('/orders/:id/cancel', cancelOrder);
 
 // Product
 router.delete('/products', validateData(productsDeleteSchema), deleteProducts);
+router.get('/products', getAdminProducts);
 
 // Category
 router.delete(
