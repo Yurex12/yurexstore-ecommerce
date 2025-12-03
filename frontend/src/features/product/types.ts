@@ -59,6 +59,8 @@ export type ProductDetails = Product & { color: Color };
 
 export type GetProductsResponse = ApiResponseBase & {
   products: Product[];
+  totalProducts: number;
+  totalPages: number;
 };
 
 export type GetProductResponse = ApiResponseBase & {

@@ -4,7 +4,6 @@ import ProductCard from './ProductCard';
 import ProductListSkeleton from './ProductListSkeleton';
 
 import { useProducts } from '../hooks/useProducts';
-import AppPagination from '@/components/Pagination';
 
 export default function ProductsList() {
   const { products, isPending, error } = useProducts();
@@ -22,13 +21,10 @@ export default function ProductsList() {
   }
 
   return (
-    <>
-      <div className='mt-3 grid grid-cols-2 items-center justify-around gap-1 sm:gap-2 md:grid lg:grid-cols-3 '>
-        {products.map((product) => (
-          <ProductCard key={product.id} {...product} />
-        ))}
-      </div>
-      <AppPagination />
-    </>
+    <div className='mt-3 grid grid-cols-2 items-center justify-around gap-1 sm:gap-2 md:grid lg:grid-cols-3 '>
+      {products.map((product) => (
+        <ProductCard key={product.id} {...product} />
+      ))}
+    </div>
   );
 }

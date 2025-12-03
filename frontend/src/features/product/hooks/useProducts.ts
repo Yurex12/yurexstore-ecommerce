@@ -11,13 +11,16 @@ export function useProducts() {
   const sort = searchParams.get('sort') || undefined;
   const page = Number(searchParams.get('page') || 1);
 
-  const {
-    data: products,
-    isPending,
-    error,
-  } = useQuery({
-    queryKey: ['products', category, color, gender, sort],
+  const { data, isPending, error } = useQuery({
+    queryKey: ['products', category, color, gender, sort, page],
     queryFn: () => getProducts({ category, color, gender, sort, page }),
   });
-  return { products, isPending, error };
+  return {
+    products: data?.products,
+    totalPages: data?.totalPages ?? 0,
+    totalProduct: data?.totalProducts ?? 0,
+    page,
+    isPending,
+    error,
+  };
 }

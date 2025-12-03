@@ -54,50 +54,51 @@ export const getProducts = expressAsyncHandler(
       orderBy = { avgRating: 'desc' };
     }
 
-    const products = await prisma.product.findMany({
-      where,
-      orderBy,
-      skip,
-      take,
-      select: {
-        id: true,
-        name: true,
-        avgRating: true,
-        price: true,
-        quantity: true,
-        variantTypeName: true,
-        gender: true,
-        reviewCount: true,
-        images: {
-          select: {
-            id: true,
-            url: true,
+    const [products, totalProducts] = await Promise.all([
+      await prisma.product.findMany({
+        where,
+        orderBy,
+        skip,
+        take,
+        select: {
+          id: true,
+          name: true,
+          avgRating: true,
+          price: true,
+          quantity: true,
+          variantTypeName: true,
+          gender: true,
+          reviewCount: true,
+          images: {
+            select: {
+              id: true,
+              url: true,
+            },
+          },
+          category: {
+            select: {
+              name: true,
+            },
+          },
+          productVariants: {
+            select: {
+              id: true,
+              price: true,
+              quantity: true,
+              value: true,
+            },
           },
         },
-        category: {
-          select: {
-            name: true,
-          },
-        },
-        productVariants: {
-          select: {
-            id: true,
-            price: true,
-            quantity: true,
-            value: true,
-          },
-        },
-      },
-    });
-
-    const totalProducts = await prisma.product.count();
+      }),
+      await prisma.product.count({ where }),
+    ]);
 
     res.json({
       success: true,
       message: 'Successful.',
       products,
       totalProducts,
-      totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE),
+      totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE) || 1,
     });
   }
 );

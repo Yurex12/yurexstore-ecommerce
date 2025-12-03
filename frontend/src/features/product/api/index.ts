@@ -34,7 +34,7 @@ export async function getProducts(filters: ProductFilters) {
   try {
     const { data } = await api.get<GetProductsResponse>(url);
 
-    return data.products;
+    return data;
   } catch (error) {
     handleApiError(error, 'Failed to fetch products');
   }
