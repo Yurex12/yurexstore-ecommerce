@@ -51,4 +51,11 @@ export const productSchema = z
   })
   .and(variantsSchema);
 
+export const similarProductsSchema = z.object({
+  productId: z.string(),
+  categoryId: z.string(),
+});
+
+export type SimilarProductsSchema = z.infer<typeof similarProductsSchema>;
+
 export type ProductSchema = z.input<typeof productSchema>;

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/helpers';
-import useCart from '../hooks/useCart';
+import { useCart } from '../hooks/useCart';
 
 export default function CartSummary() {
   const navigate = useNavigate();

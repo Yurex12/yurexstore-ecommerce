@@ -1,9 +1,9 @@
 import { Minus, Plus, Trash } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Spinner } from '@/components/ui/spinner';
-import useDecrementCartItem from '../hooks/useDecrementCartItem';
-import useIncrementCartItem from '../hooks/useIncrementCartItem';
-import useRemoveItemFromCart from '../hooks/useRemoveItemFromCart';
+import { useDecrementCartItem } from '../hooks/useDecrementCartItem';
+import { useIncrementCartItem } from '../hooks/useIncrementCartItem';
+import { useRemoveItemFromCart } from '../hooks/useRemoveItemFromCart';
 import { formatCurrency } from '@/lib/helpers';
 import type { CartWithRelation } from '../types';
 

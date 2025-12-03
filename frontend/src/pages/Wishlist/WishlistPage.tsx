@@ -1,6 +1,6 @@
 import { Separator } from '@/components/ui/separator';
 import WishlistItemsList from '@/features/wishlist/components/WishlistItemsList';
-import useWishlist from '@/features/wishlist/hooks/useWishlist';
+import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
 
 export default function Wishlist() {
   const { wishlist } = useWishlist();

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 
 import prisma from '../lib/prisma';
-import { ProductSchema } from '../schemas/productSchema';
+import { ProductSchema, SimilarProductsSchema } from '../schemas/productSchema';
 import { ProductEditSchema } from '../schemas/productEditSchema';
 
 //@desc fetch all products
@@ -117,6 +117,58 @@ export const getProduct = expressAsyncHandler(
       success: true,
       message: 'Successful.',
       product,
+    });
+  }
+);
+
+//@desc fetch similar products
+//@route GET api/similar-products/
+//@access public
+export const getSimilarProduct = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { productId, categoryId } = req.query as SimilarProductsSchema;
+
+    const products = await prisma.product.findMany({
+      where: {
+        id: { not: productId },
+        categoryId,
+      },
+      select: {
+        id: true,
+        name: true,
+        avgRating: true,
+        price: true,
+        quantity: true,
+        variantTypeName: true,
+        gender: true,
+        reviewCount: true,
+        images: {
+          select: {
+            id: true,
+            url: true,
+          },
+        },
+        category: {
+          select: {
+            name: true,
+          },
+        },
+        productVariants: {
+          select: {
+            id: true,
+            price: true,
+            quantity: true,
+            value: true,
+          },
+        },
+      },
+      take: 4,
+    });
+
+    res.json({
+      success: true,
+      message: 'Successful.',
+      products,
     });
   }
 );

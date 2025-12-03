@@ -2,15 +2,16 @@ import express from 'express';
 
 import { validateToken } from '../middlewares/validateTokenHandler';
 import { requireAdmin } from '../middlewares/requireAdmin';
-import { validateData } from '../middlewares/validation';
+import { validateData, validateQuery } from '../middlewares/validation';
 
-import { productSchema } from '../schemas/productSchema';
+import { productSchema, similarProductsSchema } from '../schemas/productSchema';
 
 import {
   createProduct,
   deleteProduct,
   getProduct,
   getProducts,
+  getSimilarProduct,
   updateProduct,
 } from '../controllers/productController';
 import { productEditSchema } from '../schemas/productEditSchema';
@@ -19,7 +20,13 @@ const router = express.Router();
 
 router.get('/', getProducts);
 
-router.get('/:id', validateToken, getProduct);
+router.get(
+  '/similar-products',
+  validateQuery(similarProductsSchema),
+  getSimilarProduct
+);
+
+router.get('/:id', getProduct);
 
 router.post(
   '/',

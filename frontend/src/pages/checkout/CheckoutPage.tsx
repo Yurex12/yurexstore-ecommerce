@@ -14,7 +14,7 @@ import { usePaymentStore } from '@/features/order/store/usePaymentStore';
 import { useCreateOrder } from '@/features/order/hooks/useCreateOrder';
 import { CustomerAddress } from '@/features/address/components/CustomerAddress';
 import OrderSummary from '@/features/order/components/OrderSummary';
-import useCart from '@/features/cart/hooks/useCart';
+import { useCart } from '@/features/cart/hooks/useCart';
 
 export default function CheckoutPage() {
   const { cart, isPending: isFetchingCart, error } = useCart();

@@ -1,13 +1,13 @@
 import { api, handleApiError } from '@/services/api';
 
+import type { ApiResponseBase } from '@/services/types';
 import type { ProductCreateSchema } from '../schemas/productCreateSchema';
 import type { ProductEditSchema } from '../schemas/productEditSchema';
 import type {
   GetProductResponse,
   GetProductsResponse,
-  // ProductResponse,
+  SimilarProductsQuery,
 } from '../types';
-import type { ApiResponseBase } from '@/services/types';
 
 interface ProductFilters {
   category?: string;
@@ -28,8 +28,6 @@ export async function getProducts(filters: ProductFilters) {
 
   const url = queryString ? `/products?${queryString}` : '/products';
 
-  console.log(url);
-
   try {
     const { data } = await api.get<GetProductsResponse>(url);
 
@@ -48,6 +46,21 @@ export async function getProduct(productId: string) {
     return data.product;
   } catch (error) {
     handleApiError(error, 'Failed to fetch product');
+  }
+}
+
+export async function getSimilarProducts(productData: SimilarProductsQuery) {
+  try {
+    const { data } = await api.get<GetProductsResponse>(
+      '/products/similar-products',
+      {
+        params: productData,
+      }
+    );
+
+    return data.products;
+  } catch (error) {
+    handleApiError(error, 'Failed to fetch products');
   }
 }
 

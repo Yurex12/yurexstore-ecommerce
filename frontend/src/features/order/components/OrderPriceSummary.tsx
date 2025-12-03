@@ -1,6 +1,6 @@
 import { Spinner } from '@/components/ui/spinner';
 
-import useCart from '@/features/cart/hooks/useCart';
+import { useCart } from '@/features/cart/hooks/useCart';
 
 import { formatCurrency } from '@/lib/helpers';
 

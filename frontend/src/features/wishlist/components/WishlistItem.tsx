@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
-import useAddToCart from '@/features/cart/hooks/useAddToCart';
-import useCart from '@/features/cart/hooks/useCart';
+import { useAddToCart } from '@/features/cart/hooks/useAddToCart';
+import { useCart } from '@/features/cart/hooks/useCart';
 import ProductVariantDialog from '@/features/product/components/ProductVariantDialog';
-import useRemoveFromWishlist from '../hooks/useRemoveFromWishlist';
+import { useRemoveFromWishlist } from '../hooks/useRemoveFromWishlist';
 
 import { formatCurrency } from '@/lib/helpers';
 

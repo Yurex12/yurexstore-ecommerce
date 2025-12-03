@@ -62,6 +62,11 @@ export type ProductVariantProps = {
   product: Product;
 };
 
+export type SimilarProductsQuery = {
+  categoryId: string;
+  productId: string;
+};
+
 export type ProductDeleteState = {
   isDeleteDialogOpen: boolean;
   selectedProductId: string;

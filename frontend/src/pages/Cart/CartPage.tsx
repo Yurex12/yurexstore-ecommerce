@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import CartItemsList from '@/features/cart/components/CartItemList';
 import CartSummary from '@/features/cart/components/CartSummary';
 import EmptyCart from '@/features/cart/components/EmptyCart';
-import useCart from '@/features/cart/hooks/useCart';
+import { useCart } from '@/features/cart/hooks/useCart';
 import CartLoadingSkeleton from '@/features/cart/components/CartLoadingSkeleton';
 
 export default function CartPage() {

@@ -9,6 +9,7 @@ import ProductImageCarousel from '@/features/product/components/ProductDetailsIm
 import ProductInfo from '@/features/product/components/ProductInfo';
 import ProductReview from '@/features/product/components/ProductReviews';
 import { useProduct } from '@/features/product/hooks/useProduct';
+import SimilarProductsList from '@/features/product/components/SimilarProductsList';
 
 export default function ProductDetailsPage() {
   const { productId } = useParams();
@@ -19,7 +20,7 @@ export default function ProductDetailsPage() {
   if (error) return <InlineError message={error.message} />;
   if (!product) return <EmptyState message='Product not found' />;
   return (
-    <div>
+    <div className='space-y-4'>
       <div className='flex gap-x-4 mb-4'>
         <Link
           to='/shop'
@@ -38,6 +39,15 @@ export default function ProductDetailsPage() {
 
       <div className='md:w-1/2'>
         <ProductReview productId={product.id} />
+      </div>
+
+      <div>
+        <h2 className='text-xl font-semibold'>Similar Products</h2>
+
+        <SimilarProductsList
+          categoryId={product.categoryId}
+          productId={product.id}
+        />
       </div>
     </div>
   );

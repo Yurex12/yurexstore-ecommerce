@@ -161,7 +161,7 @@ export default function ProductInfo({ product }: { product: ProductDetails }) {
         </div>
       )}
 
-      <div className='w-50'>
+      <div>
         {!inCart ? (
           <Button
             className='w-50 rounded'
@@ -192,7 +192,7 @@ export default function ProductInfo({ product }: { product: ProductDetails }) {
             )}
           </Button>
         ) : (
-          <div className='flex justify-between items-center'>
+          <div className='flex justify-between items-center w-30'>
             <Button
               onClick={(e) => {
                 e.stopPropagation();

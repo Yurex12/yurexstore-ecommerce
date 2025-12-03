@@ -1,6 +1,6 @@
 import WishlistItem from './WishlistItem';
 
-import useWishlist from '../hooks/useWishlist';
+import { useWishlist } from '../hooks/useWishlist';
 
 import EmptyState from '@/components/EmptyState';
 import InlineError from '@/components/InlineError';
