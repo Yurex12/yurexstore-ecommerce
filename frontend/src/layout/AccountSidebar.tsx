@@ -1,9 +1,12 @@
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
+import useUser from '@/features/auth/hooks/useUser';
 import { Heart, Home, Key, LogOut, MapPin, Package, Star } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 export default function AccountSidebar() {
   const { pathname } = useLocation();
+  const { user } = useUser();
 
   const links = [
     { name: 'Overview', path: '/account', icon: <Home size={18} /> },
@@ -30,7 +33,7 @@ export default function AccountSidebar() {
   ];
 
   const isActiveLink = (path: string) => {
-    if (path === '/account') return pathname === '/account'; // exact match
+    if (path === '/account') return pathname === '/account';
     return pathname.startsWith(path);
   };
 
@@ -72,6 +75,17 @@ export default function AccountSidebar() {
             </h4>
             <ul className='space-y-1'>
               {accountManagementLinks.map((link) => {
+                if (link.path === '/account/update-password') {
+                  if (!user) {
+                    return (
+                      <li key={link.name} className='mx-4'>
+                        <Skeleton className='h-8 w-2/3 rounded-md' />
+                      </li>
+                    );
+                  }
+                  if (user.signUpMethod === 'SOCIAL') return null;
+                }
+
                 const active = isActiveLink(link.path);
                 return (
                   <li key={link.name}>

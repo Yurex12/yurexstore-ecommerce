@@ -2,6 +2,7 @@ import express from 'express';
 
 import {
   getUserData,
+  googleLogin,
   loginUser,
   logoutUser,
   registerUser,
@@ -9,6 +10,7 @@ import {
 } from '../controllers/authController';
 import { validateData } from '../middlewares/validation';
 import {
+  googleLoginSchema,
   loginSchema,
   registerSchema,
   updatePasswordSchema,
@@ -20,6 +22,8 @@ const router = express.Router();
 router.post('/register', validateData(registerSchema), registerUser);
 
 router.post('/login', validateData(loginSchema), loginUser);
+
+router.post('/google-login', validateData(googleLoginSchema), googleLogin);
 
 router.post('/logout', logoutUser);
 

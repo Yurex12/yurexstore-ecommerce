@@ -3,6 +3,7 @@ export type User = {
   name: string;
   email: string;
   role: string;
+  signUpMethod: 'EMAIL' | 'SOCIAL';
   createdAt: Date;
 };
 

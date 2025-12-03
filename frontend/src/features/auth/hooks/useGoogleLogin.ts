@@ -1,18 +1,18 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { signInUser } from '../api';
+import { loginWithGoogle as loginWithGoogleApi } from '../api';
 
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
-export default function useSignIn() {
+export default function useGoogleLogin() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const {
-    mutate: signIn,
+    mutate: loginWithGoogle,
     isPending,
     error,
   } = useMutation({
-    mutationFn: signInUser,
+    mutationFn: loginWithGoogleApi,
     onSuccess(data) {
       queryClient.setQueryData(['user'], data);
       toast.success('Login successful');
@@ -22,5 +22,5 @@ export default function useSignIn() {
       toast.error(error.message);
     },
   });
-  return { signIn, isPending, error };
+  return { loginWithGoogle, isPending, error };
 }

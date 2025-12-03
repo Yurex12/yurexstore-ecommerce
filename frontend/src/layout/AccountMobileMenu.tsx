@@ -1,17 +1,20 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Skeleton } from '@/components/ui/skeleton';
+import useUser from '@/features/auth/hooks/useUser';
 import {
-  Home,
-  Package,
+  ChevronRight,
   Heart,
-  Star,
-  MapPin,
-  User,
+  Home,
   Key,
   LogOut,
-  ChevronRight,
+  MapPin,
+  Package,
+  Star,
+  User,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function AccountMobileMenu() {
+  const { user } = useUser();
   const menuItems = [
     { name: 'Overview', path: '/account', icon: <Home size={18} /> },
     { name: 'Orders', path: '/account/orders', icon: <Package size={18} /> },
@@ -49,24 +52,39 @@ export default function AccountMobileMenu() {
 
       <nav>
         <ul className='space-y-3'>
-          {menuItems.map((item) => (
-            <li
-              key={item.name}
-              className='text-sm font-medium rounded-md bg-muted'
-            >
-              <Link
-                to={item.path}
-                className='flex items-center justify-between gap-x-4 p-3 w-full'
+          {menuItems.map((item) => {
+            if (item.path === '/account/update-password') {
+              if (!user) {
+                return (
+                  <li
+                    key={item.name}
+                    className='h-4 w-full rounded-md bg-muted'
+                  >
+                    <Skeleton className='h-8 w-2/3 rounded-md' />
+                  </li>
+                );
+              }
+              if (user.signUpMethod === 'SOCIAL') return null;
+            }
+            return (
+              <li
+                key={item.name}
+                className='text-sm font-medium rounded-md bg-muted'
               >
-                <div className='gap-x-3 flex items-center'>
-                  {item.icon}
-                  <span>{item.name}</span>
-                </div>
+                <Link
+                  to={item.path}
+                  className='flex items-center justify-between gap-x-4 p-3 w-full'
+                >
+                  <div className='gap-x-3 flex items-center'>
+                    {item.icon}
+                    <span>{item.name}</span>
+                  </div>
 
-                <ChevronRight />
-              </Link>
-            </li>
-          ))}
+                  <ChevronRight />
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 

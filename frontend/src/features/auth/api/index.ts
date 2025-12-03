@@ -19,6 +19,18 @@ export async function signInUser({
   }
 }
 
+export async function loginWithGoogle(tokenId: string) {
+  try {
+    const { data } = await api.post<UserData>('/auth/google-login', {
+      tokenId,
+    });
+
+    return data.user;
+  } catch (error) {
+    handleApiError(error, 'Failed to login');
+  }
+}
+
 export async function signOut() {
   try {
     const { data } = await api.post('/auth/logout');

@@ -19,6 +19,10 @@ export const loginSchema = z.object({
   password: z.string().trim().min(1, 'Password is required'),
 });
 
+export const googleLoginSchema = z.object({
+  tokenId: z.string().trim().min(1, 'Token is required'),
+});
+
 export const updatePasswordSchema = z.object({
   oldPassword: z.string().trim().nonempty('Password is required'),
   newPassword: z
@@ -31,11 +35,8 @@ export const updatePasswordSchema = z.object({
       'Password must contain at least one uppercase letter and one number'
     ),
 });
-// .refine((data) => data.newPassword !== data.oldPassword, {
-//   error: 'New password must be different from old password.',
-//   path: ['newPassword'],
-// });
 
 export type LoginSchema = z.infer<typeof loginSchema>;
 export type RegisterSchema = z.infer<typeof registerSchema>;
 export type UpdatePasswordSchema = z.infer<typeof updatePasswordSchema>;
+export type GoogleLoginSchema = z.infer<typeof googleLoginSchema>;

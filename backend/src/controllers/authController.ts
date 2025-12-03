@@ -7,10 +7,16 @@ import jwt from 'jsonwebtoken';
 import { cookieConfig } from '../config/cookieConfig';
 import prisma from '../lib/prisma';
 import {
+  GoogleLoginSchema,
   LoginSchema,
   RegisterSchema,
   UpdatePasswordSchema,
 } from '../schemas/authSchema';
+import { OAuth2Client } from 'google-auth-library';
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 //@desc Register a user
 //@route POST api/auth/register
@@ -37,6 +43,7 @@ export const registerUser = expressAsyncHandler(
         name,
         email,
         password: hashedPassword,
+        signUpMethod: 'EMAIL',
         role: 'USER',
       },
       omit: {
@@ -65,7 +72,7 @@ export const loginUser = expressAsyncHandler(
       },
     });
 
-    if (!user) {
+    if (!user || !user.password) {
       res.status(401);
       throw new Error('Email or password is incorrect.');
     }
@@ -80,7 +87,6 @@ export const loginUser = expressAsyncHandler(
     const accessToken = jwt.sign(
       {
         userId: user.id,
-        role: user.role,
       },
       process.env.JWT_TOKEN_SECRET as string,
       { expiresIn: '7d' }
@@ -94,6 +100,62 @@ export const loginUser = expressAsyncHandler(
       success: true,
       message: 'Login successful',
       user: userWithoutPassword,
+    });
+  }
+);
+
+//@desc Login With Google
+//@route POST api/auth/google-login
+//@access public
+export const googleLogin = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { tokenId } = req.body as GoogleLoginSchema;
+
+    const ticket = await client.verifyIdToken({
+      idToken: tokenId,
+      audience: GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const email = payload?.email;
+    const name = payload?.name;
+
+    if (!email) {
+      res.status(400);
+      throw new Error('Google login failed: email not found.');
+    }
+
+    let user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          email,
+          name: name || 'John Doe',
+          role: 'USER',
+          signUpMethod: 'SOCIAL',
+        },
+      });
+    }
+
+    const accessToken = jwt.sign(
+      {
+        userId: user.id,
+      },
+      process.env.JWT_TOKEN_SECRET as string,
+      { expiresIn: '7d' }
+    );
+
+    res.cookie('accessToken', accessToken, cookieConfig);
+
+    res.json({
+      success: true,
+      message: 'Login successful',
+      user: user,
     });
   }
 );
@@ -158,7 +220,7 @@ export const updateUserPassword = expressAsyncHandler(
       },
     });
 
-    if (!user) {
+    if (!user || !user.password) {
       res.status(404);
       throw new Error('User not found');
     }

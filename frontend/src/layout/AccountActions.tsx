@@ -1,14 +1,3 @@
-import { useState } from 'react';
-import {
-  ChevronDown,
-  ChevronUp,
-  Heart,
-  Package,
-  LogOut,
-  User,
-  UserCheck,
-  UserCheck2,
-} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +5,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import useSignOut from '@/features/auth/hooks/useSignOut';
+import {
+  ChevronDown,
+  ChevronUp,
+  Heart,
+  LogOut,
+  Package,
+  User,
+  UserCheck2,
+} from 'lucide-react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const MOBILE_SCREEN = 640;
@@ -23,6 +23,7 @@ const MOBILE_SCREEN = 640;
 export default function AccountActions() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const { signOut, isPending: isSigningOut } = useSignOut();
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -79,8 +80,9 @@ export default function AccountActions() {
         {/* Logout */}
         <DropdownMenuItem
           className='flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition'
-          onClick={() => console.log('Logout')}
           variant='destructive'
+          onClick={() => signOut()}
+          disabled={isSigningOut}
         >
           <LogOut size={18} />
           <span>Logout</span>

@@ -1,0 +1,5 @@
+-- CreateEnum
+CREATE TYPE "SIGN_UP_METHOD" AS ENUM ('SOCIAL', 'EMAIL');
+
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "signUpMethod" "SIGN_UP_METHOD" NOT NULL DEFAULT 'EMAIL';

@@ -13,15 +13,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { useNavigate } from 'react-router-dom';
+import { Spinner } from '@/components/ui/spinner';
 import useSignIn from '../hooks/useSignIn';
 import { signInSchema, type SignInSchema } from '../schemas/signInSchema';
-import { Spinner } from '@/components/ui/spinner';
 
 export default function SignInForm() {
   const { signIn, isPending } = useSignIn();
 
-  const navigate = useNavigate();
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -32,11 +30,7 @@ export default function SignInForm() {
   });
 
   function onsubmit(userDetails: SignInSchema) {
-    signIn(userDetails, {
-      onSuccess() {
-        navigate('/');
-      },
-    });
+    signIn(userDetails);
   }
 
   const isSubmitting = form.formState.isSubmitting || isPending;
