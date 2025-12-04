@@ -26,7 +26,7 @@ export default function SimilarProductsList({
     return <p className='text-muted-foreground mt-2'>Nothing to see here</p>;
 
   return (
-    <div className='mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3'>
+    <div className='mt-3 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 '>
       {similarProducts.map((product) => (
         <ProductCard key={product.id} {...product} />
       ))}

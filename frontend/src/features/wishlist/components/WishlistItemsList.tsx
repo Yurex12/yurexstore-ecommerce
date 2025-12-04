@@ -2,7 +2,6 @@ import WishlistItem from './WishlistItem';
 
 import { useWishlist } from '../hooks/useWishlist';
 
-import EmptyState from '@/components/EmptyState';
 import InlineError from '@/components/InlineError';
 import WishlistItemsSkeleton from './WishlistItemsSkeleton';
 
@@ -15,8 +14,13 @@ export default function WishlistItemsList() {
 
   if (!wishlist?.length)
     return (
-      <EmptyState message='There are currently no products in your wishlist' />
+      <div className='mt-10'>
+        <p className='text-center text-muted-foreground'>
+          There are currently no products in your wishlist.
+        </p>
+      </div>
     );
+
   return (
     <div className='space-y-4'>
       {wishlist.map((wishlist) => (

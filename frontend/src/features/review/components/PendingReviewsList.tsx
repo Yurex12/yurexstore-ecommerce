@@ -19,7 +19,10 @@ export default function PendingReviewsList() {
   return (
     <div className='space-y-4'>
       {pendingReviews.map((pendingReview) => (
-        <PendingReviewCard key={pendingReview.id} {...pendingReview} />
+        <PendingReviewCard
+          key={pendingReview.id}
+          pendingReview={pendingReview}
+        />
       ))}
     </div>
   );

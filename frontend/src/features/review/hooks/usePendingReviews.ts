@@ -10,5 +10,6 @@ export function usePendingReviews() {
     queryKey: ['pending-reviews'],
     queryFn: getPendingReviews,
   });
+
   return { pendingReviews, isPending, error };
 }

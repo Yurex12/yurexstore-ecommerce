@@ -5,7 +5,11 @@ import { Button } from '@/components/ui/button';
 
 import type { PendingReview } from '../types';
 
-export default function PendingReviewCard(pendingReview: PendingReview) {
+export default function PendingReviewCard({
+  pendingReview,
+}: {
+  pendingReview: PendingReview;
+}) {
   const navigate = useNavigate();
   return (
     <div className='p-4 border rounded-lg bg-background flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between'>

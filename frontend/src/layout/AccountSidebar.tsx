@@ -9,7 +9,7 @@ export default function AccountSidebar() {
   const { user } = useUser();
 
   const links = [
-    { name: 'Overview', path: '/account', icon: <Home size={18} /> },
+    { name: 'Overview', path: '/account/overview', icon: <Home size={18} /> },
     { name: 'Orders', path: '/account/orders', icon: <Package size={18} /> },
     { name: 'Wishlist', path: '/account/wishlist', icon: <Heart size={18} /> },
     {

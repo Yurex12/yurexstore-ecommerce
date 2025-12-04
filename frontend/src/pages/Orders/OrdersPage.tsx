@@ -9,12 +9,9 @@ export default function OrdersPage() {
     <div className='space-y-4'>
       <h2 className='text-xl font-semibold text-foreground'>My Orders</h2>
 
-      {!(isPending || !orders?.length || error) && (
-        <>
-          <Separator />
-          <OrderTabs />
-        </>
-      )}
+      <Separator />
+
+      {!(isPending || !orders?.length || error) && <OrderTabs />}
 
       <OrdersList />
     </div>

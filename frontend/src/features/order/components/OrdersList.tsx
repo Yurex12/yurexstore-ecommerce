@@ -15,7 +15,12 @@ export default function OrdersList() {
 
   if (error) return <InlineError message='Unable to fetch orders' />;
 
-  if (!orders?.length) return <EmptyState message='No orders found' />;
+  if (!orders?.length)
+    return (
+      <div className='mt-10'>
+        <p className='text-center text-muted-foreground'>No orders found.</p>
+      </div>
+    );
 
   let filteredOrders;
 

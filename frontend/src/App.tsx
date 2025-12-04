@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from 'react-hot-toast';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import AppLayout from './layout/AppLayout';
 
@@ -15,7 +15,6 @@ import ContactPage from './pages/Contact/ContactPage';
 import HomePage from './pages/Home/HomePage';
 import OrderDetailsPage from './pages/OrderDetails/OrderDetailsPage';
 import OrdersPage from './pages/Orders/OrdersPage';
-import SettingsPage from './pages/Settings/SettingsPage';
 import ShopPage from './pages/Shop/ShopPage';
 import SignInPage from './pages/SignIn/SignInPage';
 import SignUpPage from './pages/SignUp/SignUpPage';
@@ -25,6 +24,8 @@ import WriteReviewPage from './pages/WriteReview/WriteReviewPage';
 
 import AdminLayout from './layout/AdminLayout2';
 
+import AdminProtectedRoute from './layout/AdminProtectedRoute';
+import ProtectedRoute from './layout/ProtectedRoute';
 import AdminOrderDetailsPage from './pages/AdminOrderDetails/AdminOrderDetailsPage';
 import AdminOrdersPage from './pages/AdminOrders/AdminOrdersPage';
 import AdminProductCreatePage from './pages/AdminProductCreate/AdminProductCreatePage';
@@ -50,41 +51,50 @@ export default function App() {
             <Route path='/' element={<HomePage />} />
             <Route path='/shop' element={<ShopPage />} />
             <Route path='/shop/:productId' element={<ProductDetailsPage />} />
-            <Route path='/cart' element={<CartPage />} />
             <Route path='/about-us' element={<AboutPage />} />
             <Route path='/contact-us' element={<ContactPage />} />
-            <Route path='/checkout' element={<CheckoutPage />} />
-            {/* Account */}
-            <Route element={<AccountLayout />}>
-              <Route path='/account' element={<AccountOverviewPage />} />
-              <Route path='/account/orders' element={<OrdersPage />} />
-              <Route path='/account/settings' element={<SettingsPage />} />
-              <Route
-                path='/account/pending-reviews'
-                element={<PendingReviewsPage />}
-              />
-              <Route path='/account/wishlist' element={<WishlistPage />} />
-              <Route
-                path='/account/orders/:id'
-                element={<OrderDetailsPage />}
-              />
-              <Route
-                path='/account/update-password'
-                element={<UpdatePasswordPage />}
-              />
-              <Route
-                path='/account/pending-reviews/:pendingReviewId/write'
-                element={<WriteReviewPage />}
-              />
-              <Route path='/account/addresses' element={<AddressPage />} />
+
+            <Route element={<ProtectedRoute />}>
+              <Route path='/cart' element={<CartPage />} />
+              <Route path='/checkout' element={<CheckoutPage />} />
             </Route>
 
-            <Route path='/account/menu' element={<AccountMobileMenu />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path='/account' element={<AccountLayout />}>
+                <Route index element={<Navigate to='overview' replace />} />
+
+                <Route path='overview' element={<AccountOverviewPage />} />
+                <Route path='orders' element={<OrdersPage />} />
+                <Route
+                  path='pending-reviews'
+                  element={<PendingReviewsPage />}
+                />
+                <Route path='wishlist' element={<WishlistPage />} />
+                <Route path='orders/:id' element={<OrderDetailsPage />} />
+                <Route
+                  path='update-password'
+                  element={<UpdatePasswordPage />}
+                />
+                <Route
+                  path='pending-reviews/:pendingReviewId/write'
+                  element={<WriteReviewPage />}
+                />
+                <Route path='addresses' element={<AddressPage />} />
+              </Route>
+
+              <Route path='/account/menu' element={<AccountMobileMenu />} />
+            </Route>
           </Route>
           <Route path='/login' element={<SignInPage />} />
           <Route path='/register' element={<SignUpPage />} />
           {/* Admin */}
-          <Route element={<AdminLayout />}>
+          <Route
+            element={
+              <AdminProtectedRoute>
+                <AdminLayout />
+              </AdminProtectedRoute>
+            }
+          >
             <Route path='/admin/colors' element={<AdminColorsPage />} />
             <Route path='/admin/categories' element={<AdminCategoriesPage />} />
             <Route path='/admin/products' element={<AdminProductsPage />} />
