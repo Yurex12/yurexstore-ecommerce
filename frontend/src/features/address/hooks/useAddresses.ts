@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getAddresses } from '../api';
 
-export default function useAddresses() {
+export function useAddresses() {
   const {
     data: addresses,
     isPending,

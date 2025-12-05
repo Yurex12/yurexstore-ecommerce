@@ -32,11 +32,12 @@ import AdminProductCreatePage from './pages/AdminProductCreate/AdminProductCreat
 import AdminProductEditPage from './pages/AdminProductEdit/AdminProductEditPage';
 import AdminProductsPage from './pages/AdminProducts/AdminProductsPage';
 import AdminUsersPage from './pages/AdminUsers/AdminUsersPage';
-import AdminCategoriesPage from './pages/CategoriesPage/AdminCategoriesPage';
+import AdminCategoriesPage from './pages/Categories/AdminCategoriesPage';
 import CheckoutPage from './pages/checkout/CheckoutPage';
 import AdminColorsPage from './pages/Color/AdminColorsPage';
 import PendingReviewsPage from './pages/PendingReviews/PendingReviewsPage';
 import ProductDetailsPage from './pages/ProductDetails/ProductDetailsPage';
+import CreateAddressPage from './pages/CreateAddress/CreateAddressPage';
 
 const queryClient = new QueryClient();
 
@@ -80,6 +81,7 @@ export default function App() {
                   element={<WriteReviewPage />}
                 />
                 <Route path='addresses' element={<AddressPage />} />
+                <Route path='addresses/new' element={<CreateAddressPage />} />
               </Route>
 
               <Route path='/account/menu' element={<AccountMobileMenu />} />

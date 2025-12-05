@@ -19,9 +19,6 @@ export const getOrders = expressAsyncHandler(
       include: {
         orderItems: true,
       },
-      omit: {
-        stripePaymentId: true,
-      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -82,7 +79,6 @@ export const getOrder = expressAsyncHandler(
         userId,
       },
       omit: {
-        stripePaymentId: true,
         paymentStatus: true,
       },
       include: {
@@ -154,9 +150,16 @@ export const createOrder = expressAsyncHandler(
               id: orderItem.productVariantId,
               productId: orderItem.productId,
             },
-            include: {
+            select: {
+              id: true,
+              price: true,
+              productId: true,
+              quantity: true,
+              value: true,
               product: {
-                include: {
+                select: {
+                  id: true,
+                  name: true,
                   images: {
                     select: {
                       url: true,
@@ -193,7 +196,18 @@ export const createOrder = expressAsyncHandler(
         } else {
           const product = await prisma.product.findUnique({
             where: { id: orderItem.productId },
-            include: { images: { select: { url: true }, take: 1 } },
+            select: {
+              id: true,
+              name: true,
+              price: true,
+              quantity: true,
+              images: {
+                select: {
+                  url: true,
+                },
+                take: 1,
+              },
+            },
           });
 
           if (!product) {
@@ -238,15 +252,20 @@ export const createOrder = expressAsyncHandler(
             totalPrice,
             deliveryFee,
             paymentMethod: data.paymentMethod,
+            paymentStatus:
+              data.paymentMethod === 'STRIPE' ? 'CONFIRMED' : 'PENDING',
             userId,
             orderItems: {
               createMany: {
                 data: validatedItems,
               },
             },
-          },
-          include: {
-            orderItems: true,
+            notifications: {
+              create: {
+                userId,
+                content: 'Your order has been placed successfully',
+              },
+            },
           },
         });
 
@@ -274,14 +293,6 @@ export const createOrder = expressAsyncHandler(
 
         await tx.cartItem.deleteMany({
           where: { userId },
-        });
-
-        await tx.notification.create({
-          data: {
-            userId,
-            orderId: newOrder.id,
-            content: 'Your order has been placed successfully',
-          },
         });
 
         return newOrder;

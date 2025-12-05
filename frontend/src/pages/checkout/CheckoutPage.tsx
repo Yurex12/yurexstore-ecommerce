@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 
 import { Separator } from '@/components/ui/separator';
 
@@ -15,13 +17,23 @@ import { useCreateOrder } from '@/features/order/hooks/useCreateOrder';
 import { CustomerAddress } from '@/features/address/components/CustomerAddress';
 import OrderSummary from '@/features/order/components/OrderSummary';
 import { useCart } from '@/features/cart/hooks/useCart';
+import useCreatePaymentIntent from '@/hooks/useCreatePaymentIntent';
+import StripeCheckoutForm from './components/StripeCheckoutForm';
+import { useState } from 'react';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)!;
 
 export default function CheckoutPage() {
   const { cart, isPending: isFetchingCart, error } = useCart();
-  const { createOrder, isPending: isCreating } = useCreateOrder();
+  const { createOrder, isPending: isCreatingOrder } = useCreateOrder();
+  const [clientSecret, setClientSecret] = useState<string | undefined>(
+    undefined
+  );
 
   const { addresses, selectedAddressId } = useAddressStore();
   const { selectedMethod } = usePaymentStore();
+  const { createPaymentIntent, isPending: isCreatingPaymentIntent } =
+    useCreatePaymentIntent();
 
   const navigate = useNavigate();
 
@@ -62,8 +74,31 @@ export default function CheckoutPage() {
     );
   }
 
+  function handlePaymentIntent() {
+    if (!selectedAddress || !selectedAddress.phone) {
+      toast.error('Please select a valid address before placing your order');
+      return;
+    }
+
+    createPaymentIntent(
+      {
+        orderItems,
+        deliveryAddress: `${selectedAddress!.deliveryAddress} | ${
+          selectedAddress!.city
+        } | ${selectedAddress!.state}`,
+        phone: selectedAddress.phone,
+        paymentMethod: selectedMethod,
+      },
+      {
+        onSuccess(data) {
+          setClientSecret(data?.clientSecret);
+        },
+      }
+    );
+  }
+
   return (
-    <>
+    <Elements stripe={stripePromise}>
       <div className='grid grid-cols-1 lg:grid-cols-[60%_35%] gap-5 justify-between lg:space-y-8'>
         <div className='space-y-6'>
           <CustomerAddress />
@@ -78,11 +113,18 @@ export default function CheckoutPage() {
         <OrderSummary
           onOrder={handleOrder}
           disabled={!selectedAddress}
-          isCreatingOrder={isCreating}
+          isCreatingOrder={isCreatingOrder}
+          onPaymentIntent={handlePaymentIntent}
+          isCreatingPaymentIntent={isCreatingPaymentIntent}
+          clientSecret={clientSecret}
         />
       </div>
 
-      {isCreating && <FullPageLoader text='Placing your order...' />}
-    </>
+      {isCreatingOrder && <FullPageLoader text='Placing your order...' />}
+
+      {selectedMethod === 'STRIPE' && clientSecret && (
+        <StripeCheckoutForm clientSecret={clientSecret} />
+      )}
+    </Elements>
   );
 }

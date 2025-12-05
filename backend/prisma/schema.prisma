@@ -44,6 +44,7 @@ enum PAYMENT_METHOD {
 enum PAYMENT_STATUS {
   PENDING
   CONFIRMED
+  FAILED
 }
 
 enum SIGN_UP_METHOD {
@@ -208,7 +209,7 @@ model Order {
   paymentMethod   PAYMENT_METHOD
   paymentStatus   PAYMENT_STATUS @default(PENDING)
   deliveryFee     Float
-  stripePaymentId String?
+  paymentIntentId String?        @unique
   orderItems      OrderItem[]
   notifications   Notification[]
 
@@ -234,6 +235,14 @@ model OrderItem {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Checkout {
+  id        String   @id @default(cuid())
+  userId    String
+  data      Json
+  createdAt DateTime @default(now())
+  expiresAt DateTime
 }
 
 model Address {

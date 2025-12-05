@@ -4,6 +4,7 @@ import type {
   CreateAddressResponse,
   GetAddressResponse,
 } from '../types';
+import type { ApiResponseBase } from '@/services/types';
 
 export async function getAddresses() {
   try {
@@ -12,6 +13,18 @@ export async function getAddresses() {
     return data.addresses;
   } catch (error) {
     handleApiError(error, 'Failed to fetch address');
+  }
+}
+
+export async function deleteAddress(addressId: string) {
+  try {
+    const { data } = await api.delete<ApiResponseBase>(
+      `/addresses/${addressId}`
+    );
+
+    return data;
+  } catch (error) {
+    handleApiError(error, 'Failed to delete address');
   }
 }
 

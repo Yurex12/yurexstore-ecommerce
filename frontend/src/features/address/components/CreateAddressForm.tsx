@@ -9,20 +9,20 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
+import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useCreateAddress } from '../hooks/useCreateAddress';
 import {
   addressSchema,
   type AddressFormValues,
 } from '../schemas/addressSchema';
-import { useAddressStore } from '../store/useAddressStore';
-import { useCreateAddress } from '../hooks/useCreateAddress';
-import { Input } from '@/components/ui/input';
-import { Spinner } from '@/components/ui/spinner';
+import { useNavigate } from 'react-router-dom';
 
-export function AddressForm() {
-  const { showSelectedAddress } = useAddressStore();
+export function CreateAddressForm() {
   const { createAddress, isPending } = useCreateAddress();
+  const navigate = useNavigate();
 
   const form = useForm<AddressFormValues>({
     resolver: zodResolver(addressSchema),
@@ -40,7 +40,8 @@ export function AddressForm() {
   function onSubmit(values: AddressFormValues) {
     createAddress(values, {
       onSuccess() {
-        showSelectedAddress();
+        form.reset();
+        navigate('/account/addresses');
       },
     });
   }
@@ -49,7 +50,10 @@ export function AddressForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4 py-4'>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='space-y-4 py-6 rounded bg-background px-4'
+      >
         <div className='grid grid-cols-2 gap-3'>
           <FormField
             control={form.control}
@@ -186,14 +190,9 @@ export function AddressForm() {
           )}
         />
 
-        <div className='flex justify-end gap-x-4'>
-          <Button type='button' variant='outline' onClick={showSelectedAddress}>
-            Cancel
-          </Button>
-          <Button type='submit' className='w-34'>
-            {isSubmitting ? <Spinner /> : <span>Save</span>}
-          </Button>
-        </div>
+        <Button type='submit' className='w-34'>
+          {isSubmitting ? <Spinner /> : <span>Create Address</span>}
+        </Button>
       </form>
     </Form>
   );

@@ -23,7 +23,7 @@ export default function OrderPriceSummary() {
     return <p>No products found</p>;
   }
 
-  const totalPrice = cart
+  const subTotal = cart
     .map((cartItem) =>
       cartItem.productVariant
         ? cartItem.productVariant.price * cartItem.quantity
@@ -31,14 +31,16 @@ export default function OrderPriceSummary() {
     )
     .reduce((acc, price) => acc + price, 0);
 
-  const deliveryFee = (1 / 100) * totalPrice;
+  const deliveryFee = (1 / 100) * subTotal;
+
+  const totalPrice = subTotal + deliveryFee;
 
   return (
     <div className='space-y-5 text-sm'>
       <div className='flex justify-between'>
         <span className='text-foreground/80'>Subtotal</span>
         <span className='font-medium text-foreground/70'>
-          {formatCurrency(totalPrice)}
+          {formatCurrency(subTotal)}
         </span>
       </div>
       <div className='flex justify-between'>

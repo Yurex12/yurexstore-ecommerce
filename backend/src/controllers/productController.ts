@@ -5,7 +5,7 @@ import prisma from '../lib/prisma';
 import { ProductSchema, SimilarProductsSchema } from '../schemas/productSchema';
 import { ProductEditSchema } from '../schemas/productEditSchema';
 
-const ITEMS_PER_PAGE = 1;
+const ITEMS_PER_PAGE = 12;
 
 //@desc fetch all products
 //@route GET api/products/

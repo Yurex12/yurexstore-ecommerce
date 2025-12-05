@@ -1,7 +1,7 @@
 import useUser from '@/features/auth/hooks/useUser';
 import AddressCard from './components/AddressCard';
 import ProfileCard from './components/ProfileCard';
-import useAddresses from '@/features/address/hooks/useAddresses';
+import { useAddresses } from '@/features/address/hooks/useAddresses';
 import AccountOverviewSkeleton from './components/AccountOverviewSkeleton';
 
 export default function AccountOverviewPage() {

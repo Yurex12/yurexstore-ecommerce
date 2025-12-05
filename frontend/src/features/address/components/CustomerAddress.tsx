@@ -9,7 +9,7 @@ import { EmptyAddress } from './EmptyAddress';
 
 import { useAddressStore } from '../store/useAddressStore';
 
-import useAddresses from '../hooks/useAddresses';
+import { useAddresses } from '../hooks/useAddresses';
 import CustomerAddressSkeleton from './CustomerAddressSkeleton';
 import InlineError from '@/components/InlineError';
 

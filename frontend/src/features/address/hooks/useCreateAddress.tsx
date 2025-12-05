@@ -4,7 +4,7 @@ import { createAddress as createAddressApi } from '../api';
 
 import { toast } from 'react-hot-toast';
 
-export default function useCreateAddress() {
+export function useCreateAddress() {
   const queryClient = useQueryClient();
   const {
     mutate: createAddress,

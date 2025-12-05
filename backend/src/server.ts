@@ -17,6 +17,9 @@ import orderRoutes from './routes/orderRoutes';
 import colorRoutes from './routes/colorRoutes';
 import adminRoutes from './routes/adminRoutes';
 import imagekitRoutes from './routes/imagekitRoutes';
+import webHookRoutes from './routes/webHookRoutes';
+import paymentRoutes from './routes/paymentRoutes';
+
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler';
 
 const PORT = process.env.PORT || 9000;
@@ -32,6 +35,8 @@ app.use(
     ],
   })
 );
+
+app.use('/api/stripe', webHookRoutes);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -50,6 +55,7 @@ app.use('/api/addresses', addressRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/colors', colorRoutes);
 app.use('/api/imagekit', imagekitRoutes);
+app.use('/api/payment', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
@@ -57,7 +63,3 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`Server is running on PORT: ${PORT}`);
 });
-
-// app.listen(PORT as number, '0.0.0.0', () => {
-//   console.log(`Server is running on PORT: ${PORT}`);
-// });
