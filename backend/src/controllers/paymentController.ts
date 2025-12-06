@@ -178,7 +178,6 @@ export const createPaymentIntent = expressAsyncHandler(
 
 export const stripeWebhook = async (req: Request, res: Response) => {
   const sig = req.headers['stripe-signature']!;
-  // TODO: set up in .env
 
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
@@ -202,12 +201,12 @@ export const stripeWebhook = async (req: Request, res: Response) => {
       });
 
       if (existing) {
-        res.sendStatus(200);
+        res.status(200).send('Order already exist');
         return;
       }
 
       if (!checkoutId) {
-        res.status(400).send('Missing checkout Id');
+        res.status(200).send('Missing checkout Id');
         return;
       }
 
@@ -216,12 +215,17 @@ export const stripeWebhook = async (req: Request, res: Response) => {
       });
 
       if (!checkout) {
-        res.status(400).send('Checkout not found');
+        res.status(200).send('Checkout not found');
         return;
       }
 
       if (new Date() > checkout.expiresAt) {
-        res.sendStatus(200);
+        await stripe.refunds.create({
+          payment_intent: paymentIntentId,
+          reason: 'requested_by_customer',
+        });
+        res.status(200).send('Checkout expired');
+
         return;
       }
 
@@ -234,7 +238,7 @@ export const stripeWebhook = async (req: Request, res: Response) => {
       };
 
       await prisma.$transaction(async (tx) => {
-        const newOrder = await tx.order.create({
+        await tx.order.create({
           data: {
             userId: checkout.userId,
             totalPrice: checkoutData.totalPrice,
@@ -298,16 +302,17 @@ export const stripeWebhook = async (req: Request, res: Response) => {
           where: { id: checkout.id },
         });
       });
+
+      res.status(200).send('Order created successfully');
+      return;
     }
 
     if (event.type === 'payment_intent.payment_failed') {
-      res.sendStatus(200);
+      res.status(200).send('Payment failed');
       return;
     }
   } catch {
     res.status(500).send('Webhook failure');
     return;
   }
-
-  res.sendStatus(200);
 };
