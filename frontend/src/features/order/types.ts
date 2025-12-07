@@ -1,4 +1,5 @@
 import type { ApiResponseBase } from '@/services/types';
+import type { Address } from '../address/types';
 
 export type PaymentMethod = 'CASH_ON_DELIVERY' | 'STRIPE';
 export type OrderStatus = 'PENDING' | 'CANCELLED' | 'DELIVERED';
@@ -99,4 +100,13 @@ export type AdminOrder = {
 
 export type AdminOrderResponse = ApiResponseBase & {
   order: AdminOrderDetails;
+};
+
+export type OrderSummaryProps = {
+  onConfirmCashOrder: VoidFunction;
+  selectedAddress: Address | undefined;
+  isProcessingCashOrder: boolean;
+  isProcessingStripePayment: boolean;
+  onCreatePaymentIntent: VoidFunction;
+  clientSecret?: string;
 };

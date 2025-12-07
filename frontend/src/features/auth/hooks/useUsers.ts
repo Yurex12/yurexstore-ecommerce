@@ -7,7 +7,7 @@ export default function useUsers() {
     isPending,
     error,
   } = useQuery({
-    queryKey: ['user'],
+    queryKey: ['admin-user'],
     queryFn: getUsersData,
   });
   return { users, isPending, error };

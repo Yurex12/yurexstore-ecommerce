@@ -14,6 +14,7 @@ export function useCreateProduct() {
     onSuccess() {
       toast.success('Product created successfully');
       queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-products'] });
     },
     onError(error) {
       toast.error(error.message);

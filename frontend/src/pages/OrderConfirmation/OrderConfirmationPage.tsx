@@ -6,6 +6,7 @@ import OrderProcessingCard from '@/features/order/components/OrderProcessingCard
 import OrderSuccessCard from '@/features/order/components/OrderSuccessCard';
 import OrderTimeoutCard from '@/features/order/components/OrderTimeoutCard';
 import { useOrderStatus } from '@/features/order/hooks/useOrderStatus';
+import { useQueryClient } from '@tanstack/react-query';
 
 type Status = 'PROCESSING' | 'CONFIRMED' | 'TIMEOUT';
 
@@ -13,6 +14,7 @@ export default function OrderConfirmationPage() {
   const [status, setStatus] = useState<Status>('PROCESSING');
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const timeoutRef = useRef<number | null>(null);
 
@@ -39,6 +41,8 @@ export default function OrderConfirmationPage() {
         timeoutRef.current = null;
       }
 
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+
       setStatus('CONFIRMED');
       const successId = setTimeout(
         () => navigate(`/account/orders/${order.orderId}`),
@@ -46,7 +50,7 @@ export default function OrderConfirmationPage() {
       );
       return () => clearTimeout(successId);
     }
-  }, [order, navigate]);
+  }, [order, navigate, queryClient]);
 
   if (!paymentId) return <Navigate to='/cart' replace />;
 

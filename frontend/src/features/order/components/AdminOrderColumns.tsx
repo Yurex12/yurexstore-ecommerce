@@ -20,8 +20,6 @@ export const columns: ColumnDef<AdminOrder>[] = [
     accessorKey: 'user.name',
     header: 'Customer',
     cell: ({ cell }) => {
-      console.log(cell.row.original);
-
       return <div>{cell.row.original.user.name}</div>;
     },
   },

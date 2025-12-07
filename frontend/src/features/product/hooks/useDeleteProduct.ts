@@ -39,6 +39,7 @@ export function useDeleteProduct() {
 
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-products'] });
     },
   });
 

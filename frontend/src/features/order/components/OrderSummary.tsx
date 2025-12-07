@@ -4,26 +4,23 @@ import { Spinner } from '@/components/ui/spinner';
 
 import OrderPriceSummary from './OrderPriceSummary';
 
-import { useAddressStore } from '@/features/address/store/useAddressStore';
+import StripeCheckoutForm from '@/pages/checkout/components/StripeCheckoutForm';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { usePaymentStore } from '../store/usePaymentStore';
+import type { OrderSummaryProps } from '../types';
 import PaymentOptions from './PaymentOptions';
 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)!;
+
 export default function OrderSummary({
-  onOrder,
-  disabled,
-  isCreatingOrder,
-  onPaymentIntent,
-  isCreatingPaymentIntent,
   clientSecret,
-}: {
-  onOrder: VoidFunction;
-  disabled: boolean;
-  isCreatingOrder: boolean;
-  onPaymentIntent: VoidFunction;
-  isCreatingPaymentIntent: boolean;
-  clientSecret: string | undefined;
-}) {
-  const { selectedAddressId } = useAddressStore();
+  onConfirmCashOrder,
+  isProcessingCashOrder,
+  onCreatePaymentIntent,
+  isProcessingStripePayment,
+  selectedAddress,
+}: OrderSummaryProps) {
   const { selectedMethod } = usePaymentStore();
 
   return (
@@ -36,26 +33,34 @@ export default function OrderSummary({
 
       <OrderPriceSummary />
 
+      {selectedMethod === 'STRIPE' && clientSecret && (
+        <Elements stripe={stripePromise} options={{ clientSecret }}>
+          <StripeCheckoutForm />
+        </Elements>
+      )}
+
       {selectedMethod === 'CASH_ON_DELIVERY' && (
         <Button
           className='w-full disabled:opacity-50'
-          onClick={onOrder}
-          disabled={isCreatingOrder || disabled || !selectedAddressId}
+          onClick={onConfirmCashOrder}
+          disabled={!selectedAddress || isProcessingCashOrder}
         >
-          {isCreatingOrder ? <Spinner /> : <span> Confirm Order</span>}
+          {isProcessingCashOrder ? <Spinner /> : <span> Confirm Order</span>}
         </Button>
       )}
 
-      {selectedMethod === 'STRIPE' && (
+      {selectedMethod === 'STRIPE' && !clientSecret && (
         <Button
           className='w-full disabled:opacity-50'
-          onClick={onPaymentIntent}
-          disabled={isCreatingPaymentIntent || disabled || !!clientSecret}
+          onClick={onCreatePaymentIntent}
+          disabled={
+            !selectedAddress || isProcessingStripePayment || !!clientSecret
+          }
         >
-          {isCreatingPaymentIntent ? (
+          {isProcessingStripePayment ? (
             <Spinner />
           ) : (
-            <span> pay with stripe</span>
+            <span> Pay with stripe</span>
           )}
         </Button>
       )}

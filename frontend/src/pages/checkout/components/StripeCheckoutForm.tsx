@@ -1,18 +1,22 @@
+import { useState } from 'react';
+
+import toast from 'react-hot-toast';
+
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+
 import {
   PaymentElement,
   useElements,
   useStripe,
 } from '@stripe/react-stripe-js';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function StripeCheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isPaymentReady, setIsPaymentReady] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -42,18 +46,18 @@ export default function StripeCheckoutForm() {
   }
 
   return (
-    <Dialog open>
-      <DialogContent className='sm:max-w-md'>
-        <form
-          onSubmit={handleSubmit}
-          className='max-w-md mx-auto p-6 bg-white rounded-xl border border-input space-y-4'
-        >
-          <PaymentElement />
-          <Button type='submit' disabled={isProcessing} className='w-full'>
-            {isProcessing ? 'Processing...' : 'Pay'}
-          </Button>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <form
+      onSubmit={handleSubmit}
+      className='max-w-md mx-auto p-4 rounded-md border border-input space-y-4'
+    >
+      <PaymentElement onReady={() => setIsPaymentReady(true)} />
+      <Button
+        type='submit'
+        disabled={isProcessing || !isPaymentReady}
+        className='w-full disabled:opacity-50'
+      >
+        {isProcessing ? <Spinner /> : <span> Pay</span>}
+      </Button>
+    </form>
   );
 }

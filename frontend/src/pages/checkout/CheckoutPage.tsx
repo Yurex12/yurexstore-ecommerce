@@ -1,27 +1,21 @@
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import { Separator } from '@/components/ui/separator';
 
-import CheckoutItemsList from './components/CheckoutItemsList';
-import InlineError from '@/components/InlineError';
-import EmptyState from '@/components/EmptyState';
 import FullPageLoader from '@/components/FullPageLoader';
+import InlineError from '@/components/InlineError';
+import CheckoutItemsList from './components/CheckoutItemsList';
 import CheckoutSkeleton from './components/CheckoutSkeleton';
 
-import { useAddressStore } from '@/features/address/store/useAddressStore';
-import { usePaymentStore } from '@/features/order/store/usePaymentStore';
-import { useCreateOrder } from '@/features/order/hooks/useCreateOrder';
 import { CustomerAddress } from '@/features/address/components/CustomerAddress';
-import OrderSummary from '@/features/order/components/OrderSummary';
+import { useAddressStore } from '@/features/address/store/useAddressStore';
 import { useCart } from '@/features/cart/hooks/useCart';
+import OrderSummary from '@/features/order/components/OrderSummary';
+import { useCreateOrder } from '@/features/order/hooks/useCreateOrder';
+import { usePaymentStore } from '@/features/order/store/usePaymentStore';
 import useCreatePaymentIntent from '@/hooks/useCreatePaymentIntent';
-import StripeCheckoutForm from './components/StripeCheckoutForm';
-import { useState } from 'react';
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)!;
 
 export default function CheckoutPage() {
   const { cart, isPending: isFetchingCart, error } = useCart();
@@ -41,7 +35,7 @@ export default function CheckoutPage() {
 
   if (error) return <InlineError message='Unable to load your cart' />;
 
-  if (!cart?.length) return <EmptyState message='Your cart is empty' />;
+  if (!cart?.length) return <Navigate to='/shop' replace />;
 
   const selectedAddress = addresses?.find((a) => a.id === selectedAddressId);
 
@@ -51,7 +45,7 @@ export default function CheckoutPage() {
     quantity: cartItem.quantity,
   }));
 
-  function handleOrder() {
+  function confirmCashOrder() {
     if (!selectedAddress || !selectedAddress.phone) {
       toast.error('Please select a valid address before placing your order');
       return;
@@ -74,7 +68,7 @@ export default function CheckoutPage() {
     );
   }
 
-  function handlePaymentIntent() {
+  function createStripePaymentIntent() {
     if (!selectedAddress || !selectedAddress.phone) {
       toast.error('Please select a valid address before placing your order');
       return;
@@ -111,22 +105,16 @@ export default function CheckoutPage() {
         </div>
 
         <OrderSummary
-          onOrder={handleOrder}
-          disabled={!selectedAddress}
-          isCreatingOrder={isCreatingOrder}
-          onPaymentIntent={handlePaymentIntent}
-          isCreatingPaymentIntent={isCreatingPaymentIntent}
+          onConfirmCashOrder={confirmCashOrder}
+          selectedAddress={selectedAddress}
+          isProcessingCashOrder={isCreatingOrder}
+          isProcessingStripePayment={isCreatingPaymentIntent}
+          onCreatePaymentIntent={createStripePaymentIntent}
           clientSecret={clientSecret}
         />
       </div>
 
       {isCreatingOrder && <FullPageLoader text='Placing your order...' />}
-
-      {selectedMethod === 'STRIPE' && clientSecret && (
-        <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <StripeCheckoutForm />
-        </Elements>
-      )}
     </div>
   );
 }

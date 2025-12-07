@@ -194,7 +194,13 @@ export const getUserData = expressAsyncHandler(
 //@access private(ADMINS ONLY)
 export const getUsersData = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      select: {
+        createdAt: true,
+        name: true,
+        email: true,
+      },
+    });
 
     res.json({
       success: true,

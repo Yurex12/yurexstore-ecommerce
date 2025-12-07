@@ -14,6 +14,7 @@ export function useUpdateProduct() {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-products'] });
       toast.success('Product updated successfully');
     },
 

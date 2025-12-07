@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import useSignOut from '@/features/auth/hooks/useSignOut';
+import useUser from '@/features/auth/hooks/useUser';
 import {
   ChevronDown,
   ChevronUp,
@@ -25,13 +26,17 @@ export default function AccountActions() {
   const navigate = useNavigate();
   const { signOut, isPending: isSigningOut } = useSignOut();
 
+  const { user } = useUser();
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       {window.innerWidth > MOBILE_SCREEN ? (
         <DropdownMenuTrigger asChild>
           <button className='flex items-center justify-center gap-x-2 rounded-md px-3 py-2 text-sm text-foreground/80 transition hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent outline-0'>
             <UserCheck2 className='size-5' />
-            <span className='font-medium'>Hi, Yusuf</span>
+            <span className='font-medium'>
+              Hi, {user?.name.split(' ')[0] || 'user'}
+            </span>
             <span>
               {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </span>

@@ -4,7 +4,6 @@ import expressAsyncHandler from 'express-async-handler';
 import prisma from '../lib/prisma';
 
 import { CartSchema } from '../schemas/cartSchema';
-import { ca } from 'zod/v4/locales';
 
 //@desc fetch user Cart
 //@route GET api/cart/
@@ -21,17 +20,16 @@ export const getCart = expressAsyncHandler(
         product: {
           select: {
             id: true,
-            images: true,
+            images: {
+              take: 1,
+              select: {
+                url: true,
+              },
+            },
             name: true,
             price: true,
             quantity: true,
             variantTypeName: true,
-
-            category: {
-              select: {
-                name: true,
-              },
-            },
           },
         },
         productVariant: true,
@@ -49,8 +47,9 @@ export const getCart = expressAsyncHandler(
           return null;
         }
 
-        const availableStock =
-          cartItem.productVariant?.quantity || cartItem.product.quantity;
+        const availableStock = cartItem.productVariant
+          ? cartItem.productVariant.quantity
+          : cartItem.product.quantity;
 
         // product out of stock
         if (availableStock === 0) {
