@@ -5,6 +5,7 @@ import { validateData } from '../middlewares/validation';
 import { validateToken } from '../middlewares/validateTokenHandler';
 
 import {
+  checkOrderStatus,
   createOrder,
   getOrder,
   getOrders,
@@ -15,6 +16,8 @@ import { OrderSchema } from '../schemas/orderSchema';
 const router = express.Router();
 
 router.get('/', validateToken, getOrders);
+
+router.get('/status', validateToken, checkOrderStatus);
 
 router.get('/:id', validateToken, getOrder);
 

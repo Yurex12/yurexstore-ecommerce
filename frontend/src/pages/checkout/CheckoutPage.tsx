@@ -98,7 +98,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <Elements stripe={stripePromise}>
+    <div>
       <div className='grid grid-cols-1 lg:grid-cols-[60%_35%] gap-5 justify-between lg:space-y-8'>
         <div className='space-y-6'>
           <CustomerAddress />
@@ -123,8 +123,10 @@ export default function CheckoutPage() {
       {isCreatingOrder && <FullPageLoader text='Placing your order...' />}
 
       {selectedMethod === 'STRIPE' && clientSecret && (
-        <StripeCheckoutForm clientSecret={clientSecret} />
+        <Elements stripe={stripePromise} options={{ clientSecret }}>
+          <StripeCheckoutForm />
+        </Elements>
       )}
-    </Elements>
+    </div>
   );
 }

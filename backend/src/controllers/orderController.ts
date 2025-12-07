@@ -460,3 +460,42 @@ export const cancelOrder = expressAsyncHandler(
     });
   }
 );
+
+//@desc check order status
+//@route GET api/orders/status?paymentId
+//@access PRIVATE
+export const checkOrderStatus = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const paymentIntentId = req.query.paymentId as string;
+    const userId = req.user.userId;
+
+    const order = await prisma.order.findFirst({
+      where: {
+        paymentIntentId,
+        paymentStatus: 'CONFIRMED',
+        userId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!order) {
+      res.status(202).json({
+        success: true,
+        message: 'Order still processing',
+        status: 'PROCESSING',
+        orderId: null,
+      });
+
+      return;
+    }
+
+    res.json({
+      success: true,
+      message: 'Order has been placed',
+      orderId: order.id,
+      status: 'CONFIRMED',
+    });
+  }
+);

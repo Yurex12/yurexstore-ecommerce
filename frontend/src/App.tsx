@@ -38,6 +38,7 @@ import AdminColorsPage from './pages/Color/AdminColorsPage';
 import PendingReviewsPage from './pages/PendingReviews/PendingReviewsPage';
 import ProductDetailsPage from './pages/ProductDetails/ProductDetailsPage';
 import CreateAddressPage from './pages/CreateAddress/CreateAddressPage';
+import OrderConfirmationPage from './pages/OrderConfirmation/OrderConfirmationPage';
 
 const queryClient = new QueryClient();
 
@@ -87,8 +88,15 @@ export default function App() {
               <Route path='/account/menu' element={<AccountMobileMenu />} />
             </Route>
           </Route>
+
           <Route path='/login' element={<SignInPage />} />
           <Route path='/register' element={<SignUpPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route
+              path='/order-confirmation'
+              element={<OrderConfirmationPage />}
+            />
+          </Route>
           {/* Admin */}
           <Route
             element={

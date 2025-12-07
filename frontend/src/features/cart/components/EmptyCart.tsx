@@ -6,7 +6,7 @@ export default function EmptyCart() {
   const navigate = useNavigate();
 
   return (
-    <div className='flex flex-col items-center justify-center py-20 gap-4 text-center text-foreground/70'>
+    <div className='flex flex-col items-center h-[90vh] justify-center gap-4 text-center text-foreground/70'>
       <ShoppingCart className='w-16 h-16 text-muted-foreground' />
       <h2 className='text-xl font-semibold'>Your cart is empty</h2>
       <p className='text-sm text-foreground/60'>

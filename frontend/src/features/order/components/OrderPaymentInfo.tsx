@@ -1,12 +1,14 @@
 import { formatCurrency } from '@/lib/helpers';
 
-import type { PaymentInfoProps } from '../types';
-
 export default function OrderPaymentInfo({
   paymentMethod,
   deliveryFee,
   totalPrice,
-}: PaymentInfoProps) {
+}: {
+  paymentMethod: string;
+  deliveryFee: number;
+  totalPrice: number;
+}) {
   return (
     <div className='border rounded-xl p-4 bg-background space-y-4 flex-1'>
       <h3 className='font-semibold'>Payment Information</h3>

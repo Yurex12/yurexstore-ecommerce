@@ -64,6 +64,11 @@ export type CreateOrderResponse = ApiResponseBase & {
   orderId: string;
 };
 
+export type GetOrderStatusResponse = ApiResponseBase & {
+  orderId: string | null;
+  status: 'PROCESSING' | 'CONFIRMED';
+};
+
 export type AdminOrderDetails = Order & {
   user: { name: string };
 };

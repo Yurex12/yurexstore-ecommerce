@@ -7,6 +7,7 @@ import type {
   CreateOrderInput,
   OrderResponse,
   OrdersResponse,
+  GetOrderStatusResponse,
 } from '../types';
 import type { ApiResponseBase } from '@/services/types';
 
@@ -17,6 +18,20 @@ export async function getOrders() {
     return data.orders;
   } catch (error) {
     handleApiError(error, 'Failed to fetch orders');
+  }
+}
+
+export async function getOrderStatus(paymentId: string) {
+  try {
+    const { data } = await api.get<GetOrderStatusResponse>(`/orders/status`, {
+      params: {
+        paymentId,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    handleApiError(error, 'Failed to fetch order');
   }
 }
 
