@@ -4,9 +4,12 @@ import { Separator } from '@/components/ui/separator';
 import { Edit, Trash2 } from 'lucide-react';
 import type { Address } from '../types';
 import { useDeleteAddress } from '../hooks/useDeleteAddress';
+import { useChangeDefaultAddress } from '../hooks/useChangeDefaultAddress';
 
 export default function AddressCards({ address }: { address: Address }) {
   const { deleteAddress, isPending: isDeleting } = useDeleteAddress();
+  const { setDefaultAddress, isPending: isChangingToDefaultAddress } =
+    useChangeDefaultAddress();
   return (
     <div
       key={address.id}
@@ -32,8 +35,8 @@ export default function AddressCards({ address }: { address: Address }) {
       {/* Actions */}
       <div className='flex items-center gap-2 justify-between'>
         <button
-          onClick={() => {}}
-          disabled={address.default || isDeleting}
+          onClick={() => setDefaultAddress(address.id)}
+          disabled={address.default || isDeleting || isChangingToDefaultAddress}
           className='font-semibold text-primary/70 bg-primary/5 text-sm py-2 px-4 rounded cursor-pointer disabled:cursor-not-allowed disabled:text-foreground/20'
         >
           Set as Default
@@ -45,7 +48,7 @@ export default function AddressCards({ address }: { address: Address }) {
             variant='secondary'
             className='text-primary'
             onClick={() => {}}
-            disabled={isDeleting}
+            // disabled={isDeleting}
           >
             <Edit size={16} />
           </Button>

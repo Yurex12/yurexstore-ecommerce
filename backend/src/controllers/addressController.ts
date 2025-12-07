@@ -15,6 +15,9 @@ export const getAddresses = expressAsyncHandler(
       where: {
         userId,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     res.json({
@@ -120,6 +123,82 @@ export const deleteAddress = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Successful.',
+    });
+  }
+);
+
+//@desc change default Address
+//@route PATCH api/addresses/:id
+//@access Private
+export const changeDefaultAddress = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user.userId;
+
+    const addressId = req.params.id;
+
+    const address = await prisma.address.findUnique({
+      where: {
+        id: addressId,
+      },
+    });
+
+    if (!address) {
+      res.status(404);
+      throw new Error('This address does not exist.');
+    }
+
+    if (address.default) {
+      res.status(400);
+      throw new Error('This is already your default address.');
+    }
+
+    const prevDefaultAddress = await prisma.address.findFirst({
+      where: {
+        userId,
+        default: true,
+      },
+      select: {
+        id: true,
+        default: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    if (!prevDefaultAddress) {
+      await prisma.address.update({
+        where: {
+          id: addressId,
+        },
+        data: {
+          default: true,
+        },
+      });
+    } else {
+      await prisma.$transaction(async (tx) => {
+        await tx.address.update({
+          where: {
+            id: prevDefaultAddress.id,
+          },
+          data: {
+            default: false,
+          },
+        });
+        await tx.address.update({
+          where: {
+            id: addressId,
+          },
+          data: {
+            default: true,
+          },
+        });
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Default address changed successfully.',
     });
   }
 );

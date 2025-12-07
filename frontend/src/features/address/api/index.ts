@@ -28,6 +28,18 @@ export async function deleteAddress(addressId: string) {
   }
 }
 
+export async function changeDefaultAddress(addressId: string) {
+  try {
+    const { data } = await api.patch<ApiResponseBase>(
+      `/addresses/${addressId}`
+    );
+
+    return data;
+  } catch (error) {
+    handleApiError(error, 'Failed to set as default address');
+  }
+}
+
 export async function createAddress(
   addressData: Omit<Address, 'id' | 'userId'>
 ) {
