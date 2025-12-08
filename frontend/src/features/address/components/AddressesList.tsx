@@ -1,7 +1,9 @@
 import InlineError from '@/components/InlineError';
-import { useAddresses } from '../hooks/useAddresses';
 import EmptyState from '@/components/EmptyState';
-import AddressCards from './AddressCards';
+
+import AddressCard from './AddressCard';
+
+import { useAddresses } from '../hooks/useAddresses';
 
 export default function AddressesList() {
   const { addresses, isPending, error } = useAddresses();
@@ -21,7 +23,7 @@ export default function AddressesList() {
   return (
     <div className='space-y-4'>
       {addresses.map((address) => (
-        <AddressCards key={address.id} address={address} />
+        <AddressCard key={address.id} address={address} />
       ))}
     </div>
   );

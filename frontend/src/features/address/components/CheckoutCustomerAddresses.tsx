@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { AddressForm } from './AddressForm';
-import { AddressSelection } from './AddressSelection';
+import { CheckoutAddressForm } from './CheckoutAddressForm';
+import { CheckoutAddressSelection } from './CheckoutAddressSelection';
 import { EmptyAddress } from './EmptyAddress';
 
 import { useAddressStore } from '../store/useAddressStore';
@@ -13,7 +13,7 @@ import { useAddresses } from '../hooks/useAddresses';
 import CustomerAddressSkeleton from './CustomerAddressSkeleton';
 import InlineError from '@/components/InlineError';
 
-export function CustomerAddress() {
+export function CheckoutCustomerAddresses() {
   const { addresses, error, isPending } = useAddresses();
   const {
     view,
@@ -72,8 +72,8 @@ export function CustomerAddress() {
       )}
 
       {view === 'display' && !addresses?.length && <EmptyAddress />}
-      {view === 'form' && <AddressForm />}
-      {view === 'selection' && <AddressSelection />}
+      {view === 'form' && <CheckoutAddressForm />}
+      {view === 'selection' && <CheckoutAddressSelection />}
     </div>
   );
 }

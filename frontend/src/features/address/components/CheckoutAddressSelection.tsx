@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { RadioGroup } from '@/components/ui/radio-group';
 import { Plus } from 'lucide-react';
-import { AddressCard } from './AddressCard';
+import { CheckoutAddressCard } from './CheckoutAddressCard';
 import { useAddressStore } from '../store/useAddressStore';
 
-export function AddressSelection() {
+export function CheckoutAddressSelection() {
   const {
     addresses,
     tempSelectedId,
@@ -19,7 +19,7 @@ export function AddressSelection() {
       <RadioGroup value={tempSelectedId} onValueChange={selectAddress}>
         <div className='max-h-[400px] overflow-y-auto space-y-4 scrollbar'>
           {addresses.map((address) => (
-            <AddressCard key={address.id} address={address} />
+            <CheckoutAddressCard key={address.id} {...address} />
           ))}
         </div>
       </RadioGroup>

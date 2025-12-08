@@ -14,7 +14,7 @@ export default function AddressPage() {
       {/* Header */}
       <div className='flex items-center justify-between'>
         <h2 className='text-xl font-semibold text-foreground'>
-          Addresses ({addresses?.length})
+          {addresses?.length ? `Addresses (${addresses.length})` : 'Addresses'}
         </h2>
         <Button onClick={() => navigate('/account/addresses/new')}>
           Add New Address

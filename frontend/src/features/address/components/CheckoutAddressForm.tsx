@@ -20,7 +20,7 @@ import { useCreateAddress } from '../hooks/useCreateAddress';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 
-export function AddressForm() {
+export function CheckoutAddressForm() {
   const { showSelectedAddress } = useAddressStore();
   const { createAddress, isPending } = useCreateAddress();
 

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { changeDefaultAddress } from '../api';
 import toast from 'react-hot-toast';
+import { changeDefaultAddress } from '../api';
 
 export function useChangeDefaultAddress() {
   const queryClient = useQueryClient();
