@@ -124,8 +124,6 @@ export default function AdminProductEditForm() {
       <NoData content='You need at least one category and one color set up before you can add products. Please create them first.' />
     );
 
-  if (!product) return <NoData content='Product not found' />;
-
   async function onSubmit(data: ProductEditSchema) {
     const needsUpload = data.images?.filter((image) => image instanceof File);
 

@@ -9,7 +9,7 @@ import InlineError from '@/components/InlineError';
 import CheckoutItemsList from './components/CheckoutItemsList';
 import CheckoutSkeleton from './components/CheckoutSkeleton';
 
-import { CustomerAddress } from '@/features/address/components/CustomerAddress';
+import { CheckoutCustomerAddresses } from '@/features/address/components/CheckoutCustomerAddresses';
 import { useAddressStore } from '@/features/address/store/useAddressStore';
 import { useCart } from '@/features/cart/hooks/useCart';
 import OrderSummary from '@/features/order/components/OrderSummary';
@@ -95,7 +95,7 @@ export default function CheckoutPage() {
     <div>
       <div className='grid grid-cols-1 lg:grid-cols-[60%_35%] gap-5 justify-between lg:space-y-8'>
         <div className='space-y-6'>
-          <CustomerAddress />
+          <CheckoutCustomerAddresses />
 
           <div className='border space-y-2 px-4 py-4 rounded-md'>
             <h1 className='text-xl font-semibold'>Order Items</h1>

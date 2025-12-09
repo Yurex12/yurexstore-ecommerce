@@ -4,25 +4,40 @@ import { validateData } from '../middlewares/validation';
 
 import { validateToken } from '../middlewares/validateTokenHandler';
 
-import { addressSchema } from '../schemas/addressSchema';
+import {
+  createAddressSchema,
+  updateAddressSchema,
+} from '../schemas/addressSchema';
 import {
   changeDefaultAddress,
   createAddress,
   deleteAddress,
+  getAddress,
   getAddresses,
+  updateAddress,
 } from '../controllers/addressController';
 
 const router = express.Router();
 
 router.get('/', validateToken, getAddresses);
 
-router.post('/', validateToken, validateData(addressSchema), createAddress);
+router.get('/:id', validateToken, getAddress);
 
-// router.patch('/increment/:cartItemId', validateToken, incrementCartItem);
+router.post(
+  '/',
+  validateToken,
+  validateData(createAddressSchema),
+  createAddress
+);
+
+router.put(
+  '/:id',
+  validateToken,
+  validateData(updateAddressSchema),
+  updateAddress
+);
 
 router.patch('/:id', validateToken, changeDefaultAddress);
-
-// router.delete('/:cartItemId', validateToken, removeCartItem);
 
 router.delete('/:id', validateToken, deleteAddress);
 

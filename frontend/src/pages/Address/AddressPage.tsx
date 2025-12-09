@@ -16,7 +16,7 @@ export default function AddressPage() {
         <h2 className='text-xl font-semibold text-foreground'>
           {addresses?.length ? `Addresses (${addresses.length})` : 'Addresses'}
         </h2>
-        <Button onClick={() => navigate('/account/addresses/new')}>
+        <Button onClick={() => navigate('/account/addresses/form')}>
           Add New Address
         </Button>
       </div>

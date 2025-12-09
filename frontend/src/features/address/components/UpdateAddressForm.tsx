@@ -3,24 +3,17 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateAddress as updateAddressApi } from '../api';
 
 import { toast } from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
 
-export function useUpdateAddress() {
-  const { id: addressId } = useParams();
+export function useUpdateAddress(addressId: string) {
   const queryClient = useQueryClient();
   const {
     mutate: updateAddress,
     isPending,
     error,
   } = useMutation({
-    mutationFn: updateAddressApi,
+    mutationFn: () => updateAddressApi(addressId),
     onSuccess() {
-      queryClient.invalidateQueries({
-        queryKey: ['addresses', addressId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['addresses'],
-      });
+      queryClient.invalidateQueries({ queryKey: ['addresses', addressId] });
       toast.success('Address updated successfully');
     },
     onError(error) {

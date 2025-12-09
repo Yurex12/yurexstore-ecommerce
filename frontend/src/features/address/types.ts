@@ -1,3 +1,5 @@
+import type { ApiResponseBase } from '@/services/types';
+
 export type Address = {
   id: string;
   firstName: string;
@@ -10,12 +12,18 @@ export type Address = {
   userId: string;
 };
 
-export type GetAddressResponse = {
-  success: boolean;
-  message: string;
+export type GetAddressResponse = ApiResponseBase & {
+  address: Address;
+};
+export type GetAddressesResponse = ApiResponseBase & {
   addresses: Address[];
 };
 export type CreateAddressResponse = {
+  success: boolean;
+  message: string;
+  address: Address;
+};
+export type UpdateAddressResponse = {
   success: boolean;
   message: string;
   address: Address;

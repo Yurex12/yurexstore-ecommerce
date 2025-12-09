@@ -12,8 +12,8 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import {
-  addressSchema,
-  type AddressFormValues,
+  createAddressSchema,
+  type CreateAddressSchema,
 } from '../schemas/addressSchema';
 import { useAddressStore } from '../store/useAddressStore';
 import { useCreateAddress } from '../hooks/useCreateAddress';
@@ -24,8 +24,8 @@ export function CheckoutAddressForm() {
   const { showSelectedAddress } = useAddressStore();
   const { createAddress, isPending } = useCreateAddress();
 
-  const form = useForm<AddressFormValues>({
-    resolver: zodResolver(addressSchema),
+  const form = useForm<CreateAddressSchema>({
+    resolver: zodResolver(createAddressSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -37,7 +37,7 @@ export function CheckoutAddressForm() {
     },
   });
 
-  function onSubmit(values: AddressFormValues) {
+  function onSubmit(values: CreateAddressSchema) {
     createAddress(values, {
       onSuccess() {
         showSelectedAddress();

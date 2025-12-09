@@ -1,16 +1,31 @@
 import { api, handleApiError } from '@/services/api';
+import type { ApiResponseBase } from '@/services/types';
 import type {
-  Address,
+  CreateAddressSchema,
+  UpdateAddressSchema,
+} from '../schemas/addressSchema';
+import type {
   CreateAddressResponse,
+  GetAddressesResponse,
   GetAddressResponse,
 } from '../types';
-import type { ApiResponseBase } from '@/services/types';
 
 export async function getAddresses() {
   try {
-    const { data } = await api.get<GetAddressResponse>('/addresses');
+    const { data } = await api.get<GetAddressesResponse>('/addresses');
 
     return data.addresses;
+  } catch (error) {
+    handleApiError(error, 'Failed to fetch addresses');
+  }
+}
+export async function getAddress(addressId: string) {
+  try {
+    const { data } = await api.get<GetAddressResponse>(
+      `/addresses/${addressId}`
+    );
+
+    return data.address;
   } catch (error) {
     handleApiError(error, 'Failed to fetch address');
   }
@@ -40,9 +55,7 @@ export async function changeDefaultAddress(addressId: string) {
   }
 }
 
-export async function createAddress(
-  addressData: Omit<Address, 'id' | 'userId'>
-) {
+export async function createAddress(addressData: CreateAddressSchema) {
   try {
     const { data } = await api.post<CreateAddressResponse>(
       '/addresses',
@@ -50,6 +63,25 @@ export async function createAddress(
     );
 
     return data.address;
+  } catch (error) {
+    handleApiError(error, 'Failed to create address');
+  }
+}
+
+export async function updateAddress({
+  addressData,
+  addressId,
+}: {
+  addressData: UpdateAddressSchema;
+  addressId: string;
+}) {
+  try {
+    const { data } = await api.put<CreateAddressResponse>(
+      `/addresses/${addressId}`,
+      addressData
+    );
+
+    return data;
   } catch (error) {
     handleApiError(error, 'Failed to create address');
   }

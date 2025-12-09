@@ -5,11 +5,14 @@ import { Edit, Trash2 } from 'lucide-react';
 import type { Address } from '../types';
 import { useDeleteAddress } from '../hooks/useDeleteAddress';
 import { useChangeDefaultAddress } from '../hooks/useChangeDefaultAddress';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddressCards({ address }: { address: Address }) {
   const { deleteAddress, isPending: isDeleting } = useDeleteAddress();
   const { setDefaultAddress, isPending: isChangingToDefaultAddress } =
     useChangeDefaultAddress();
+
+  const navigate = useNavigate();
   return (
     <div
       key={address.id}
@@ -47,8 +50,7 @@ export default function AddressCards({ address }: { address: Address }) {
             size='sm'
             variant='secondary'
             className='text-primary'
-            onClick={() => {}}
-            // disabled={isDeleting}
+            onClick={() => navigate(`/account/addresses/form/${address.id}`)}
           >
             <Edit size={16} />
           </Button>

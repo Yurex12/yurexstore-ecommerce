@@ -1,5 +1,5 @@
 import useUser from '@/features/auth/hooks/useUser';
-import AddressCard from './components/AddressCard';
+import AddressCard from './components/AccountOverviewAddressCard';
 import ProfileCard from './components/ProfileCard';
 import AccountOverviewSkeleton from './components/AccountOverviewSkeleton';
 

@@ -13,19 +13,33 @@ import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { useCreateAddress } from '../hooks/useCreateAddress';
-import {
-  type CreateAddressSchema,
-  createAddressSchema,
-} from '../schemas/addressSchema';
 
-export function CreateAddressForm() {
-  const { createAddress, isPending: isCreatingAddress } = useCreateAddress();
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useAddress } from '../hooks/useAddress';
+import { useUpdateAddress } from '../hooks/useUpdateAddress';
+import {
+  updateAddressSchema,
+  type UpdateAddressSchema,
+} from '../schemas/addressSchema';
+import { PageLoader } from '@/components/PageLoader';
+import ErrorState from '@/components/ErrorState';
+
+export function EditAddressForm() {
   const navigate = useNavigate();
 
-  const form = useForm<CreateAddressSchema>({
-    resolver: zodResolver(createAddressSchema),
+  const { updateAddress, isPending: isUpdating } = useUpdateAddress();
+
+  const { id: addressId } = useParams();
+
+  const {
+    address,
+    error,
+    isPending: isFetchingAddress,
+  } = useAddress(addressId);
+
+  const form = useForm<UpdateAddressSchema>({
+    resolver: zodResolver(updateAddressSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -37,16 +51,29 @@ export function CreateAddressForm() {
     },
   });
 
-  function onSubmit(values: CreateAddressSchema) {
-    createAddress(values, {
-      onSuccess() {
-        form.reset();
-        navigate('/account/addresses');
-      },
-    });
+  useEffect(() => {
+    if (address) {
+      form.reset(address);
+    }
+  }, [address, form]);
+
+  function onSubmit(values: UpdateAddressSchema) {
+    updateAddress(
+      { addressData: values, addressId: address!.id },
+      {
+        onSuccess() {
+          form.reset();
+          navigate('/account/addresses');
+        },
+      }
+    );
   }
 
-  const isSubmitting = form.formState.isSubmitting || isCreatingAddress;
+  if (isFetchingAddress) return <PageLoader message='Loading address' />;
+
+  if (error) return <ErrorState message={error.message} />;
+
+  const isSubmitting = form.formState.isSubmitting || isUpdating;
 
   return (
     <Form {...form}>
@@ -180,7 +207,7 @@ export function CreateAddressForm() {
                 <Checkbox
                   disabled={isSubmitting}
                   checked={field.value}
-                  onCheckedChange={field.onChange}
+                  onCheckedChange={(checked) => field.onChange(checked)}
                 />
               </FormControl>
               <FormLabel className='text-sm font-normal cursor-pointer'>
@@ -191,7 +218,7 @@ export function CreateAddressForm() {
         />
 
         <Button type='submit' className='w-34'>
-          {isSubmitting ? <Spinner /> : <span>Create Address</span>}
+          {isSubmitting ? <Spinner /> : <span>Edit Address</span>}
         </Button>
       </form>
     </Form>

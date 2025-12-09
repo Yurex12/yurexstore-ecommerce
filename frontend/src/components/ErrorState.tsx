@@ -5,7 +5,7 @@ export default function ErrorState({
   message?: string;
 }) {
   return (
-    <div className='flex h-[70vh] flex-col items-center justify-center p-4'>
+    <div className='flex min-h-[75vh] md:min-h-[60vh] flex-col items-center justify-center p-4'>
       <div className='max-w-md text-center'>
         <LucideAlertCircle className='mx-auto text-red-500' size={50} />
         <h2 className='mt-4 text-2xl font-bold text-gray-700'>Error</h2>

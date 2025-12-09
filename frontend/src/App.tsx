@@ -35,10 +35,12 @@ import AdminUsersPage from './pages/AdminUsers/AdminUsersPage';
 import AdminCategoriesPage from './pages/Categories/AdminCategoriesPage';
 import CheckoutPage from './pages/checkout/CheckoutPage';
 import AdminColorsPage from './pages/Color/AdminColorsPage';
+
+import OrderConfirmationPage from './pages/OrderConfirmation/OrderConfirmationPage';
 import PendingReviewsPage from './pages/PendingReviews/PendingReviewsPage';
 import ProductDetailsPage from './pages/ProductDetails/ProductDetailsPage';
 import CreateAddressPage from './pages/CreateAddress/CreateAddressPage';
-import OrderConfirmationPage from './pages/OrderConfirmation/OrderConfirmationPage';
+import EditAddressPage from './pages/EditAddress/EditAddressPage';
 
 const queryClient = new QueryClient();
 
@@ -82,7 +84,14 @@ export default function App() {
                   element={<WriteReviewPage />}
                 />
                 <Route path='addresses' element={<AddressPage />} />
-                <Route path='addresses/new' element={<CreateAddressPage />} />
+                <Route
+                  path='addresses/form/new'
+                  element={<CreateAddressPage />}
+                />
+                <Route
+                  path='addresses/form/:id'
+                  element={<EditAddressPage />}
+                />
               </Route>
 
               <Route path='/account/menu' element={<AccountMobileMenu />} />
@@ -116,10 +125,7 @@ export default function App() {
               path='/admin/products/edit/:productId'
               element={<AdminProductEditPage />}
             />
-            <Route
-              path='/admin/products/edit/:productId'
-              element={<AdminProductEditPage />}
-            />
+
             <Route path='/admin/orders' element={<AdminOrdersPage />} />
             <Route
               path='/admin/orders/:orderId'

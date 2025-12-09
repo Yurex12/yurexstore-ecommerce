@@ -2,9 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 import expressAsyncHandler from 'express-async-handler';
 
 import prisma from '../lib/prisma';
-import { AddressSchema } from '../schemas/addressSchema';
+import {
+  CreateAddressSchema,
+  UpdateAddressSchema,
+} from '../schemas/addressSchema';
 
-//@desc fetch user Address
+//@desc fetch user Addresses
 //@route GET api/addresses/
 //@access Private
 export const getAddresses = expressAsyncHandler(
@@ -23,7 +26,36 @@ export const getAddresses = expressAsyncHandler(
     res.json({
       success: true,
       message: 'Successful.',
-      addresses: addresses,
+      addresses,
+    });
+  }
+);
+
+//@desc fetch user Address
+//@route GET api/addresses/:id
+//@access Private
+export const getAddress = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user.userId;
+
+    const id = req.params.id as string;
+
+    const address = await prisma.address.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!address) {
+      res.status(404);
+      throw new Error('Address not found');
+    }
+
+    res.json({
+      success: true,
+      message: 'Successful.',
+      address,
     });
   }
 );
@@ -35,7 +67,7 @@ export const createAddress = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user.userId;
 
-    const { default: isDefault, ...rest } = req.body as AddressSchema;
+    const { default: isDefault, ...rest } = req.body as CreateAddressSchema;
 
     const hasAddress = await prisma.address.count({ where: { userId } });
     const makeDefault = hasAddress === 0 || isDefault;
@@ -61,6 +93,139 @@ export const createAddress = expressAsyncHandler(
       success: true,
       message: 'Successful.',
       address: newAddress,
+    });
+  }
+);
+
+//@desc update an Address
+//@route PUT api/addresses/:id
+//@access Private
+export const updateAddress = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user.userId;
+
+    const id = req.params.id as string;
+
+    const { default: isDefault, ...addressData } =
+      req.body as UpdateAddressSchema;
+
+    const address = await prisma.address.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        default: true,
+      },
+    });
+
+    if (!address) {
+      res.status(404);
+      throw new Error('Address not found');
+    }
+
+    const isDefaultAddress = address.default;
+
+    await prisma.$transaction(
+      async (tx) => {
+        if (
+          (isDefaultAddress && isDefault) ||
+          (!isDefaultAddress && !isDefault)
+        ) {
+          await prisma.address.update({
+            where: { id },
+            data: addressData,
+          });
+
+          return;
+        }
+
+        if (isDefaultAddress && !isDefault) {
+          const otherAddresses = await tx.address.findMany({
+            where: {
+              userId,
+              id: { not: id },
+            },
+            select: {
+              id: true,
+            },
+            orderBy: {
+              createdAt: 'desc',
+            },
+          });
+          if (otherAddresses.length >= 1) {
+            await Promise.all([
+              tx.address.update({
+                where: {
+                  id: otherAddresses[0].id,
+                },
+                data: {
+                  default: true,
+                },
+              }),
+              tx.address.update({
+                where: { id },
+                data: { ...addressData, default: false },
+              }),
+            ]);
+          } else {
+            await tx.address.update({
+              where: { id },
+              data: addressData,
+            });
+          }
+
+          return;
+        }
+
+        if (!isDefaultAddress && isDefault) {
+          const currentDefault = await tx.address.findFirst({
+            where: {
+              userId,
+              default: true,
+            },
+            select: {
+              id: true,
+            },
+          });
+
+          if (currentDefault) {
+            await Promise.all([
+              tx.address.update({
+                where: {
+                  id: currentDefault.id,
+                },
+                data: {
+                  default: false,
+                },
+              }),
+              tx.address.update({
+                where: {
+                  id,
+                },
+                data: {
+                  default: true,
+                },
+              }),
+            ]);
+          } else {
+            await tx.address.update({
+              where: {
+                id,
+              },
+              data: {
+                default: true,
+              },
+            });
+          }
+        }
+      },
+      { timeout: 10_000 }
+    );
+
+    res.json({
+      success: true,
+      message: 'Successful.',
     });
   }
 );

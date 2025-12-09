@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const addressSchema = z.object({
+export const createAddressSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   deliveryAddress: z.string().min(1, 'Delivery address is required'),
@@ -13,4 +13,7 @@ export const addressSchema = z.object({
     .max(15, 'Phone number is too long'),
 });
 
-export type AddressSchema = z.infer<typeof addressSchema>;
+export const updateAddressSchema = createAddressSchema.partial();
+
+export type CreateAddressSchema = z.infer<typeof createAddressSchema>;
+export type UpdateAddressSchema = z.infer<typeof updateAddressSchema>;
