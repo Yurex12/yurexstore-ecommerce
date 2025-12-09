@@ -16,7 +16,7 @@ export function useUpdateAddress() {
     mutationFn: updateAddressApi,
     onSuccess() {
       queryClient.invalidateQueries({
-        queryKey: ['addresses', addressId],
+        queryKey: ['address', addressId],
       });
       queryClient.invalidateQueries({
         queryKey: ['addresses'],

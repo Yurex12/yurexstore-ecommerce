@@ -190,7 +190,7 @@ export function CreateAddressForm() {
           )}
         />
 
-        <Button type='submit' className='w-34'>
+        <Button type='submit' className='w-34' disabled={isSubmitting}>
           {isSubmitting ? <Spinner /> : <span>Create Address</span>}
         </Button>
       </form>

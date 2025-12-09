@@ -4,13 +4,12 @@ import EmptyState from '@/components/EmptyState';
 import AddressCard from './AddressCard';
 
 import { useAddresses } from '../hooks/useAddresses';
+import { AddressSkeleton } from './AddressesSkeleton';
 
 export default function AddressesList() {
   const { addresses, isPending, error } = useAddresses();
 
-  if (isPending) {
-    return <p>Loading</p>;
-  }
+  if (isPending) return <AddressSkeleton />;
 
   if (error) {
     return <InlineError message='unable to load address.' />;

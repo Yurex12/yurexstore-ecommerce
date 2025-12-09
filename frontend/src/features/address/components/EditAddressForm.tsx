@@ -207,7 +207,7 @@ export function EditAddressForm() {
                 <Checkbox
                   disabled={isSubmitting}
                   checked={field.value}
-                  onCheckedChange={(checked) => field.onChange(checked)}
+                  onCheckedChange={field.onChange}
                 />
               </FormControl>
               <FormLabel className='text-sm font-normal cursor-pointer'>
@@ -217,7 +217,7 @@ export function EditAddressForm() {
           )}
         />
 
-        <Button type='submit' className='w-34'>
+        <Button type='submit' className='w-34' disabled={isSubmitting}>
           {isSubmitting ? <Spinner /> : <span>Edit Address</span>}
         </Button>
       </form>

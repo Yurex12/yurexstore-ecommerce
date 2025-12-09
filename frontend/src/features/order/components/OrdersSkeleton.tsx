@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function OrdersSkeleton() {
   return (
     <ul className='space-y-4'>
-      {Array.from({ length: 3 }).map((_, i) => (
+      {Array.from({ length: 2 }).map((_, i) => (
         <div key={i} className='border rounded-xl p-5 space-y-4'>
           {/* Header */}
           <div className='flex items-center justify-between'>

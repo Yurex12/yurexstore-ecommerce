@@ -4,9 +4,11 @@ import InlineError from '@/components/InlineError';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAddresses } from '@/features/address/hooks/useAddresses';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddressCard() {
   const { addresses, isPending, error } = useAddresses();
+  const navigate = useNavigate();
 
   if (isPending) return <p>Loading</p>;
 
@@ -24,7 +26,11 @@ export default function AddressCard() {
         <CardTitle className='font-semibold text-lg text-foreground/90'>
           Address Book
         </CardTitle>
-        <Button variant='secondary' className='cursor-pointer'>
+        <Button
+          variant='secondary'
+          className='cursor-pointer'
+          onClick={() => navigate(`/account/addresses/form/${address.id}`)}
+        >
           <Edit />
         </Button>
       </CardHeader>
