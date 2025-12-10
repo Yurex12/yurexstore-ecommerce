@@ -12,7 +12,7 @@ export default function AddressesList() {
   if (isPending) return <AddressSkeleton />;
 
   if (error) {
-    return <InlineError message='unable to load address.' />;
+    return <InlineError message='Unable to load Addresses.' />;
   }
 
   if (!addresses?.length) {
