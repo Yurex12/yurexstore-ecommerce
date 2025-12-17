@@ -14,7 +14,8 @@ export function useCreateOrder() {
     mutationFn: createOrderApi,
     onSuccess() {
       toast.success('Order placed successfully');
-      queryClient.invalidateQueries({ queryKey: ['order', 'cart'] });
+      queryClient.invalidateQueries({ queryKey: ['order'] });
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
     onError: (error) => {
       let message = 'Failed to create order';

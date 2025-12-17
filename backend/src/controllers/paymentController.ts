@@ -6,18 +6,7 @@ import { Order } from '../schemas/orderSchema';
 import stripe from '../config/stripe';
 
 import Stripe from 'stripe';
-
-type OrderItem = {
-  productId: string;
-  productVariantId: string | null;
-  productVariantValue: string | null;
-  productName: string;
-  productPrice: number;
-  productImage: string;
-  quantity: number;
-};
-
-type OrderItems = OrderItem[];
+import { paymentQueue } from '../queue/paymentQueue';
 
 //@desc create payment Intent
 //@route GET api/payment/create-payment-intent
@@ -176,6 +165,147 @@ export const createPaymentIntent = expressAsyncHandler(
 //@route GET api/payment/create-payment-intent
 //@access PRIVATE
 
+// export const stripeWebhook = async (req: Request, res: Response) => {
+//   const sig = req.headers['stripe-signature']!;
+
+//   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+
+//   let event: Stripe.Event;
+
+//   try {
+//     event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+//   } catch (error) {
+//     res.status(400).send('Invalid signature');
+//     return;
+//   }
+
+//   try {
+//     if (event.type === 'payment_intent.succeeded') {
+//       const paymentIntent = event.data.object as Stripe.PaymentIntent;
+//       const checkoutId = paymentIntent.metadata?.checkoutId;
+//       const paymentIntentId = paymentIntent.id;
+
+//       const existing = await prisma.order.findUnique({
+//         where: { paymentIntentId },
+//       });
+
+//       if (existing) {
+//         res.status(200).send('Order already exist');
+//         return;
+//       }
+
+//       if (!checkoutId) {
+//         res.status(200).send('Missing checkout Id');
+//         return;
+//       }
+
+//       const checkout = await prisma.checkout.findUnique({
+//         where: { id: checkoutId },
+//       });
+
+//       if (!checkout) {
+//         res.status(200).send('Checkout not found');
+//         return;
+//       }
+
+//       if (new Date() > checkout.expiresAt) {
+//         await stripe.refunds.create({
+//           payment_intent: paymentIntentId,
+//           reason: 'requested_by_customer',
+//         });
+//         res.status(200).send('Checkout expired');
+
+//         return;
+//       }
+
+//       const checkoutData = checkout.data as {
+//         items: OrderItem[];
+//         deliveryFee: number;
+//         totalPrice: number;
+//         deliveryAddress: string;
+//         phone: string;
+//       };
+
+//       await prisma.$transaction(async (tx) => {
+//         await tx.order.create({
+//           data: {
+//             userId: checkout.userId,
+//             totalPrice: checkoutData.totalPrice,
+//             deliveryFee: checkoutData.deliveryFee,
+//             paymentMethod: 'STRIPE',
+//             paymentStatus: 'CONFIRMED',
+//             paymentIntentId,
+//             deliveryAddress: checkoutData.deliveryAddress,
+//             phone: checkoutData.phone,
+
+//             orderItems: {
+//               createMany: {
+//                 data: checkoutData.items.map((item) => ({
+//                   productId: item.productId,
+//                   productVariantId: item.productVariantId,
+//                   productPrice: item.productPrice,
+//                   productImage: item.productImage,
+//                   productName: item.productName,
+//                   quantity: item.quantity,
+//                 })),
+//               },
+//             },
+
+//             notifications: {
+//               create: {
+//                 userId: checkout.userId,
+//                 content: 'Your order has been placed successfully',
+//               },
+//             },
+//           },
+//         });
+
+//         //  clean up
+//         await Promise.all(
+//           checkoutData.items.map((item) => {
+//             if (item.productVariantId) {
+//               return Promise.all([
+//                 tx.productVariant.update({
+//                   where: { id: item.productVariantId },
+//                   data: { quantity: { decrement: item.quantity } },
+//                 }),
+//                 tx.product.update({
+//                   where: { id: item.productId },
+//                   data: { quantity: { decrement: item.quantity } },
+//                 }),
+//               ]);
+//             } else {
+//               return tx.product.update({
+//                 where: { id: item.productId },
+//                 data: { quantity: { decrement: item.quantity } },
+//               });
+//             }
+//           })
+//         );
+
+//         await tx.cartItem.deleteMany({
+//           where: { userId: checkout.userId },
+//         });
+
+//         await tx.checkout.delete({
+//           where: { id: checkout.id },
+//         });
+//       });
+
+//       res.status(200).send('Order created successfully');
+//       return;
+//     }
+
+//     if (event.type === 'payment_intent.payment_failed') {
+//       res.status(200).send('Payment failed');
+//       return;
+//     }
+//   } catch {
+//     res.status(500).send('Webhook failure');
+//     return;
+//   }
+// };
+
 export const stripeWebhook = async (req: Request, res: Response) => {
   const sig = req.headers['stripe-signature']!;
 
@@ -193,126 +323,30 @@ export const stripeWebhook = async (req: Request, res: Response) => {
   try {
     if (event.type === 'payment_intent.succeeded') {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      const checkoutId = paymentIntent.metadata?.checkoutId;
-      const paymentIntentId = paymentIntent.id;
 
-      const existing = await prisma.order.findUnique({
-        where: { paymentIntentId },
-      });
-
-      if (existing) {
-        res.status(200).send('Order already exist');
-        return;
-      }
-
-      if (!checkoutId) {
-        res.status(200).send('Missing checkout Id');
-        return;
-      }
-
-      const checkout = await prisma.checkout.findUnique({
-        where: { id: checkoutId },
-      });
-
-      if (!checkout) {
-        res.status(200).send('Checkout not found');
-        return;
-      }
-
-      if (new Date() > checkout.expiresAt) {
-        await stripe.refunds.create({
-          payment_intent: paymentIntentId,
-          reason: 'requested_by_customer',
-        });
-        res.status(200).send('Checkout expired');
-
-        return;
-      }
-
-      const checkoutData = checkout.data as {
-        items: OrderItem[];
-        deliveryFee: number;
-        totalPrice: number;
-        deliveryAddress: string;
-        phone: string;
-      };
-
-      await prisma.$transaction(async (tx) => {
-        await tx.order.create({
-          data: {
-            userId: checkout.userId,
-            totalPrice: checkoutData.totalPrice,
-            deliveryFee: checkoutData.deliveryFee,
-            paymentMethod: 'STRIPE',
-            paymentStatus: 'CONFIRMED',
-            paymentIntentId,
-            deliveryAddress: checkoutData.deliveryAddress,
-            phone: checkoutData.phone,
-
-            orderItems: {
-              createMany: {
-                data: checkoutData.items.map((item) => ({
-                  productId: item.productId,
-                  productVariantId: item.productVariantId,
-                  productPrice: item.productPrice,
-                  productImage: item.productImage,
-                  productName: item.productName,
-                  quantity: item.quantity,
-                })),
-              },
-            },
-
-            notifications: {
-              create: {
-                userId: checkout.userId,
-                content: 'Your order has been placed successfully',
-              },
-            },
+      await paymentQueue.add(
+        'process-payment',
+        {
+          paymentIntentId: paymentIntent.id,
+          checkoutId: paymentIntent.metadata?.checkoutId,
+        },
+        {
+          attempts: 5,
+          jobId: `payment-${paymentIntent.id}`,
+          backoff: {
+            type: 'exponential',
+            delay: 3000,
           },
-        });
-
-        //  clean up
-        await Promise.all(
-          checkoutData.items.map((item) => {
-            if (item.productVariantId) {
-              return Promise.all([
-                tx.productVariant.update({
-                  where: { id: item.productVariantId },
-                  data: { quantity: { decrement: item.quantity } },
-                }),
-                tx.product.update({
-                  where: { id: item.productId },
-                  data: { quantity: { decrement: item.quantity } },
-                }),
-              ]);
-            } else {
-              return tx.product.update({
-                where: { id: item.productId },
-                data: { quantity: { decrement: item.quantity } },
-              });
-            }
-          })
-        );
-
-        await tx.cartItem.deleteMany({
-          where: { userId: checkout.userId },
-        });
-
-        await tx.checkout.delete({
-          where: { id: checkout.id },
-        });
-      });
-
-      res.status(200).send('Order created successfully');
-      return;
+        }
+      );
     }
 
-    if (event.type === 'payment_intent.payment_failed') {
-      res.status(200).send('Payment failed');
-      return;
-    }
+    // if (event.type === 'payment_intent.payment_failed') {
+    //   res.status(200).send('Payment failed');
+    // }
+
+    res.status(200).send('ok');
   } catch {
     res.status(500).send('Webhook failure');
-    return;
   }
 };

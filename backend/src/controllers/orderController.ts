@@ -269,27 +269,19 @@ export const createOrder = expressAsyncHandler(
           },
         });
 
-        await Promise.all(
-          validatedItems.map((item) => {
-            if (item.productVariantId) {
-              return Promise.all([
-                tx.productVariant.update({
-                  where: { id: item.productVariantId },
-                  data: { quantity: { decrement: item.quantity } },
-                }),
-                tx.product.update({
-                  where: { id: item.productId },
-                  data: { quantity: { decrement: item.quantity } },
-                }),
-              ]);
-            } else {
-              return tx.product.update({
-                where: { id: item.productId },
-                data: { quantity: { decrement: item.quantity } },
-              });
-            }
-          })
-        );
+        for (const item of validatedItems) {
+          if (item.productVariantId) {
+            await tx.productVariant.update({
+              where: { id: item.productVariantId },
+              data: { quantity: { decrement: item.quantity } },
+            });
+          }
+
+          await tx.product.update({
+            where: { id: item.productId },
+            data: { quantity: { decrement: item.quantity } },
+          });
+        }
 
         await tx.cartItem.deleteMany({
           where: { userId },
@@ -466,12 +458,12 @@ export const cancelOrder = expressAsyncHandler(
 //@access PRIVATE
 export const checkOrderStatus = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const paymentIntentId = req.query.paymentId as string;
+    const paymentId = req.query.paymentId as string;
     const userId = req.user.userId;
 
     const order = await prisma.order.findFirst({
       where: {
-        paymentIntentId,
+        paymentIntentId: paymentId,
         paymentStatus: 'CONFIRMED',
         userId,
       },
