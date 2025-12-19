@@ -11,6 +11,7 @@ import {
   deleteProduct,
   getProduct,
   getProducts,
+  getSearchProducts,
   getSimilarProduct,
   updateProduct,
 } from '../controllers/productController';
@@ -25,6 +26,7 @@ router.get(
   validateQuery(similarProductsSchema),
   getSimilarProduct
 );
+router.get('/search', getSearchProducts);
 
 router.get('/:id', getProduct);
 

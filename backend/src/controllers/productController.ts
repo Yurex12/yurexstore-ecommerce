@@ -4,6 +4,7 @@ import expressAsyncHandler from 'express-async-handler';
 import prisma from '../lib/prisma';
 import { ProductSchema, SimilarProductsSchema } from '../schemas/productSchema';
 import { ProductEditSchema } from '../schemas/productEditSchema';
+import { Prisma } from '../generated/prisma';
 
 const ITEMS_PER_PAGE = 12;
 
@@ -12,15 +13,17 @@ const ITEMS_PER_PAGE = 12;
 //@access public
 export const getProducts = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { gender, colorName, sortOption, categorySlug, page } = req.query as {
-      gender: string;
-      colorName: string;
-      sortOption: string;
-      categorySlug: string;
-      page: string;
-    };
+    const { gender, colorName, sortOption, categorySlug, page, q } =
+      req.query as {
+        gender: 'MALE' | 'FEMALE' | 'BOTH';
+        colorName: string;
+        sortOption: string;
+        categorySlug: string;
+        page: string;
+        q: string;
+      };
 
-    const where: any = {};
+    const where: Prisma.ProductWhereInput = {};
 
     let orderBy: any = { createdAt: 'desc' };
 
@@ -35,13 +38,20 @@ export const getProducts = expressAsyncHandler(
     }
 
     if (gender) {
-      where.gender = gender.toUpperCase();
+      where.gender = gender;
     }
 
     if (colorName) {
       where.color = {
         name: colorName,
       };
+    }
+
+    if (q) {
+      where.OR = [
+        { name: { contains: q, mode: 'insensitive' } },
+        { description: { contains: q, mode: 'insensitive' } },
+      ];
     }
 
     if (sortOption === 'price-low-to-high') {
@@ -207,6 +217,36 @@ export const getSimilarProduct = expressAsyncHandler(
         },
       },
       take: 4,
+    });
+
+    res.json({
+      success: true,
+      message: 'Successful.',
+      products,
+    });
+  }
+);
+
+//@desc fetch search products
+//@route GET api/products/search?q=xxxx
+//@access public
+export const getSearchProducts = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { q } = req.query as { q: string };
+
+    const products = await prisma.product.findMany({
+      where: {
+        OR: [
+          { name: { contains: q, mode: 'insensitive' } },
+          { description: { contains: q, mode: 'insensitive' } },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+      take: 10,
+      orderBy: { createdAt: 'desc' },
     });
 
     res.json({

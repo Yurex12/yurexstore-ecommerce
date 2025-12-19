@@ -6,14 +6,15 @@ export function useProducts() {
   const [searchParams] = useSearchParams();
 
   const category = searchParams.get('category') || undefined;
+  const q = searchParams.get('q') || undefined;
   const color = searchParams.get('color') || undefined;
   const gender = searchParams.get('gender')?.toUpperCase() || undefined;
   const sort = searchParams.get('sort') || undefined;
   const page = Number(searchParams.get('page') || 1);
 
   const { data, isPending, error } = useQuery({
-    queryKey: ['products', category, color, gender, sort, page],
-    queryFn: () => getProducts({ category, color, gender, sort, page }),
+    queryKey: ['products', category, color, gender, sort, page, q],
+    queryFn: () => getProducts({ category, color, gender, sort, page, q }),
   });
   return {
     products: data?.products,

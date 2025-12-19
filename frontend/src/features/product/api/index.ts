@@ -7,6 +7,7 @@ import type {
   GetAdminProductsResponse,
   GetProductResponse,
   GetProductsResponse,
+  GetSearchProductsResponse,
   SimilarProductsQuery,
 } from '../types';
 
@@ -16,6 +17,7 @@ interface ProductFilters {
   gender?: string;
   sort?: string;
   page?: number;
+  q?: string;
 }
 
 export async function getProducts(filters: ProductFilters) {
@@ -26,6 +28,7 @@ export async function getProducts(filters: ProductFilters) {
   if (filters?.gender) params.append('gender', filters.gender);
   if (filters?.sort) params.append('sortOption', filters.sort);
   if (filters?.page) params.append('page', filters.page.toString());
+  if (filters?.q) params.append('q', filters.q.toString());
 
   const queryString = params.toString();
 
@@ -35,6 +38,22 @@ export async function getProducts(filters: ProductFilters) {
     const { data } = await api.get<GetProductsResponse>(url);
 
     return data;
+  } catch (error) {
+    handleApiError(error, 'Failed to fetch products');
+  }
+}
+
+export async function getSearchProducts(query: string) {
+  const params = new URLSearchParams();
+
+  if (query) params.append('q', query);
+
+  const url = `/products/search?${params.toString()}`;
+
+  try {
+    const { data } = await api.get<GetSearchProductsResponse>(url);
+
+    return data.products;
   } catch (error) {
     handleApiError(error, 'Failed to fetch products');
   }

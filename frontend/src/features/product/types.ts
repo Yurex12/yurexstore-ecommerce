@@ -55,12 +55,27 @@ export type AdminProduct = {
   images: Image[];
 };
 
+type ProductSearchResponse = {
+  id: string;
+  name: string;
+};
+
+export type SearchDropdownProps = {
+  isPending: boolean;
+  error: Error | null;
+  products: ProductSearchResponse[] | undefined;
+  onClearInput: VoidFunction;
+};
+
 export type ProductDetails = Product & { color: Color };
 
 export type GetProductsResponse = ApiResponseBase & {
   products: Product[];
   totalProducts: number;
   totalPages: number;
+};
+export type GetSearchProductsResponse = ApiResponseBase & {
+  products: ProductSearchResponse[];
 };
 
 export type GetProductResponse = ApiResponseBase & {

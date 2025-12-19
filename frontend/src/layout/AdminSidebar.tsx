@@ -66,10 +66,7 @@ export default function AdminSidebar() {
       </div>
 
       {/* Logout */}
-      <button
-        onClick={() => console.log('logout')}
-        className='mt-6 flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors'
-      >
+      <button className='mt-6 flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors'>
         <LogOut size={18} />
         Logout
       </button>
