@@ -43,7 +43,10 @@ export default function ProductSearchBar() {
   }
 
   return (
-    <div className='relative w-full max-w-md' ref={searchRef}>
+    <div
+      className='relative w-full max-w-sm md:max-w-md hidden md:block'
+      ref={searchRef}
+    >
       <div className='relative'>
         <Input
           value={value}

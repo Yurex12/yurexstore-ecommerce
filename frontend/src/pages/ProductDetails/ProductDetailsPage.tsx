@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { ArrowLeft } from 'lucide-react';
 
@@ -8,8 +8,8 @@ import { PageLoader } from '@/components/PageLoader';
 import ProductImageCarousel from '@/features/product/components/ProductDetailsImageCarousel';
 import ProductInfo from '@/features/product/components/ProductInfo';
 import ProductReview from '@/features/product/components/ProductReviews';
-import { useProduct } from '@/features/product/hooks/useProduct';
 import SimilarProductsList from '@/features/product/components/SimilarProductsList';
+import { useProduct } from '@/features/product/hooks/useProduct';
 
 export default function ProductDetailsPage() {
   const { productId } = useParams();
@@ -22,13 +22,13 @@ export default function ProductDetailsPage() {
   return (
     <div className='space-y-4'>
       <div className='flex gap-x-4 mb-4'>
-        <Link
-          to='/shop'
+        <button
+          onClick={() => history.back()}
           className='flex items-center gap-2 rounded-md border border-gray-200 px-4 py-2 text-sm'
         >
           <ArrowLeft />
           <span>Back</span>
-        </Link>
+        </button>
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
