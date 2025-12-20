@@ -3,14 +3,19 @@ import MobileFilterSort from '@/features/product/components/MobileProductFilterS
 import { ProductFilters } from '@/features/product/components/ProductFilters';
 import ProductsList from '@/features/product/components/ProductsList';
 import ProductSort from '@/features/product/components/ProductSort';
+import ProductsSearchQueryBadge from '@/features/product/components/ProductsSearchQueryBadge';
 import { useProducts } from '@/features/product/hooks/useProducts';
 
 export default function ShopPage() {
   const { isPending, page, totalPages } = useProducts();
+
   return (
     <div>
       <div className='flex items-center justify-between'>
-        <h1 className='heading'>Explore All Collections</h1>
+        <div className='space-y-1'>
+          <h1 className='heading'>Explore All Collections</h1>
+          <ProductsSearchQueryBadge />
+        </div>
 
         <ProductSort />
       </div>

@@ -46,7 +46,7 @@ export function ProductsSearchDropdown({
         {products.map((product) => (
           <li
             key={product.id}
-            className='cursor-pointer px-4 py-3 text-sm hover:bg-gray-100'
+            className='cursor-pointer px-4 py-3 text-sm hover:bg-gray-100 border-b'
             onClick={() => {
               onClearInput();
               navigate(`/shop/${product.id}`);

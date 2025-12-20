@@ -9,7 +9,6 @@ import {
   MapPin,
   Package,
   Star,
-  User,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -21,14 +20,10 @@ export default function AccountMobileMenu() {
     { name: 'Wishlist', path: '/account/wishlist', icon: <Heart size={18} /> },
     {
       name: 'Pending Reviews',
-      path: '/account/reviews',
+      path: '/account/pending-reviews',
       icon: <Star size={18} />,
     },
-    {
-      name: 'Profile Info',
-      path: '/account/profile',
-      icon: <User size={18} />,
-    },
+
     {
       name: 'Update Password',
       path: '/account/update-password',

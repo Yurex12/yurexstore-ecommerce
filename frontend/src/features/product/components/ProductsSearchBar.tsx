@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { useSearchProducts } from '../hooks/useSearchProducts';
 import { ProductsSearchDropdown } from './ProductsSearchDropdown';
 
-export default function ProductSearchBar() {
+export default function ProductsSearchBar() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [value, setValue] = useState(searchParams.get('q') || '');
   const [showDropdown, setShowDropdown] = useState(false);

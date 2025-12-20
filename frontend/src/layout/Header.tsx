@@ -6,7 +6,8 @@ import MobileNav from './MobileNav';
 import Logo from '@/components/Logo';
 
 import { Sheet } from '@/components/ui/sheet';
-import ProductSearchBar from '@/features/product/components/ProductSearchBar';
+import ProductsSearchBar from '@/features/product/components/ProductsSearchBar';
+import MobileProductsSearchWrapper from '@/features/product/components/MobileProductsSearchWrapper';
 
 function Header() {
   const [open, setOpen] = useState(false);
@@ -16,7 +17,9 @@ function Header() {
       <div className='mx-auto flex max-w-[1440px]  flex-1 items-center justify-between p-6 backdrop-blur'>
         <Logo />
 
-        <ProductSearchBar />
+        <ProductsSearchBar />
+
+        <MobileProductsSearchWrapper />
 
         <Sheet open={open} onOpenChange={setOpen}>
           <MobileNav onClose={handleClose} />

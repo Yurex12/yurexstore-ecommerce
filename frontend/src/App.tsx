@@ -36,11 +36,11 @@ import AdminCategoriesPage from './pages/Categories/AdminCategoriesPage';
 import CheckoutPage from './pages/checkout/CheckoutPage';
 import AdminColorsPage from './pages/Color/AdminColorsPage';
 
+import CreateAddressPage from './pages/CreateAddress/CreateAddressPage';
+import EditAddressPage from './pages/EditAddress/EditAddressPage';
 import OrderConfirmationPage from './pages/OrderConfirmation/OrderConfirmationPage';
 import PendingReviewsPage from './pages/PendingReviews/PendingReviewsPage';
 import ProductDetailsPage from './pages/ProductDetails/ProductDetailsPage';
-import CreateAddressPage from './pages/CreateAddress/CreateAddressPage';
-import EditAddressPage from './pages/EditAddress/EditAddressPage';
 
 const queryClient = new QueryClient();
 
@@ -100,6 +100,7 @@ export default function App() {
 
           <Route path='/login' element={<SignInPage />} />
           <Route path='/register' element={<SignUpPage />} />
+
           <Route element={<ProtectedRoute />}>
             <Route
               path='/order-confirmation'
