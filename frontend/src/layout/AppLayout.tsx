@@ -6,9 +6,10 @@ export default function AppLayout() {
   return (
     <div>
       <Header />
-      <main className='max-w-[1440px] px-4 lg:px-10 mx-auto pt-25 md:pt-28'>
+      <main className='max-w-[1600px] h-full flex-1 px-4 lg:px-10 mx-auto mt-25 md:mt-28'>
         <Outlet />
       </main>
+
       <Footer />
     </div>
   );

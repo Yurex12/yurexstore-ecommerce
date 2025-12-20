@@ -5,7 +5,7 @@ import ProductGender from './ProductGender';
 
 export function ProductFilters() {
   return (
-    <div className='hidden h-auto divide-y-1 space-y-4 md:block'>
+    <div className='hidden divide-y-1 sticky top-0 h-[75dvh] overflow-y-auto space-y-4 md:block scrollbar'>
       <ProductCategories />
       <ProductColors />
       <ProductGender />

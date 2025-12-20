@@ -10,7 +10,7 @@ export default function ProductGender() {
   return (
     <div className='pb-4'>
       <h3 className='text-lg font-semibold'>Gender</h3>
-      <div className='mt-3 flex gap-x-2'>
+      <div className='mt-3 gap-2 flex flex-wrap'>
         {genders.map((gender) => (
           <Button
             onClick={() => handleSearchQuery(gender)}

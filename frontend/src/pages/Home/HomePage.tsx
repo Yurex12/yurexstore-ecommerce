@@ -1,9 +1,9 @@
-import Hero from './Hero';
+import BrandFeatures from './BrandFeatures';
 import FeaturedCategories from './FeaturedCategories';
+import Hero from './Hero';
+import NewsLetter from './NewsLetter';
 import ProductShowcase from './ProductShowcase';
 import PromotionalSection from './PromotionalSection';
-import BrandFeatures from './BrandFeatures';
-import NewsLetter from './NewsLetter';
 
 export default function HomePage() {
   return (

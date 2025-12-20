@@ -55,143 +55,138 @@ export default function ProductCard(product: Product) {
   }
 
   return (
-    <>
-      <div
-        className='p-1 border border-input/50 pb-2 sm:p-4 space-y-2 flex flex-col h-full justify-between'
-        onClick={() => navigate(`/shop/${product.id}`)}
-      >
-        {/* Image + Wishlist */}
-        <div className='w-full h-48 sm:h-72 bg-muted/60 flex items-center justify-center relative'>
-          {!wishlistError ? (
-            <button
-              className='absolute right-1 top-2 inline-block rounded-full bg-primary/5 p-1 shadow-sm hover:bg-primary/20 sm:right-4 disabled:opacity-50'
-              onClick={(e) => {
-                e.stopPropagation();
-                handleWishlistToggle();
-              }}
-              disabled={
-                isAddingToWishlist ||
-                isRemovingFromWishlist ||
-                isFetchingWishlist
-              }
-            >
-              <Heart
-                className={`text-lg ${
-                  productInWishlist
-                    ? 'fill-primary text-primary'
-                    : 'text-foreground/50'
-                }`}
-              />
-            </button>
-          ) : null}
-          <img
-            src={product.images.at(0)?.url}
-            alt={product.name}
-            className='max-h-full max-w-full object-contain'
-          />
-        </div>
-
-        {/* Product info */}
-        <div className='space-y-2'>
-          <p className='truncate text-sm font-medium text-foreground'>
-            {product.name}
-          </p>
-          <p className='text-xs text-foreground/50'>{product.category.name}</p>
-
-          <div className='flex items-center justify-between'>
-            <span className='text-sm text-foreground font-medium'>
-              {formatCurrency(product.price)}
-            </span>
-            {product.reviewCount > 0 && (
-              <div className='flex gap-x-2 items-center'>
-                <Star className='text-amber-400 fill-amber-400' size={18} />
-                <span className='text-xs'>
-                  {product.avgRating.toFixed(1)} ({product.reviewCount})
-                </span>
-              </div>
-            )}
-          </div>
-
-          {hasReachedStockLimit && (
-            <p className='text-xs text-destructive text-center'>
-              Maximum stock reached
-            </p>
-          )}
-
-          {/* Add to Cart / Quantity */}
-          {product.productVariants?.length ? (
-            <Button
-              className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
-              variant='outline'
-              disabled={isFetchingCart || product.quantity === 0}
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpen(true);
-              }}
-            >
-              {product.quantity === 0 ? (
-                <span>Out of stock</span>
-              ) : isFetchingCart ? (
-                <Spinner />
-              ) : (
-                <span>Add to cart</span>
-              )}
-            </Button>
-          ) : inCart ? (
-            <div className='flex flex-col gap-1'>
-              <div className='flex justify-between items-center'>
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    decrementCartItem(inCart.id);
-                  }}
-                  disabled={isFetchingCart || isWorking}
-                >
-                  <Minus className='text-background' />
-                </Button>
-                <span className='text-foreground font-bold text-xl'>
-                  {inCart.quantity}
-                </span>
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    incrementCartItem(inCart.id);
-                  }}
-                  disabled={isFetchingCart || isWorking || hasReachedStockLimit}
-                >
-                  <Plus className='text-background' />
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <Button
-              className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
-              variant='outline'
-              onClick={(e) => {
-                e.stopPropagation();
-                addToCart({ productId: product.id });
-              }}
-              disabled={
-                isFetchingCart ||
-                isAddingToCart ||
-                isWorking ||
-                hasReachedStockLimit ||
-                product.quantity === 0
-              }
-            >
-              {product.quantity === 0 ? (
-                'Out of stock'
-              ) : isFetchingCart || isAddingToCart ? (
-                <Spinner />
-              ) : (
-                'Add to cart'
-              )}
-            </Button>
-          )}
-        </div>
+    <div
+      className='p-1 border border-input/50 pb-2 sm:p-4 space-y-2 flex flex-col h-fit justify-between'
+      onClick={() => navigate(`/shop/${product.id}`)}
+    >
+      {/* Image + Wishlist */}
+      <div className='w-full h-48 sm:h-72 bg-muted/60 flex items-center justify-center relative'>
+        {!wishlistError ? (
+          <button
+            className='absolute right-1 top-2 inline-block rounded-full bg-primary/5 p-1 shadow-sm hover:bg-primary/20 sm:right-4 disabled:opacity-50'
+            onClick={(e) => {
+              e.stopPropagation();
+              handleWishlistToggle();
+            }}
+            disabled={
+              isAddingToWishlist || isRemovingFromWishlist || isFetchingWishlist
+            }
+          >
+            <Heart
+              className={`text-lg ${
+                productInWishlist
+                  ? 'fill-primary text-primary'
+                  : 'text-foreground/50'
+              }`}
+            />
+          </button>
+        ) : null}
+        <img
+          src={product.images.at(0)?.url}
+          alt={product.name}
+          className='max-h-full max-w-full object-contain'
+        />
       </div>
 
+      {/* Product info */}
+      <div className='space-y-2'>
+        <p className='truncate text-sm font-medium text-foreground'>
+          {product.name}
+        </p>
+        <p className='text-xs text-foreground/50'>{product.category.name}</p>
+
+        <div className='flex items-center justify-between'>
+          <span className='text-sm text-foreground font-medium'>
+            {formatCurrency(product.price)}
+          </span>
+          {product.reviewCount > 0 && (
+            <div className='flex gap-x-2 items-center'>
+              <Star className='text-amber-400 fill-amber-400' size={18} />
+              <span className='text-xs'>
+                {product.avgRating.toFixed(1)} ({product.reviewCount})
+              </span>
+            </div>
+          )}
+        </div>
+
+        {hasReachedStockLimit && (
+          <p className='text-xs text-destructive text-center'>
+            Maximum stock reached
+          </p>
+        )}
+
+        {/* Add to Cart / Quantity */}
+        {product.productVariants?.length ? (
+          <Button
+            className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
+            variant='outline'
+            disabled={isFetchingCart || product.quantity === 0}
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(true);
+            }}
+          >
+            {product.quantity === 0 ? (
+              <span>Out of stock</span>
+            ) : isFetchingCart ? (
+              <Spinner />
+            ) : (
+              <span>Add to cart</span>
+            )}
+          </Button>
+        ) : inCart ? (
+          <div className='flex flex-col gap-1'>
+            <div className='flex justify-between items-center'>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  decrementCartItem(inCart.id);
+                }}
+                disabled={isFetchingCart || isWorking}
+              >
+                <Minus className='text-background' />
+              </Button>
+              <span className='text-foreground font-bold text-xl'>
+                {inCart.quantity}
+              </span>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  incrementCartItem(inCart.id);
+                }}
+                disabled={isFetchingCart || isWorking || hasReachedStockLimit}
+              >
+                <Plus className='text-background' />
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <Button
+            className='w-full border border-foreground/40 rounded text-foreground/70 hover:bg-primary hover:text-background hover:border-primary'
+            variant='outline'
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart({ productId: product.id });
+            }}
+            disabled={
+              isFetchingCart ||
+              isAddingToCart ||
+              isWorking ||
+              hasReachedStockLimit ||
+              product.quantity === 0
+            }
+          >
+            {product.quantity === 0 ? (
+              'Out of stock'
+            ) : isFetchingCart || isAddingToCart ? (
+              <Spinner />
+            ) : (
+              'Add to cart'
+            )}
+          </Button>
+        )}
+      </div>
       <ProductVariantDialog product={product} open={open} setOpen={setOpen} />
-    </>
+    </div>
   );
 }

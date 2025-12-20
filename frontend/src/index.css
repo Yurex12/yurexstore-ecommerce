@@ -154,9 +154,7 @@
   * {
     @apply border-border outline-ring;
   }
-  *::-webkit-scrollbar {
-    @apply hidden;
-  }
+
   body {
     @apply bg-background text-foreground/60 font-normal font-sans text-base;
   }
