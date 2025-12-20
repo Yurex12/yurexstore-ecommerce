@@ -13,13 +13,15 @@ export default function CategoriesList() {
   if (!categories?.length) return <EmptyState message='No categories found' />;
 
   return (
-    <ScrollArea className='w-full whitespace-nowrap rounded'>
-      <div className='flex bg-muted/50 gap-4 p-4 md:p-8'>
-        {categories.map((category) => (
-          <CategoryCard key={category.id} {...category} />
-        ))}
-      </div>
-      <ScrollBar orientation='horizontal' />
-    </ScrollArea>
+    <div className='bg-muted/50 px-4 py-2 md:p-8 rounded'>
+      <ScrollArea className='w-full rounded'>
+        <div className='flex gap-4 min-w-max pb-4'>
+          {categories.map((category) => (
+            <CategoryCard key={category.id} {...category} />
+          ))}
+        </div>
+        <ScrollBar orientation='horizontal' />
+      </ScrollArea>
+    </div>
   );
 }

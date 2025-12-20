@@ -7,7 +7,6 @@ export default function CategorySkeletonList() {
   return (
     <div className='bg-muted/50 px-4 py-2 md:p-8 rounded'>
       <ScrollArea className='w-full rounded'>
-        {/* Add bottom padding to create space for the scrollbar */}
         <div className='flex gap-4 min-w-max pb-4'>
           {skeletons.map((_, i) => (
             <div
