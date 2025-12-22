@@ -14,7 +14,6 @@ import { useAddressStore } from '@/features/address/store/useAddressStore';
 import { useCart } from '@/features/cart/hooks/useCart';
 import OrderSummary from '@/features/order/components/OrderSummary';
 import { useCreateOrder } from '@/features/order/hooks/useCreateOrder';
-import { usePaymentStore } from '@/features/order/store/usePaymentStore';
 import useCreatePaymentIntent from '@/hooks/useCreatePaymentIntent';
 
 export default function CheckoutPage() {
@@ -25,7 +24,7 @@ export default function CheckoutPage() {
   );
 
   const { addresses, selectedAddressId } = useAddressStore();
-  const { selectedMethod } = usePaymentStore();
+
   const { createPaymentIntent, isPending: isCreatingPaymentIntent } =
     useCreatePaymentIntent();
 
@@ -39,12 +38,6 @@ export default function CheckoutPage() {
 
   const selectedAddress = addresses?.find((a) => a.id === selectedAddressId);
 
-  const orderItems = cart.map((cartItem) => ({
-    productId: cartItem.product.id,
-    productVariantId: cartItem.productVariantId,
-    quantity: cartItem.quantity,
-  }));
-
   function confirmCashOrder() {
     if (!selectedAddress || !selectedAddress.phone) {
       toast.error('Please select a valid address before placing your order');
@@ -53,12 +46,10 @@ export default function CheckoutPage() {
 
     createOrder(
       {
-        orderItems,
         deliveryAddress: `${selectedAddress!.deliveryAddress} | ${
           selectedAddress!.city
         } | ${selectedAddress!.state}`,
         phone: selectedAddress.phone,
-        paymentMethod: selectedMethod,
       },
       {
         onSuccess(orderId) {
@@ -76,12 +67,10 @@ export default function CheckoutPage() {
 
     createPaymentIntent(
       {
-        orderItems,
         deliveryAddress: `${selectedAddress!.deliveryAddress} | ${
           selectedAddress!.city
         } | ${selectedAddress!.state}`,
         phone: selectedAddress.phone,
-        paymentMethod: selectedMethod,
       },
       {
         onSuccess(data) {

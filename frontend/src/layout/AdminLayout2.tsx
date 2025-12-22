@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Outlet, useLocation } from 'react-router-dom';
 import AdminSidebar from './AdminSidebar2';
+import AdminAvatar from './AdminAvatar';
 
 export default function AdminLayout() {
   const { pathname } = useLocation();
@@ -21,7 +22,7 @@ export default function AdminLayout() {
     <SidebarProvider>
       <AdminSidebar />
       <SidebarInset>
-        <header className='flex h-16 shrink-0 items-center gap-2 border-b'>
+        <header className='flex bg-white z-50 h-16 top-0 w-full sticky shrink-0 items-center gap-2 border-b justify-between pr-4'>
           <div className='flex items-center gap-2 px-3'>
             <SidebarTrigger />
             <Separator orientation='vertical' className='mr-2 h-4' />
@@ -57,8 +58,10 @@ export default function AdminLayout() {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
+
+          <AdminAvatar />
         </header>
-        <main className='p-4'>
+        <main className='p-4 '>
           <Outlet />
         </main>
       </SidebarInset>

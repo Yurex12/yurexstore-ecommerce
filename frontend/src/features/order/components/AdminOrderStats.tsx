@@ -56,19 +56,16 @@ export function AdminOrderStats({ orders }: { orders: AdminOrder[] }) {
       {statCards.map((card) => {
         const Icon = card.icon;
         return (
-          <div key={card.title} className={`rounded-xl border p-5`}>
-            <div className='flex items-center justify-between'>
-              <div className='space-y-1'>
-                <p className='text-sm font-medium text-gray-600'>
-                  {card.title}
-                </p>
-                <p className='text-3xl font-bold text-gray-900'>{card.value}</p>
-              </div>
-              <div
-                className={`${card.bgColor} ${card.iconColor} rounded-lg p-3`}
-              >
-                <Icon className='h-6 w-6' />
-              </div>
+          <div
+            key={card.title}
+            className='flex items-center justify-between rounded-xl border p-5'
+          >
+            <div className='space-y-1'>
+              <p className='text-sm font-medium text-gray-600'>{card.title}</p>
+              <p className='text-3xl font-bold text-gray-900'>{card.value}</p>
+            </div>
+            <div className={`${card.bgColor} ${card.iconColor} rounded-lg p-3`}>
+              <Icon className='h-6 w-6' />
             </div>
           </div>
         );

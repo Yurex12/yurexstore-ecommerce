@@ -41,6 +41,7 @@ import EditAddressPage from './pages/EditAddress/EditAddressPage';
 import OrderConfirmationPage from './pages/OrderConfirmation/OrderConfirmationPage';
 import PendingReviewsPage from './pages/PendingReviews/PendingReviewsPage';
 import ProductDetailsPage from './pages/ProductDetails/ProductDetailsPage';
+import AdminOverviewPage from './pages/AdminOverview/AdminOverviewPage';
 
 const queryClient = new QueryClient();
 
@@ -115,6 +116,12 @@ export default function App() {
               </AdminProtectedRoute>
             }
           >
+            <Route
+              path='/admin'
+              index
+              element={<Navigate to='overview' replace />}
+            />
+            <Route path='/admin/overview' element={<AdminOverviewPage />} />
             <Route path='/admin/colors' element={<AdminColorsPage />} />
             <Route path='/admin/categories' element={<AdminCategoriesPage />} />
             <Route path='/admin/products' element={<AdminProductsPage />} />

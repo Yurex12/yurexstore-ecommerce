@@ -21,6 +21,7 @@ import {
   productsDeleteSchema,
 } from '../schemas/adminSchema';
 import { getUsersData } from '../controllers/authController';
+import { getMetrics } from '../controllers/analyticsController';
 
 const router = express.Router();
 
@@ -48,7 +49,10 @@ router.delete(
 router.delete('/colors', validateData(colorsDeleteSchema), deleteColors);
 
 // Users
-
 router.get('/users', getUsersData);
+
+// analytics
+
+router.get('/analytics/metrics', getMetrics);
 
 export default router;

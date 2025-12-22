@@ -142,98 +142,79 @@ export const createOrder = expressAsyncHandler(
 
     const data = req.body as Order;
 
-    const validatedItems = await Promise.all(
-      data.orderItems.map(async (orderItem) => {
-        if (orderItem.productVariantId) {
-          const variant = await prisma.productVariant.findFirst({
-            where: {
-              id: orderItem.productVariantId,
-              productId: orderItem.productId,
-            },
-            select: {
-              id: true,
-              price: true,
-              productId: true,
-              quantity: true,
-              value: true,
-              product: {
-                select: {
-                  id: true,
-                  name: true,
-                  images: {
-                    select: {
-                      url: true,
-                    },
-                    take: 1,
-                  },
-                },
+    const cart = await prisma.cartItem.findMany({
+      where: {
+        userId,
+      },
+      select: {
+        id: true,
+        quantity: true,
+        productVariantId: true,
+        product: {
+          select: {
+            id: true,
+            name: true,
+            price: true,
+            quantity: true,
+            images: {
+              select: {
+                url: true,
               },
+              take: 1,
             },
-          });
+          },
+        },
+        productVariant: {
+          select: {
+            id: true,
+            price: true,
+            productId: true,
+            quantity: true,
+            value: true,
+          },
+        },
+      },
+    });
 
-          if (!variant) {
-            res.status(404);
-            throw new Error('Some items in your cart are no longer available.');
-          }
+    const validatedItems = cart.map((cartItem) => {
+      if (cartItem.productVariantId && !cartItem.productVariant) {
+        res.status(404);
+        throw new Error('Some items in your cart are no longer available.');
+      }
 
-          // Check stock
-          if (variant.quantity < orderItem.quantity) {
-            res.status(409);
-            throw new Error(
-              'Some items are out of stock. Your cart has been updated.'
-            );
-          }
+      if (!cartItem.product) {
+        res.status(404);
+        throw new Error('Some items in your cart are no longer available.');
+      }
 
-          return {
-            productId: variant.productId,
-            productVariantId: variant.id,
-            productName: variant.product.name,
-            productVariantValue: variant.value,
-            productPrice: variant.price,
-            productImage: variant.product.images[0].url || '',
-            quantity: orderItem.quantity,
-          };
-        } else {
-          const product = await prisma.product.findUnique({
-            where: { id: orderItem.productId },
-            select: {
-              id: true,
-              name: true,
-              price: true,
-              quantity: true,
-              images: {
-                select: {
-                  url: true,
-                },
-                take: 1,
-              },
-            },
-          });
+      // Check stock
+      if (
+        cartItem.productVariant &&
+        cartItem.productVariant?.quantity < cartItem.quantity
+      ) {
+        res.status(409);
+        throw new Error(
+          'Some items are out of stock. Your cart has been updated.'
+        );
+      }
 
-          if (!product) {
-            res.status(404);
-            throw new Error('Some items in your cart are no longer available.');
-          }
+      if (cartItem.product.quantity < cartItem.quantity) {
+        res.status(409);
+        throw new Error(
+          'Some items are out of stock. Your cart has been updated.'
+        );
+      }
 
-          if (product.quantity < orderItem.quantity) {
-            res.status(409);
-            throw new Error(
-              'Some items are out of stock. Your cart has been updated.'
-            );
-          }
-
-          return {
-            productId: product.id,
-            productVariantId: null,
-            productVariantValue: null,
-            productName: product.name,
-            productPrice: product.price,
-            productImage: product.images[0].url || '',
-            quantity: orderItem.quantity,
-          };
-        }
-      })
-    );
+      return {
+        productId: cartItem.product.id,
+        productVariantId: cartItem.productVariantId || null,
+        productName: cartItem.product.name,
+        productVariantValue: cartItem.productVariant?.value || null,
+        productPrice: cartItem.productVariant?.price || cartItem.product.price,
+        productImage: cartItem.product.images[0].url || '',
+        quantity: cartItem.quantity,
+      };
+    });
 
     const totalPrice = validatedItems.reduce(
       (sum, item) => sum + item.productPrice * item.quantity,
@@ -251,9 +232,8 @@ export const createOrder = expressAsyncHandler(
             phone: data.phone,
             totalPrice,
             deliveryFee,
-            paymentMethod: data.paymentMethod,
-            paymentStatus:
-              data.paymentMethod === 'STRIPE' ? 'CONFIRMED' : 'PENDING',
+            paymentMethod: 'CASH_ON_DELIVERY',
+            paymentStatus: 'PENDING',
             userId,
             orderItems: {
               createMany: {

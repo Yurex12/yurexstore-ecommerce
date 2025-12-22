@@ -125,9 +125,9 @@ export const getUserPendingReviews = expressAsyncHandler(
   }
 );
 
-// //@desc create product reviews
-// //@route POST api/reviews/
-// //@access PRIVATE
+//@desc create product reviews
+//@route POST api/reviews/
+//@access PRIVATE
 export const createReview = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { productId, content, rating } = req.body as ReviewSchema;

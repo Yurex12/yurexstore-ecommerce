@@ -6,7 +6,7 @@ import ProductsSearchQueryBadge from '@/features/product/components/ProductsSear
 
 export default function ShopPage() {
   return (
-    <div>
+    <div className='md:border md:px-4 md:py-2 md:rounded'>
       <div className='flex items-center justify-between'>
         <div className='space-y-1'>
           <h1 className='heading'>Explore All Collections</h1>

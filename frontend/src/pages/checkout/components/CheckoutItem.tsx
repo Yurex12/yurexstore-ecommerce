@@ -10,15 +10,13 @@ export default function CheckoutItem({
   return (
     <div className='flex justify-between py-5 border-b-1 gap-x-2'>
       <div className='flex gap-x-3 lg:gap-x-5'>
-        <div className='w-20 h-20 md:w-24 md:h-24 bg-muted/60 flex items-center justify-center'>
-          <img
-            src='shirt.png'
-            className='max-h-full max-w-full object-contain'
-          />
-        </div>
+        <img
+          src='shirt.png'
+          className='size-15 rounded-md bg-muted/60 object-cover'
+        />
 
         <div className='flex flex-col space-y-1 md:space-y-2'>
-          <h1 className='font-normal text-foreground/70 text-sm sm:text-base'>
+          <h1 className='font-normal text-foreground/70 text-sm sm:text-base line-clamp-1'>
             {product.name}
           </h1>
 

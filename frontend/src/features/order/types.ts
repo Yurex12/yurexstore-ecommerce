@@ -49,8 +49,6 @@ export type CreateOrderItemInput = {
 export type CreateOrderInput = {
   deliveryAddress: string;
   phone: string;
-  paymentMethod: PaymentMethod;
-  orderItems: CreateOrderItemInput[];
 };
 
 export type OrderResponse = ApiResponseBase & {
