@@ -1,6 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
+
+import { format, subDays } from 'date-fns';
+
 import expressAsyncHandler from 'express-async-handler';
 import prisma from '../lib/prisma';
+
+type DailyData = { date: string; revenue: number; orders: number };
 
 //@desc fetch user Addresses
 //@route GET api/admin/overview/metrics
@@ -9,11 +14,11 @@ export const getMetrics = expressAsyncHandler(
   async (req: Request, res: Response) => {
     const now = new Date();
 
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(now.getDate() - 7);
+    const sevenDaysAgo = subDays(now, 6);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
 
-    const fourteenDaysAgo = new Date();
-    fourteenDaysAgo.setDate(now.getDate() - 14);
+    const fourteenDaysAgo = subDays(now, 13);
+    fourteenDaysAgo.setHours(0, 0, 0, 0);
 
     const [
       last7DaysOrders,
@@ -93,6 +98,57 @@ export const getMetrics = expressAsyncHandler(
           last14Days: last14DaysAOV,
         },
       },
+    });
+  }
+);
+
+//@desc fetch user Addresses
+//@route GET api/admin/analytics/chart
+//@access Private
+export const getChartData = expressAsyncHandler(
+  async (req: Request, res: Response) => {
+    const now = new Date();
+
+    const sevenDaysAgo = subDays(now, 6);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+    const dailyDataMap: Record<string, DailyData> = {};
+
+    for (let i = 6; i >= 0; i--) {
+      const date = subDays(now, i);
+
+      const dateString = format(date, 'MMM d');
+
+      dailyDataMap[dateString] = {
+        date: dateString,
+        revenue: 0,
+        orders: 0,
+      };
+    }
+
+    const last7DaysPaidOrders = await prisma.order.findMany({
+      where: {
+        createdAt: { gte: sevenDaysAgo, lte: now },
+        paymentStatus: 'CONFIRMED',
+      },
+      select: { createdAt: true, deliveryFee: true, totalPrice: true },
+    });
+
+    last7DaysPaidOrders.forEach((order) => {
+      const dateString = format(order.createdAt, 'MMM d');
+
+      if (dailyDataMap[dateString]) {
+        dailyDataMap[dateString].revenue +=
+          order.totalPrice + order.deliveryFee;
+
+        dailyDataMap[dateString].orders += 1;
+      }
+    });
+    const chartData = Object.values(dailyDataMap);
+
+    res.json({
+      message: 'Successful',
+      success: true,
+      chartData,
     });
   }
 );

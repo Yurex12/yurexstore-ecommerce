@@ -12,3 +12,10 @@ export type GetMetricsResponse = ApiResponseBase & {
     averageOrderValue: MetricPeriodValue;
   };
 };
+export type GetChartDataResponse = ApiResponseBase & {
+  chartData: {
+    date: string;
+    revenue: number;
+    orders: number;
+  }[];
+};
