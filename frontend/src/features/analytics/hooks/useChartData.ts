@@ -9,8 +9,8 @@ export function useChartData() {
   } = useQuery({
     queryKey: ['chartData'],
     queryFn: getChartData,
-    refetchInterval: 60 * 1000,
-    staleTime: 30 * 1000,
+    refetchInterval: 5 * 1000,
+    staleTime: 0,
     refetchOnWindowFocus: true,
   });
   return { chartData, isPending, error };

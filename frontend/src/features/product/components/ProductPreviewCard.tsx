@@ -18,7 +18,7 @@ export default function ProductPreviewCard({
   return (
     <div
       className='p-1 border border-input/50 pb-2 sm:p-4 space-y-2'
-      onClick={() => navigate(`/products/${id}`)}
+      onClick={() => navigate(`/shop/${id}`)}
     >
       <div className='w-full h-48 sm:h-60 bg-muted/60 flex items-center justify-center'>
         <img

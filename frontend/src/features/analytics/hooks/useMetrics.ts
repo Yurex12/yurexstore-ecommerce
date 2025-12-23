@@ -9,8 +9,8 @@ export function useMetrics() {
   } = useQuery({
     queryKey: ['metrics'],
     queryFn: getMetrics,
-    refetchInterval: 60 * 1000,
-    staleTime: 30 * 1000,
+    refetchInterval: 5 * 1000,
+    staleTime: 0,
     refetchOnWindowFocus: true,
   });
   return { metrics, isPending, error };

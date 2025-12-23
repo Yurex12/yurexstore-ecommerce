@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
 import { useSearchProducts } from '../hooks/useSearchProducts';
@@ -10,10 +10,15 @@ import { Separator } from '@/components/ui/separator';
 export default function MobileProductsSearch() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [value, setValue] = useState(searchParams.get('q') || '');
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const [debounced] = useDebounce(value, 500);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (searchInputRef) searchInputRef.current?.focus();
+  }, []);
 
   const { products, isPending, error } = useSearchProducts(debounced);
 
@@ -39,6 +44,7 @@ export default function MobileProductsSearch() {
 
         <div className='relative flex-1'>
           <Input
+            ref={searchInputRef}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && submitSearch()}

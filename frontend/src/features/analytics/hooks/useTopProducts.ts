@@ -9,8 +9,8 @@ export function useTopProducts() {
   } = useQuery({
     queryKey: ['top-products'],
     queryFn: getTopProducts,
-    refetchInterval: 60 * 1000,
-    staleTime: 30 * 1000,
+    refetchInterval: 5 * 1000,
+    staleTime: 0,
     refetchOnWindowFocus: true,
   });
   return { topProducts, isPending, error };
