@@ -7,7 +7,17 @@ import prisma from '../lib/prisma';
 
 type DailyData = { date: string; revenue: number; orders: number };
 
-//@desc fetch user Addresses
+interface TopProductGroup {
+  productId: string;
+  productName: string;
+  productImage: string | null;
+  _sum: {
+    quantity: number | null;
+    productPrice: number | null;
+  };
+}
+
+//@desc fetch metrics
 //@route GET api/admin/overview/metrics
 //@access Private
 export const getMetrics = expressAsyncHandler(
@@ -102,7 +112,7 @@ export const getMetrics = expressAsyncHandler(
   }
 );
 
-//@desc fetch user Addresses
+//@desc fetch chart data
 //@route GET api/admin/analytics/chart
 //@access Private
 export const getChartData = expressAsyncHandler(
@@ -149,6 +159,47 @@ export const getChartData = expressAsyncHandler(
       message: 'Successful',
       success: true,
       chartData,
+    });
+  }
+);
+
+//@desc fetch user Addresses
+//@route GET api/admin/analytics/top-products
+//@access Private
+export const getTopProducts = expressAsyncHandler(
+  async (req: Request, res: Response) => {
+    const now = new Date();
+    const sevenDaysAgo = subDays(now, 6);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+
+    const topProductsData = await prisma.orderItem.groupBy({
+      by: ['productId', 'productName', 'productImage'],
+      _sum: { quantity: true, productPrice: true },
+      where: {
+        order: {
+          createdAt: { gte: sevenDaysAgo, lte: now },
+          paymentStatus: 'CONFIRMED',
+        },
+      },
+      orderBy: {
+        _sum: { productPrice: 'desc' },
+      },
+      take: 5,
+    });
+
+    const formattedData = (topProductsData as TopProductGroup[]).map(
+      (item) => ({
+        name: item.productName,
+        revenue: item._sum.productPrice || 0,
+        sales: item._sum.quantity || 0,
+        image: item.productImage,
+      })
+    );
+
+    res.json({
+      success: true,
+      message: 'Successful',
+      topProducts: formattedData,
     });
   }
 );

@@ -14,6 +14,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import OverviewChartSkeleton from './OverviewChartSkeleton';
+import { AnalyticsError } from './AnalyticsError';
 
 const chartConfig = {
   revenue: {
@@ -26,13 +28,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export const description = 'A stacked area chart';
-
-export function OverviewChart() {
+export default function OverviewChart() {
   const { chartData, isPending, error } = useChartData();
 
-  if (isPending) return <p>Loading</p>;
-  if (error) return <p>{error.message}</p>;
+  if (isPending) return <OverviewChartSkeleton />;
+  if (error)
+    return <AnalyticsError title='Performance Chart' className='h-[470px]' />;
 
   if (!chartData) return <p>No data</p>;
   return (

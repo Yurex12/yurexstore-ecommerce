@@ -21,7 +21,11 @@ import {
   productsDeleteSchema,
 } from '../schemas/adminSchema';
 import { getUsersData } from '../controllers/authController';
-import { getChartData, getMetrics } from '../controllers/analyticsController';
+import {
+  getChartData,
+  getMetrics,
+  getTopProducts,
+} from '../controllers/analyticsController';
 
 const router = express.Router();
 
@@ -55,5 +59,6 @@ router.get('/users', getUsersData);
 
 router.get('/analytics/metrics', getMetrics);
 router.get('/analytics/chart', getChartData);
+router.get('/analytics/top-products', getTopProducts);
 
 export default router;

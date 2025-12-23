@@ -19,3 +19,11 @@ export type GetChartDataResponse = ApiResponseBase & {
     orders: number;
   }[];
 };
+export type GetTopProductsResponse = ApiResponseBase & {
+  topProducts: {
+    name: string;
+    revenue: number;
+    sales: number;
+    image: string;
+  }[];
+};

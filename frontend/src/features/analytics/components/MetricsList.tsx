@@ -12,16 +12,16 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { useMetrics } from '../hooks/useMetrics';
-import { MetricsListSkeleton } from './MetricsListSkeleton';
-import ErrorState from '@/components/ErrorState';
-import NoData from '@/components/NoData';
+import { AnalyticsError } from './AnalyticsError';
+import MetricsListSkeleton from './MetricsListSkeleton';
 
 export default function MetricsList() {
   const { metrics, isPending, error } = useMetrics();
 
   if (isPending) return <MetricsListSkeleton />;
-  if (error) return <ErrorState message={error.message} />;
-  if (!metrics) return <NoData content='No data found' />;
+  if (error)
+    return <AnalyticsError title='Dashboard Metrics' className='h-[140px]' />;
+  if (!metrics) return <p>No data found</p>;
 
   const revenueChange = calculatePercentageChange(
     metrics.revenue.last7Days,
