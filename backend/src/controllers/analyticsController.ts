@@ -10,7 +10,6 @@ type DailyData = { date: string; revenue: number; orders: number };
 interface TopProductGroup {
   productId: string;
   productName: string;
-  productImage: string | null;
   _sum: {
     quantity: number | null;
     productPrice: number | null;
@@ -173,7 +172,7 @@ export const getTopProducts = expressAsyncHandler(
     sevenDaysAgo.setHours(0, 0, 0, 0);
 
     const topProductsData = await prisma.orderItem.groupBy({
-      by: ['productId', 'productName', 'productImage'],
+      by: ['productId', 'productName'],
       _sum: { quantity: true, productPrice: true },
       where: {
         order: {
@@ -192,7 +191,6 @@ export const getTopProducts = expressAsyncHandler(
         name: item.productName,
         revenue: item._sum.productPrice || 0,
         sales: item._sum.quantity || 0,
-        image: item.productImage,
       })
     );
 

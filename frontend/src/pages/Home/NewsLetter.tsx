@@ -19,7 +19,7 @@ export default function NewsLetter() {
         <h1 className='mb-2 heading text-center'>
           Subscribe to Our Newsletter
         </h1>
-        <p className='mx-auto mb-6 w-11/12 px-1 text-sm sm:text-base md:w-9/12'>
+        <p className='mx-auto text-muted-foreground mb-6 w-11/12 px-1 text-sm sm:text-base md:w-9/12'>
           Get the latest updates, exclusive deals, and special offers delivered
           straight to your inbox.
         </p>

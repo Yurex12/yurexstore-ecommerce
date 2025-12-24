@@ -30,7 +30,7 @@ export default function TopProductsChart() {
   const { topProducts, isPending, error } = useTopProducts();
   if (isPending) return <TopProductsChartSkeleton />;
   if (error)
-    return <AnalyticsError title='Top Products' className='h-[470px]' />;
+    return <AnalyticsError title='Top Products' className='h-[500px]' />;
 
   if (!topProducts) return <p>No data</p>;
 
@@ -41,7 +41,7 @@ export default function TopProductsChart() {
         <CardDescription>Ranked by total revenue</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className='h-[350px] w-full'>
+        <ChartContainer config={chartConfig} className='h-[380px] w-full'>
           <BarChart
             accessibilityLayer
             data={topProducts}

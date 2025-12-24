@@ -2,27 +2,41 @@ import { Button } from '@/components/ui/button';
 
 export default function Hero() {
   return (
-    <div className='flex flex-col-reverse items-center md:flex-row '>
-      {/* left item */}
-      <div className='space-y-5 py-6 md:basis-1/2 md:space-y-8'>
-        <h1 className='space-y-1 text-center text-xl font-bold sm:text-3xl md:text-left lg:text-4xl xl:text-5xl'>
-          <span className='block text-primary'>Step into the</span>
-          <span className='block'>New Season in Style</span>
-          {/* <span className='block text-primary'>New Drops</span> <span className='block'>Fresh Fits for the Season</span> */}
+    <div className='relative flex flex-col-reverse md:flex-row h-auto md:h-[25rem] bg-accent rounded-md overflow-hidden'>
+      {/* Responsive Background Glow */}
+      <div className='absolute inset-0 z-0 pointer-events-none'>
+        <div className='absolute -top-12 -left-12 md:-top-24 md:-left-24 w-64 h-64 md:w-96 md:h-96 bg-primary/20 blur-[80px] md:blur-[100px] rounded-full' />
+      </div>
+
+      {/* Left Item: Content */}
+      <div className='relative z-10 flex-1 flex flex-col justify-center items-center md:items-start p-6 sm:p-8 md:p-12 lg:p-16 gap-4 md:gap-6 text-center md:text-left'>
+        <h1 className='text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15]'>
+          Everything You Need, <br className='hidden sm:block' />
+          <span className='text-primary'> All in One Place.</span>
         </h1>
-        <p className='mx-auto max-w-md text-center text-sm md:mx-0 md:text-left md:text-base'>
-          Discover our latest arrivals crafted for comfort and elegance. Elevate
-          your wardrobe with our new season collection.
+
+        <p className='text-sm sm:text-base text-muted-foreground max-w-[550px] leading-relaxed'>
+          Elevate your space, your style, and your daily routine with a curated
+          collection designed for a life well-lived.
         </p>
-        <div className='flex items-center justify-center md:justify-start'>
-          <Button className='w-fit rounded-lg bg-foreground px-10 text-background hover:bg-foreground/90'>
+
+        <div className='mt-2 w-full sm:w-auto'>
+          <Button className='sm:w-fit rounded-lg px-10 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow'>
             Shop Now
           </Button>
         </div>
       </div>
-      {/* right item */}
-      <div className='md:basis-1/2'>
-        <img src='/hero.png' alt='brand-picture' />
+
+      {/* Right Item: Image */}
+      <div className='relative z-10 flex-1 w-full h-full sm:h-80 md:h-full bg-muted/50 border-b md:border-b-0 md:border-l border-white/10'>
+        {/* <div className='relative'> */}
+        <img
+          src='/hero.png'
+          alt='Featured Products'
+          className='w-full h-full object-cover'
+        />
+        {/* Subtle overlay to make the image blend better on mobile */}
+        <div className='absolute inset-0 bg-gradient-to-t from-accent via-transparent to-transparent md:hidden' />
       </div>
     </div>
   );

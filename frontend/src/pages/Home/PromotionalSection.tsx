@@ -18,7 +18,7 @@ export default function PromotionalSection() {
           purchase.{' '}
         </p>
         <div className='flex justify-center md:justify-start'>
-          <Button className='rounded-lg bg-foreground/90 has-[>svg]:px-6 text-background hover:bg-foreground'>
+          <Button className='has-[>svg]:px-6 '>
             <span>Grab it now</span>
             <MoveRight className='text-lg' />
           </Button>

@@ -33,7 +33,7 @@ export default function OverviewChart() {
 
   if (isPending) return <OverviewChartSkeleton />;
   if (error)
-    return <AnalyticsError title='Performance Chart' className='h-[470px]' />;
+    return <AnalyticsError title='Performance Chart' className='h-[520px]' />;
 
   if (!chartData) return <p>No data</p>;
   return (
@@ -48,13 +48,14 @@ export default function OverviewChart() {
       <CardContent>
         <ChartContainer
           config={chartConfig}
-          className='aspect-[auto] h-[350px] w-full'
+          className='aspect-[auto] h-[380px] w-full'
         >
           <AreaChart
             accessibilityLayer
             data={chartData}
             margin={{
               left: 12,
+              top: 60,
               right: 12,
             }}
           >
