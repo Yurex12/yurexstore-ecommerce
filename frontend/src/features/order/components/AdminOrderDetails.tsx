@@ -6,9 +6,9 @@ import { useParams } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-import ErrorState from '@/components/ErrorState';
+import ErrorState from '@/components/AdminErrorState';
 import NoData from '@/components/NoData';
-import { PageLoader } from '@/components/PageLoader';
+import PageLoader from '@/components/PageLoader';
 
 import useAdminCancelOrder from '../hooks/useAdminCancelOrder';
 import useAdminCompleteOrder from '../hooks/useAdminCompleteOrder';

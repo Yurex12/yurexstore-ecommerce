@@ -1,6 +1,6 @@
-import ErrorState from '@/components/ErrorState';
+import ErrorState from '@/components/AdminErrorState';
 import NoData from '@/components/NoData';
-import { PageLoader } from '@/components/PageLoader';
+import PageLoader from '@/components/PageLoader';
 import { DataTable } from '@/components/ui/data-table';
 import { useCategories } from '../hook/useCategories';
 import useDeleteCategories from '../hook/useDeleteCategories';

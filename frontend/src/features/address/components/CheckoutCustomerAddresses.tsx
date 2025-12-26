@@ -11,7 +11,7 @@ import { useAddressStore } from '../store/useAddressStore';
 
 import { useAddresses } from '../hooks/useAddresses';
 import CustomerAddressSkeleton from './CustomerAddressSkeleton';
-import InlineError from '@/components/InlineError';
+import InlineError from '@/components/ErrorState';
 
 export function CheckoutCustomerAddresses() {
   const { addresses, error, isPending } = useAddresses();

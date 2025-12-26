@@ -1,15 +1,16 @@
-import InlineError from '@/components/InlineError';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import EmptyState from '@/components/EmptyState';
-import { useCategories } from '../hook/useCategories';
+
 import CategoryCard from './CategoryCard';
 import CategorySkeletonList from './CategorySkeletonList';
+import EmptyState from '@/components/EmptyState';
+import ErrorState from '@/components/ErrorState';
 
+import { useCategories } from '../hook/useCategories';
 export default function CategoriesList() {
   const { categories, isPending, error } = useCategories();
 
   if (isPending) return <CategorySkeletonList />;
-  if (error) return <InlineError message='Unable to load categories' />;
+  if (error) return <ErrorState message='Unable to load categories' />;
   if (!categories?.length) return <EmptyState message='No categories found' />;
 
   return (

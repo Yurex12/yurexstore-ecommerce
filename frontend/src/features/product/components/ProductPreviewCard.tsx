@@ -2,7 +2,7 @@ import { formatCurrency } from '@/lib/helpers';
 import { Star } from 'lucide-react';
 
 import { useNavigate } from 'react-router-dom';
-import type { Product } from '../types';
+import type { FeaturedProducts } from '../types';
 
 export default function ProductPreviewCard({
   id,
@@ -12,7 +12,7 @@ export default function ProductPreviewCard({
   category,
   avgRating,
   reviewCount,
-}: Product) {
+}: FeaturedProducts) {
   const navigate = useNavigate();
 
   return (

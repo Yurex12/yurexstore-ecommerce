@@ -1,7 +1,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function CartLoadingSkeleton() {
-  const skeletons = Array.from({ length: 3 });
+  const skeletons = Array.from({ length: 4 });
 
   return (
     <div className='space-y-4'>

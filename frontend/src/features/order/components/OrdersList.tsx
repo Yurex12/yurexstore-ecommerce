@@ -1,10 +1,10 @@
 import useOrders from '../hooks/useOrders';
 
 import EmptyState from '@/components/EmptyState';
-import InlineError from '@/components/InlineError';
 import OrderCard from './OrderCard';
 import OrdersSkeleton from './OrdersSkeleton';
 
+import ErrorState from '@/components/ErrorState';
 import { useOrderStore } from '../store/useOrderStore';
 
 export default function OrdersList() {
@@ -13,13 +13,17 @@ export default function OrdersList() {
 
   if (isPending) return <OrdersSkeleton />;
 
-  if (error) return <InlineError message='Unable to fetch orders' />;
+  if (error)
+    return (
+      <ErrorState
+        message='unable to load orders.'
+        className='h-[80svh] md:h-[50svh] border-0'
+      />
+    );
 
   if (!orders?.length)
     return (
-      <div className='mt-10'>
-        <p className='text-center text-muted-foreground'>No orders found.</p>
-      </div>
+      <EmptyState message='No orders yet' className='h-[80svh] border-0' />
     );
 
   let filteredOrders;

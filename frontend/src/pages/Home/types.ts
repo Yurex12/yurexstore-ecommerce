@@ -5,13 +5,3 @@ export type BrandFeature = {
   description: string;
   icon: IconDefinition;
 };
-
-// type CategoryItem = {
-//   id: string;
-//   name: string;
-//   icon: React.ForwardRefExoticComponent<
-//     Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
-//   >;
-// };
-
-// export type CategoryItemsProps = CategoryItem[];

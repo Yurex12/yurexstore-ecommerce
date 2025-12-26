@@ -1,4 +1,4 @@
-import InlineError from '@/components/InlineError';
+import InlineError from '@/components/ErrorState';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import useUser from '@/features/auth/hooks/useUser';

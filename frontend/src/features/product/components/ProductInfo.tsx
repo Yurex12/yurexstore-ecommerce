@@ -74,7 +74,7 @@ export default function ProductInfo({ product }: { product: ProductDetails }) {
       {/* Title & Actions */}
       <div className='space-y-3'>
         <div className='flex items-start justify-between gap-4'>
-          <h1 className='text-2xl md:text-4xl font-bold text-slate-900 leading-tight'>
+          <h1 className='text-xl md:text-3xl font-bold text-slate-900 leading-tight'>
             {product.name}
           </h1>
 

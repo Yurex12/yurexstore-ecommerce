@@ -1,6 +1,6 @@
-import ErrorState from '@/components/ErrorState';
+import ErrorState from '@/components/AdminErrorState';
 import NoData from '@/components/NoData';
-import { PageLoader } from '@/components/PageLoader';
+import PageLoader from '@/components/PageLoader';
 import { DataTable } from '@/components/ui/data-table';
 import { useColors } from '../hooks/useColors';
 import { useDeleteColors } from '../hooks/useDeleteColors';

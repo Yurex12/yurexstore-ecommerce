@@ -112,6 +112,36 @@ export const getProducts = expressAsyncHandler(
     });
   }
 );
+//@desc fetch all products
+//@route GET api/products/featured-products/
+//@access public
+export const getFeaturedProducts = expressAsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const productCount = await prisma.product.count();
+
+    const take = Math.min(productCount, 4);
+
+    const skipRange = productCount - take;
+    const skip =
+      skipRange > 0 ? Math.floor(Math.random() * (skipRange + 1)) : 0;
+
+    const products = await prisma.product.findMany({
+      take,
+      skip,
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        avgRating: true,
+        reviewCount: true,
+        images: { take: 1, select: { url: true } },
+        category: { select: { name: true } },
+      },
+    });
+
+    res.json({ success: true, message: 'Successful', products });
+  }
+);
 
 //@desc fetch all products
 //@route GET api/admin/products/

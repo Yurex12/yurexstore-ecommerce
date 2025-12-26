@@ -1,5 +1,5 @@
 import EmptyState from '@/components/EmptyState';
-import InlineError from '@/components/InlineError';
+import InlineError from '@/components/ErrorState';
 import ReviewCard from '@/features/review/components/ReviewCard';
 import { ReviewsSkeleton } from '@/features/review/components/ReviewsSkeleton';
 import { useReviews } from '@/features/review/hooks/useReviews';

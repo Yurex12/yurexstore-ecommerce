@@ -15,7 +15,8 @@ export default function CartSummary() {
 
   if (!totalPrice) return null;
 
-  const totalItems = cart?.length ?? 0;
+  const totalItems =
+    cart?.reduce((sum, cartItem) => cartItem.quantity + sum, 0) || 0;
 
   return (
     <div className='space-y-2 h-fit sm:space-y-4 bg-muted/30 p-4 rounded-md order-1 sm:order-2'>

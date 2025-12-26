@@ -1,7 +1,7 @@
 import { useSearchQuery } from '@/hooks/useSearchQuery';
 
 import EmptyState from '@/components/EmptyState';
-import InlineError from '@/components/InlineError';
+import ErrorState from '@/components/ErrorState';
 
 import { useCategories } from '@/features/category/hook/useCategories';
 import ProductCategoriesSkeleton from './ProductCategoriesSkeleton';
@@ -14,7 +14,7 @@ export default function ProductCategories() {
   if (isPending) return <ProductCategoriesSkeleton />;
 
   if (error) {
-    return <InlineError message='Unable to load categories.' />;
+    return <ErrorState message='Unable to load categories.' />;
   }
 
   if (!categories?.length) {

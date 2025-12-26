@@ -57,7 +57,9 @@ export default function ProductCard(product: Product) {
   return (
     <div
       className='p-1 border border-input/50 pb-2 sm:p-4 space-y-2 flex flex-col h-fit justify-between'
-      onClick={() => navigate(`/shop/${product.id}`)}
+      onClick={() => {
+        if (!open) navigate(`/shop/${product.id}`);
+      }}
     >
       {/* Image + Wishlist */}
       <div className='w-full h-48 sm:h-72 bg-muted/60 flex items-center justify-center relative'>

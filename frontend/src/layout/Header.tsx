@@ -14,7 +14,7 @@ function Header() {
   const handleClose = () => setOpen(false);
   return (
     <header className='fixed top-0 z-50 mx-auto flex w-full items-center justify-between bg-background/80 border border-b border-input/40'>
-      <div className='mx-auto flex max-w-[1600px]  flex-1 items-center justify-between p-6 backdrop-blur'>
+      <div className='mx-auto flex max-w-[1600px] px-4 py-4 md:px-10  flex-1 items-center justify-between backdrop-blur'>
         <Logo />
 
         <ProductsSearchBar />

@@ -22,8 +22,8 @@ import {
   updateAddressSchema,
   type UpdateAddressSchema,
 } from '../schemas/addressSchema';
-import { PageLoader } from '@/components/PageLoader';
-import ErrorState from '@/components/ErrorState';
+import PageLoader from '@/components/PageLoader';
+import ErrorState from '@/components/AdminErrorState';
 
 export function EditAddressForm() {
   const navigate = useNavigate();

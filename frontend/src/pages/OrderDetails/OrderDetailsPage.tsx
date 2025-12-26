@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import { ArrowLeft } from 'lucide-react';
 
 import EmptyState from '@/components/EmptyState';
-import InlineError from '@/components/InlineError';
+import InlineError from '@/components/ErrorState';
 import { Separator } from '@/components/ui/separator';
 
 import OrderDeliveryInfo from '@/features/order/components/OrderDeliveryInfo';
@@ -12,12 +12,17 @@ import OrderItemsList from '@/features/order/components/OrderItemsList';
 import OrderPaymentInfo from '@/features/order/components/OrderPaymentInfo';
 import OrderStatus from '@/features/order/components/OrderStatus';
 import useOrder from '@/features/order/hooks/useOrder';
+import { useEffect } from 'react';
 
 export default function OrderDetailsPage() {
   const { id } = useParams();
   const { order, isPending, error } = useOrder(id);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [id]);
 
   if (isPending) return <OrderDetailsSkeleton />;
 

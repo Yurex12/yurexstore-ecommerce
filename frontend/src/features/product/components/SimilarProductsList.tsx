@@ -1,5 +1,5 @@
 import { Spinner } from '@/components/ui/spinner';
-import InlineError from '@/components/InlineError';
+import InlineError from '@/components/ErrorState';
 import ProductCard from './ProductCard';
 
 import { useSimilarProducts } from '../hooks/useSimilarProducts';

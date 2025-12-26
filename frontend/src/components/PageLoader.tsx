@@ -1,16 +1,22 @@
+import { cn } from '@/lib/utils';
 import { Spinner } from './ui/spinner';
 
-export function PageLoader({ message }: { message?: string }) {
+export default function PageLoader({
+  message,
+  className,
+}: {
+  message?: string;
+  className?: string;
+}) {
   return (
-    <div className='container mx-auto'>
-      <div className='flex items-center justify-center min-h-[75vh] md:min-h-[60vh] w-full'>
-        <div className='flex flex-col items-center gap-3'>
-          <Spinner className='h-10 w-10' />
-          <p className='text-sm text-muted-foreground'>
-            {message ?? 'Loading...'}
-          </p>
-        </div>
-      </div>
+    <div
+      className={cn(
+        'flex flex-col items-center gap-3 justify-center h-[75svh] md:h-[60svh] w-full',
+        className
+      )}
+    >
+      <Spinner className='h-10 w-10' />
+      <p className='text-sm text-muted-foreground'>{message ?? 'Loading...'}</p>
     </div>
   );
 }

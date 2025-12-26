@@ -34,9 +34,9 @@ import { useCreateProduct } from '../hooks/useCreateProduct';
 
 import { MAX_IMAGE_SIZE } from '../constants';
 
-import ErrorState from '@/components/ErrorState';
+import ErrorState from '@/components/AdminErrorState';
 import NoData from '@/components/NoData';
-import { PageLoader } from '@/components/PageLoader';
+import PageLoader from '@/components/PageLoader';
 import {
   productCreateSchema,
   type ProductCreateSchema,

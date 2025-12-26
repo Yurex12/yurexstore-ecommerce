@@ -1,4 +1,4 @@
-import { Spinner } from '@/components/ui/spinner';
+import AuthSpinner from '@/components/AuthSpinner';
 import useUser from '@/features/auth/hooks/useUser';
 import { Navigate, Outlet } from 'react-router-dom';
 
@@ -11,7 +11,7 @@ export default function ProtectedRoute({
 }: ProtectedRouteProps) {
   const { user, isPending } = useUser();
 
-  if (isPending) return <Spinner />;
+  if (isPending) return <AuthSpinner />;
 
   if (!user) return <Navigate to={redirectTo} replace />;
 

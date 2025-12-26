@@ -2,7 +2,8 @@ import WishlistItem from './WishlistItem';
 
 import { useWishlist } from '../hooks/useWishlist';
 
-import InlineError from '@/components/InlineError';
+import EmptyState from '@/components/EmptyState';
+import ErrorState from '@/components/ErrorState';
 import WishlistItemsSkeleton from './WishlistItemsSkeleton';
 
 export default function WishlistItemsList() {
@@ -10,15 +11,20 @@ export default function WishlistItemsList() {
 
   if (isPending) return <WishlistItemsSkeleton />;
 
-  if (error) return <InlineError message='Unable to load wishlist' />;
+  if (error)
+    return (
+      <ErrorState
+        message='Unable to load wishlist'
+        className='h-[80svh] md:h-[60svh] border-0'
+      />
+    );
 
   if (!wishlist?.length)
     return (
-      <div className='mt-10'>
-        <p className='text-center text-muted-foreground'>
-          There are currently no products in your wishlist.
-        </p>
-      </div>
+      <EmptyState
+        message='There are currently no products in your wishlist.'
+        className='h-[80svh] md:h-[60svh] border-0'
+      />
     );
 
   return (

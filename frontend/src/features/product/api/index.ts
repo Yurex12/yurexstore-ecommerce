@@ -5,6 +5,7 @@ import type { ProductCreateSchema } from '../schemas/productCreateSchema';
 import type { ProductEditSchema } from '../schemas/productEditSchema';
 import type {
   GetAdminProductsResponse,
+  GetFeaturedProductsResponse,
   GetProductResponse,
   GetProductsResponse,
   GetSearchProductsResponse,
@@ -68,6 +69,18 @@ export async function getProduct(productId: string) {
     return data.product;
   } catch (error) {
     handleApiError(error, 'Failed to fetch product');
+  }
+}
+
+export async function getFeaturedProducts() {
+  try {
+    const { data } = await api.get<GetFeaturedProductsResponse>(
+      `/products/featured-products`
+    );
+
+    return data.products;
+  } catch (error) {
+    handleApiError(error, 'Failed to fetch products');
   }
 }
 

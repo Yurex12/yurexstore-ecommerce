@@ -7,7 +7,7 @@ import { footerLinks } from './constants';
 
 function Footer() {
   return (
-    <footer className='mt-10'>
+    <footer className='mt-10 bg-muted'>
       <div className='mx-auto max-w-[1600px]  px-6'>
         <div className='grid grid-cols-1 gap-y-5 py-5 sm:grid-cols-[2fr_1fr] sm:pl-2 lg:grid-cols-[2fr_1fr_1fr_1fr] lg:gap-x-4'>
           {/* text & logo */}

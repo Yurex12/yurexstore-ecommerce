@@ -11,6 +11,7 @@ import {
   deleteProduct,
   getProduct,
   getProducts,
+  getFeaturedProducts,
   getSearchProducts,
   getSimilarProduct,
   updateProduct,
@@ -20,6 +21,7 @@ import { productEditSchema } from '../schemas/productEditSchema';
 const router = express.Router();
 
 router.get('/', getProducts);
+router.get('/featured-products', getFeaturedProducts);
 
 router.get(
   '/similar-products',

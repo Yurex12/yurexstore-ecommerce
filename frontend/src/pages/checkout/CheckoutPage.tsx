@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 import { Separator } from '@/components/ui/separator';
 
 import FullPageLoader from '@/components/FullPageLoader';
-import InlineError from '@/components/InlineError';
 import CheckoutItemsList from './components/CheckoutItemsList';
 import CheckoutSkeleton from './components/CheckoutSkeleton';
 
+import ErrorState from '@/components/ErrorState';
 import { CheckoutCustomerAddresses } from '@/features/address/components/CheckoutCustomerAddresses';
 import { useAddressStore } from '@/features/address/store/useAddressStore';
 import { useCart } from '@/features/cart/hooks/useCart';
@@ -30,9 +30,19 @@ export default function CheckoutPage() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    window.scrollTo({ left: 0, top: 0, behavior: 'instant' });
+  }, []);
+
   if (isFetchingCart) return <CheckoutSkeleton />;
 
-  if (error) return <InlineError message='Unable to load your cart' />;
+  if (error)
+    return (
+      <ErrorState
+        message='unable to load products.'
+        className='h-[80svh] border-0'
+      />
+    );
 
   if (!cart?.length) return <Navigate to='/shop' replace />;
 

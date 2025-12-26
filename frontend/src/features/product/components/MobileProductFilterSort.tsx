@@ -2,8 +2,12 @@ import { Sheet, SheetTrigger } from '@/components/ui/sheet';
 import { ArrowUpDown, Filter } from 'lucide-react';
 import MobileFilterOptions from './MobileProductFilterOptions';
 import MobileSortOptions from './MobileSortOption';
+import { useProducts } from '../hooks/useProducts';
 
 export default function MobileFilterSort() {
+  const { products, error } = useProducts();
+
+  if (!products?.length || error) return null;
   return (
     <div className='fixed bottom-10 z-10 block w-full md:hidden'>
       <div className='mx-auto flex w-45 justify-between rounded-full  shadow-2xl bg-foreground/80 text-background'>

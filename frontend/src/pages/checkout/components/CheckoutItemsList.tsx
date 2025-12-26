@@ -1,7 +1,7 @@
 import { useCart } from '@/features/cart/hooks/useCart';
 import CheckoutItem from './CheckoutItem';
 import { Spinner } from '@/components/ui/spinner';
-import InlineError from '@/components/InlineError';
+import InlineError from '@/components/ErrorState';
 import EmptyState from '@/components/EmptyState';
 
 export default function CheckoutItemsList() {

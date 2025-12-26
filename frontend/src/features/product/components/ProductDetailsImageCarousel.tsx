@@ -20,14 +20,14 @@ export default function ProductImageCarousel({ images }: Props) {
         prevEl: '.swiper-button-prev-custom',
       }}
       pagination={{ clickable: true }}
-      className='w-full md:h-140 h-100 relative bg-gray-50'
+      className='w-full md:h-125 h-100 relative bg-gray-50'
     >
       {images.map((img) => (
         <SwiperSlide key={img.id} className='flex justify-center items-center'>
           <img
             src={img.url}
             alt=''
-            className='w-full h-full object-contain rounded-md'
+            className='w-full h-full object-contain rounded-md p-2'
           />
         </SwiperSlide>
       ))}

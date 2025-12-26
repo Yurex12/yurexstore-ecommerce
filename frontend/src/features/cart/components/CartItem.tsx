@@ -24,7 +24,7 @@ export default function CartItem(cartItem: CartWithRelation) {
     <div className='py-4 border-b space-y-4'>
       {/* top section */}
       <div className='flex gap-4 sm:gap-6'>
-        <div className='size-20 rounded bg-muted/60 flex items-center justify-center'>
+        <div className='size-20 rounded bg-muted/60 flex items-center justify-center '>
           <img
             src={cartItem.product.images[0].url}
             alt={cartItem.product.name}

@@ -41,8 +41,8 @@ import {
 
 import { MAX_IMAGE_SIZE } from '../constants';
 import NoData from '@/components/NoData';
-import ErrorState from '@/components/ErrorState';
-import { PageLoader } from '@/components/PageLoader';
+import ErrorState from '@/components/AdminErrorState';
+import PageLoader from '@/components/PageLoader';
 
 export default function AdminProductEditForm() {
   const { productId } = useParams();

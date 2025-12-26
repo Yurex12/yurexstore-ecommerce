@@ -1,7 +1,7 @@
 import { useSearchQuery } from '@/hooks/useSearchQuery';
 import { useColors } from '@/features/color/hooks/useColors';
 import ProductColorsSkeleton from './ProductColorsSkeleton';
-import InlineError from '@/components/InlineError';
+import ErrorState from '@/components/ErrorState';
 import EmptyState from '@/components/EmptyState';
 
 export default function ProductColors() {
@@ -9,7 +9,7 @@ export default function ProductColors() {
   const { colors, isPending, error } = useColors();
 
   if (isPending) return <ProductColorsSkeleton />;
-  if (error) return <InlineError message='Failed to fetch colors' />;
+  if (error) return <ErrorState message='Failed to fetch colors' />;
   if (!colors?.length) return <EmptyState />;
 
   return (

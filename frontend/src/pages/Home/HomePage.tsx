@@ -1,16 +1,18 @@
-import BrandFeatures from './BrandFeatures';
-import FeaturedCategories from './FeaturedCategories';
-import Hero from './Hero';
-import NewsLetter from './NewsLetter';
-import ProductShowcase from './ProductShowcase';
-import PromotionalSection from './PromotionalSection';
+import Hero from './components/Hero';
+import FeaturedCategories from './components/FeaturedCategories';
+import ProductsPreview from './components/ProductsPreview';
+import PromotionalSection from './components/PromotionalSection';
+import BrandFeatures from './components/BrandFeatures';
+import NewsLetter from './components/NewsLetter';
+import AdminLoginDialog from '@/features/auth/components/AdminLoginDialog';
 
 export default function HomePage() {
   return (
     <>
+      <AdminLoginDialog />
       <Hero />
       <FeaturedCategories />
-      <ProductShowcase />
+      <ProductsPreview />
       <PromotionalSection />
       <BrandFeatures />
       <NewsLetter />

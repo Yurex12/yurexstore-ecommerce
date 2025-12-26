@@ -2,8 +2,9 @@ import axios, { AxiosError } from 'axios';
 import type { ApiResponseBase } from './types';
 
 export const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
-  // baseURL: 'http://192.168.0.2:8080/api',
+  // baseURL: 'http://localhost:8080/api',
+  baseURL: 'http://192.168.0.3:8080/api',
+  // baseURL: 'http://192.168.0.3:8080/api',
   // baseURL: 'http://172.20.10.2:8080/api',
   withCredentials: true,
 });

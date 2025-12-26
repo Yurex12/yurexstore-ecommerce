@@ -1,6 +1,6 @@
 import { Edit, MapPin } from 'lucide-react';
 
-import InlineError from '@/components/InlineError';
+import InlineError from '@/components/ErrorState';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAddresses } from '@/features/address/hooks/useAddresses';

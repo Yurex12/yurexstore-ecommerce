@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function ProductListSkeleton() {
   return (
     <div className='mt-3 grid grid-cols-2 gap-1 sm:gap-2 lg:grid-cols-3'>
-      {Array.from({ length: 8 }).map((_, i) => (
+      {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}
           className='p-1 border border-input/50 pb-2 sm:p-4 space-y-3 rounded'

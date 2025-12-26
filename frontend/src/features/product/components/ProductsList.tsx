@@ -1,24 +1,32 @@
 import EmptyState from '@/components/EmptyState';
-import InlineError from '@/components/InlineError';
+import InlineError from '@/components/ErrorState';
 import ProductCard from './ProductCard';
+import PaginationControls from '@/components/Pagination';
+
 import ProductListSkeleton from './ProductListSkeleton';
 
 import { useProducts } from '../hooks/useProducts';
-import PaginationControls from '@/components/Pagination';
 
 export default function ProductsList() {
   const { products, isPending, error, page, totalPages } = useProducts();
 
-  if (isPending) {
-    return <ProductListSkeleton />;
-  }
+  if (isPending) return <ProductListSkeleton />;
 
-  if (error) {
-    return <InlineError message='unable to load products.' />;
-  }
+  if (error)
+    return (
+      <InlineError
+        message='unable to load products.'
+        className='h-[80svh] border-0 md:h-auto md:border'
+      />
+    );
 
   if (!products?.length) {
-    return <EmptyState message='No products found.' />;
+    return (
+      <EmptyState
+        message='No products found.'
+        className='h-[80svh] border-0 md:h-auto md:border'
+      />
+    );
   }
 
   return (

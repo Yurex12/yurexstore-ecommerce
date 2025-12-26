@@ -36,7 +36,7 @@ export default function MobileProductsSearch() {
     <div className='w-full h-svh fixed top-0 left-0  py-4 px-2 bg-background flex flex-col'>
       <div className='flex items-center gap-2 mb-4'>
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/shop')}
           className='p-2 text-gray-700 hover:text-gray-900'
         >
           <ArrowLeft className='size-6' />

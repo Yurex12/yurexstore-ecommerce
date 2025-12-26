@@ -1,15 +1,17 @@
 import EmptyState from '@/components/EmptyState';
-import InlineError from '@/components/InlineError';
-import { useProducts } from '../hooks/useProducts';
+import ErrorState from '@/components/ErrorState';
+
 import ProductPreviewCard from './ProductPreviewCard';
-import ProductPreviewSkeletonGrid from './ProductPreviewSkeletonGrid';
+
+import { useFeaturedProducts } from '../hooks/useFeaturedProducts';
+import ProductsPreviewSkeleton from './ProductsPreviewSkeleton';
 
 export default function ProductsPreviewList() {
-  const { products, isPending, error } = useProducts();
+  const { products, error, isPending } = useFeaturedProducts();
 
-  if (isPending) return <ProductPreviewSkeletonGrid />;
+  if (isPending) return <ProductsPreviewSkeleton />;
 
-  if (error) return <InlineError message='Unable to load products' />;
+  if (error) return <ErrorState message='Unable to load products' />;
 
   if (!products?.length) return <EmptyState message='No products found' />;
 

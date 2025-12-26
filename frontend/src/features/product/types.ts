@@ -60,6 +60,16 @@ type ProductSearchResponse = {
   name: string;
 };
 
+export type FeaturedProducts = {
+  id: string;
+  name: string;
+  price: number;
+  avgRating: number;
+  reviewCount: number;
+  images: { url: string }[];
+  category: { name: string };
+};
+
 export type SearchDropdownProps = {
   isPending: boolean;
   error: Error | null;
@@ -84,6 +94,9 @@ export type GetProductResponse = ApiResponseBase & {
 
 export type GetAdminProductsResponse = ApiResponseBase & {
   products: AdminProduct[];
+};
+export type GetFeaturedProductsResponse = ApiResponseBase & {
+  products: FeaturedProducts[];
 };
 
 export type ProductVariantProps = {

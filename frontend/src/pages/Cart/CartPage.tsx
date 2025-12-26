@@ -1,21 +1,34 @@
 import { useNavigate } from 'react-router-dom';
 
-import InlineError from '@/components/InlineError';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+
 import CartItemsList from '@/features/cart/components/CartItemList';
+import CartLoadingSkeleton from '@/features/cart/components/CartLoadingSkeleton';
 import CartSummary from '@/features/cart/components/CartSummary';
 import EmptyCart from '@/features/cart/components/EmptyCart';
+
+import ErrorState from '@/components/ErrorState';
 import { useCart } from '@/features/cart/hooks/useCart';
-import CartLoadingSkeleton from '@/features/cart/components/CartLoadingSkeleton';
+import { useEffect } from 'react';
 
 export default function CartPage() {
   const navigate = useNavigate();
   const { cart, isPending, error } = useCart();
 
+  useEffect(() => {
+    window.scrollTo({ left: 0, top: 0, behavior: 'instant' });
+  }, []);
+
   if (isPending) return <CartLoadingSkeleton />;
 
-  if (error) return <InlineError message='Unable to load cart' />;
+  if (error)
+    return (
+      <ErrorState
+        message='unable to load Cart.'
+        className='h-[80svh] border-0'
+      />
+    );
 
   if (!cart?.length) return <EmptyCart />;
 
