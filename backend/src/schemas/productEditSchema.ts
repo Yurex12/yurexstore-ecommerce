@@ -35,7 +35,6 @@ export const productEditSchema = z.object({
     )
     .min(1, 'At least one image is required')
     .max(4, 'Maximum 4 images allowed')
-
     .optional(),
 });
 

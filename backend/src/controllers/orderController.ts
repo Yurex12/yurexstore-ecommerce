@@ -269,7 +269,7 @@ export const createOrder = expressAsyncHandler(
 
         return newOrder;
       },
-      { timeout: 10000 }
+      { timeout: 15_000 }
     );
 
     res.status(201).json({

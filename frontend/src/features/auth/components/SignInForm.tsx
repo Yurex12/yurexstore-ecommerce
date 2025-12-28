@@ -38,7 +38,10 @@ export default function SignInForm() {
   function onsubmit(userDetails: SignInSchema) {
     signIn(userDetails, {
       onSuccess() {
-        navigate(redirectURL || '/', { replace: true });
+        const decodedURL = redirectURL ? decodeURIComponent(redirectURL) : null;
+        const safeRedirect = decodedURL?.startsWith('/') ? decodedURL : '/';
+
+        navigate(safeRedirect, { replace: true });
       },
     });
   }

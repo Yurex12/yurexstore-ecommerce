@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import { Worker } from 'bullmq';
 
 import { connection } from '../config/redisConnection';
@@ -23,21 +25,31 @@ const worker = new Worker(
       where: { paymentIntentId },
     });
 
-    if (existing) return;
-
-    if (!checkoutId) return;
+    if (existing) {
+      // console.log('Order already exists');
+      return;
+    }
+    if (!checkoutId) {
+      // console.log('Missing checkoutId');
+      return;
+    }
 
     const checkout = await prisma.checkout.findUnique({
       where: { id: checkoutId },
     });
 
-    if (!checkout) throw new Error('Checkout not found');
+    if (!checkout) {
+      // /console.log('Checkout not found');
+      throw new Error('Checkout not found');
+    }
 
     if (new Date() > checkout.expiresAt) {
       await stripe.refunds.create({
         payment_intent: paymentIntentId,
         reason: 'requested_by_customer',
       });
+
+      // console.log('Checkout expired, refund issued');
 
       return;
     }
@@ -98,7 +110,7 @@ const worker = new Worker(
           });
         }
 
-        await prisma.cartItem.deleteMany({
+        await tx.cartItem.deleteMany({
           where: { userId: checkout.userId },
         });
       },

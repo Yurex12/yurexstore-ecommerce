@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,6 @@ import EmptyCart from '@/features/cart/components/EmptyCart';
 
 import ErrorState from '@/components/ErrorState';
 import { useCart } from '@/features/cart/hooks/useCart';
-import { useEffect } from 'react';
 
 export default function CartPage() {
   const navigate = useNavigate();

@@ -27,6 +27,7 @@ export function LoginRequiredDialog({
   const location = useLocation();
 
   const url = encodeURIComponent(location.pathname + location.search);
+  
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='sm:w-md'>

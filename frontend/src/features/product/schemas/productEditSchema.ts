@@ -17,7 +17,6 @@ export const productEditSchema = z.object({
   quantity: z.coerce
     .number()
     .int()
-    // .positive('Quantity must be greater than 0')
     .optional(),
   variantTypeName: z.string().optional(),
   productVariants: z
