@@ -35,7 +35,11 @@ export function useDecrementCartItem() {
       return { prevCart };
     },
 
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data?.quantity === 1) {
+        toast.success('Item removed from cart');
+        return;
+      }
       toast.success('Item quantity reduced');
     },
 

@@ -17,6 +17,7 @@ import {
   updateProduct,
 } from '../controllers/productController';
 import { productEditSchema } from '../schemas/productEditSchema';
+import { optionalAuth } from '../middlewares/optionalAuth';
 
 const router = express.Router();
 
@@ -25,6 +26,7 @@ router.get('/featured-products', getFeaturedProducts);
 
 router.get(
   '/similar-products',
+  optionalAuth,
   validateQuery(similarProductsSchema),
   getSimilarProduct
 );

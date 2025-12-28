@@ -1,29 +1,40 @@
-import { Database, MenuIcon, Search, ShoppingCart } from 'lucide-react';
+import { useState } from 'react';
 
-import { SheetTrigger } from '@/components/ui/sheet';
-import { Link, useLocation } from 'react-router-dom';
-import AccountActions from './AccountActions';
+import { Database, Search, ShoppingCart } from 'lucide-react';
+
+import useUser from '@/features/auth/hooks/useUser';
 import { useCart } from '@/features/cart/hooks/useCart';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import AccountActions from './AccountActions';
+import AdminLoginDialog from '@/features/auth/components/AdminLoginDialog';
 
 export default function HeaderActions() {
   const { cart } = useCart();
   const location = useLocation();
 
+  const { user } = useUser();
+
+  const navigate = useNavigate();
+
+  const [openAdminLoginDialog, setOpenAdminLoginDialog] = useState(false);
+
   const totalItems =
     cart?.reduce((sum, cartItem) => cartItem.quantity + sum, 0) || 0;
   return (
     <div className='flex items-center space-x-5 text-2xl hover:cursor-pointer md:space-x-8'>
-      <Link
-        to='/admin'
-        className='flex items-center justify-center gap-2 h-10 px-2 md:px-4 rounded-lg border border-foreground/70 hover:border-primary/50 bg-background hover:bg-accent transition-all duration-300 group'
-        title='Admin Dashboard'
-      >
-        <Database className='w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors' />
+      {user && (
+        <button
+          onClick={() => {
+            if (user.role !== 'ADMIN') setOpenAdminLoginDialog(true);
+            else navigate('/admin');
+          }}
+          className='px-4 py-2 border border-foreground/50 flex items-center gap-2 rounded-md cursor-pointer'
+        >
+          <Database className='w-5 h-5' />
 
-        <span className='hidden md:inline text-sm group-hover:text-primary transition-colors'>
-          Admin Dashboard
-        </span>
-      </Link>
+          <span className='hidden md:inline text-sm'>Admin Dashboard</span>
+        </button>
+      )}
       <AccountActions />
       <Link
         to={{ hash: 'search', search: location.search }}
@@ -47,6 +58,11 @@ export default function HeaderActions() {
       {/* <SheetTrigger asChild>
         <MenuIcon className='lg:hidden' />
       </SheetTrigger> */}
+
+      <AdminLoginDialog
+        open={openAdminLoginDialog}
+        setOpen={setOpenAdminLoginDialog}
+      />
     </div>
   );
 }

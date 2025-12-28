@@ -103,7 +103,7 @@ const worker = new Worker(
         });
       },
 
-      { timeout: 20_000 }
+      { timeout: 15_000 }
     );
 
     await prisma.checkout.delete({

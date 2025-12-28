@@ -1,42 +1,59 @@
+import { Instagram, Twitter, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-import { Instagram, TwitterIcon } from 'lucide-react';
 
 import Logo from '@/components/Logo';
 import { footerLinks } from './constants';
 
 function Footer() {
   return (
-    <footer className='mt-10 bg-muted'>
-      <div className='mx-auto max-w-[1600px]  px-6'>
-        <div className='grid grid-cols-1 gap-y-5 py-5 sm:grid-cols-[2fr_1fr] sm:pl-2 lg:grid-cols-[2fr_1fr_1fr_1fr] lg:gap-x-4'>
-          {/* text & logo */}
-          <div className='space-y-4 p-1'>
-            <Logo className='uppercase text-foreground/70' />
-            <p className='sm:w-8/12 md:w-6/12'>
+    <footer className='mt-20 border-t bg-muted/30'>
+      {/* Container: Changed from fixed 1600px to max-width for responsiveness */}
+      <div className='mx-auto max-w-[1600px] px-6 py-12 lg:px-12'>
+        <div className='grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-5'>
+          {/* Brand Section - Takes more space on large screens */}
+          <div className='lg:col-span-2 space-y-6'>
+            <Logo className='uppercase text-foreground/80' />
+            <p className='text-muted-foreground leading-relaxed max-w-sm'>
               Specializes in providing high-quality, stylish products for your
-              wardrobe.
+              wardrobe. Elevate your everyday style with Yurexstore.
             </p>
-            <div className='flex space-x-4'>
-              {/* Telegram Icon */}
-              <TwitterIcon className='h-6 w-6 text-foreground/60' />
-              <Instagram className='h-6 w-6 text-foreground/60' />
-
-              {/* X (Twitter) Icon */}
-              <Instagram className='h-6 w-6 text-foreground/60' />
+            <div className='flex items-center space-x-5'>
+              <a
+                href='#'
+                className='text-muted-foreground hover:text-primary transition-colors'
+              >
+                <Send className='h-5 w-5' /> {/* Using Send for Telegram */}
+              </a>
+              <a
+                href='#'
+                className='text-muted-foreground hover:text-primary transition-colors'
+              >
+                <Instagram className='h-5 w-5' />
+              </a>
+              <a
+                href='#'
+                className='text-muted-foreground hover:text-primary transition-colors'
+              >
+                <Twitter className='h-5 w-5' />
+              </a>
             </div>
           </div>
 
-          {/* links */}
+          {/* Links Sections */}
           {footerLinks.map((footerLink) => (
-            <div className='p-1'>
-              <h2 className='text-lg uppercase text-foreground/70'>
+            <div key={footerLink.name} className='space-y-5'>
+              <h2 className='text-sm font-bold uppercase tracking-wider text-foreground'>
                 {footerLink.name}
               </h2>
-              <ul className='mt-3 space-y-3'>
+              <ul className='space-y-3'>
                 {footerLink.links.map((link) => (
-                  <li>
-                    <Link to={link.href}>{link.title}</Link>
+                  <li key={link.title}>
+                    <Link
+                      to='#'
+                      className='text-muted-foreground hover:text-primary hover:pl-1 transition-all duration-200'
+                    >
+                      {link.title}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -44,14 +61,23 @@ function Footer() {
           ))}
         </div>
 
-        {/* footer copyright */}
-        <div className='mt-5 border-t'>
-          <p className='p-3 text-center text-foreground/40 md:p-5'>
-            Copyright &copy; {new Date().getFullYear()} Yurexstore.
-            <span className='block pl-1 sm:inline-block'>
+        {/* Footer Bottom */}
+        <div className='mt-16 pt-8 border-t border-border/50'>
+          <div className='flex flex-col items-center justify-between gap-4 sm:flex-row'>
+            <p className='text-sm text-muted-foreground'>
+              Copyright &copy; {new Date().getFullYear()}{' '}
+              <span className='font-medium text-foreground'>Yurexstore</span>.
               All rights reserved.
-            </span>
-          </p>
+            </p>
+            <div className='flex gap-6 text-xs text-muted-foreground uppercase tracking-widest'>
+              <a href='#' className='hover:text-primary transition-colors'>
+                Privacy Policy
+              </a>
+              <a href='#' className='hover:text-primary transition-colors'>
+                Terms of Service
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

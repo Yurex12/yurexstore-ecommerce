@@ -17,7 +17,7 @@ const router = express.Router();
 
 router.get('/pending-reviews', validateToken, getUserPendingReviews);
 
-router.get('/:productId', validateToken, getReviews);
+router.get('/:productId', getReviews);
 
 router.post('/', validateToken, validateData(reviewSchema), createReview);
 

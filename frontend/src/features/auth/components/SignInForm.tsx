@@ -16,9 +16,15 @@ import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import useSignIn from '../hooks/useSignIn';
 import { signInSchema, type SignInSchema } from '../schemas/signInSchema';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export default function SignInForm() {
   const { signIn, isPending } = useSignIn();
+  const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+
+  const redirectURL = searchParams.get('redirectURL');
 
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
@@ -30,7 +36,11 @@ export default function SignInForm() {
   });
 
   function onsubmit(userDetails: SignInSchema) {
-    signIn(userDetails);
+    signIn(userDetails, {
+      onSuccess() {
+        navigate(redirectURL || '/', { replace: true });
+      },
+    });
   }
 
   const isSubmitting = form.formState.isSubmitting || isPending;

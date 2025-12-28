@@ -211,12 +211,21 @@ export const getProduct = expressAsyncHandler(
 export const getSimilarProduct = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { productId, categoryId } = req.query as SimilarProductsSchema;
+    const userId = req?.user?.userId || null;
+
+    const where: Prisma.ProductWhereInput = {
+      id: { not: productId },
+      categoryId,
+    };
+
+    if (userId) {
+      where.cartItems = {
+        none: { userId },
+      };
+    }
 
     const products = await prisma.product.findMany({
-      where: {
-        id: { not: productId },
-        categoryId,
-      },
+      where,
       select: {
         id: true,
         name: true,

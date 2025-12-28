@@ -11,5 +11,5 @@ export default function useUser() {
     queryFn: getUserData,
     retry: 2,
   });
-  return { user, isPending, error };
+  return { user, isPending, error, isAuthenticated: !!user };
 }

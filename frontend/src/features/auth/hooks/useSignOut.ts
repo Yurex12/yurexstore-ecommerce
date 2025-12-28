@@ -14,7 +14,7 @@ export default function useSignOut() {
   } = useMutation({
     mutationFn: signOutApi,
     onSuccess() {
-      queryClient.invalidateQueries();
+      queryClient.clear();
       toast.success('Logout successful');
       navigate('/login');
     },
