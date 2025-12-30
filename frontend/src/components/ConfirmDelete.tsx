@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/alert-dialog';
 
 import { Button } from './ui/button';
-import { Spinner } from './ui/spinner';
+import { Info } from 'lucide-react';
 
 type ConfirmDeleteProps = {
   open: boolean;
@@ -20,8 +20,8 @@ type ConfirmDeleteProps = {
 
 export function ConfirmDelete({
   resourceName,
-  disabled,
-  onConfirm,
+  // disabled,
+  // onConfirm,
   handleOpen,
   open,
 }: ConfirmDeleteProps) {
@@ -36,23 +36,46 @@ export function ConfirmDelete({
             Are you sure you want to delete this {resourceName} permanently?
             This action cannot be undone.
           </AlertDialogDescription>
+
+          {/* Friendly Info Message */}
+          <div className='mt-3 flex items-start gap-2 rounded-lg border border-blue-100 bg-blue-50 p-3 text-sm text-blue-800'>
+            <Info className='h-4 w-4 shrink-0 mt-0.5' />
+            <p>
+              <b>Note:</b> Deletion is currently disabled for this demo.
+              Everything works, but we want to keep the data intact for other
+              visitors to explore! 🥴
+            </p>
+          </div>
         </AlertDialogHeader>
+
         <AlertDialogFooter className='flex flex-row justify-end gap-x-4'>
           <Button
             onClick={() => handleOpen(false)}
             className='focus:outline-none focus:ring-0 active:outline-none active:ring-0'
-            disabled={disabled}
             variant='outline'
           >
             Cancel
           </Button>
           <Button
-            disabled={disabled}
-            onClick={onConfirm}
-            className='w-20 bg-red-500 hover:bg-red-600 flex items-center justify-center'
+            disabled={true}
+            className='w-20 bg-red-400 opacity-70 cursor-not-allowed flex items-center justify-center text-white'
           >
-            {disabled ? <Spinner /> : 'Delete'}
+            Delete
           </Button>
+
+          {/* <Button
+
+            disabled={disabled}
+
+            onClick={onConfirm}
+
+            className='w-20 bg-red-500 hover:bg-red-600 flex items-center justify-center'
+
+          >
+
+            {disabled ? <Spinner /> : 'Delete'}
+
+          </Button> */}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

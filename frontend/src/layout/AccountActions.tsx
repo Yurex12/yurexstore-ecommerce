@@ -19,8 +19,6 @@ import {
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const MOBILE_SCREEN = 640;
-
 export default function AccountActions() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -28,9 +26,12 @@ export default function AccountActions() {
 
   const { user } = useUser();
 
+  if (!user) return null;
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      {window.innerWidth > MOBILE_SCREEN ? (
+      {/* Desktop (md and up) */}
+      <div className='hidden md:block'>
         <DropdownMenuTrigger asChild>
           <button className='flex items-center justify-center gap-x-2 rounded-md px-3 py-2 text-sm text-foreground/80 transition hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent outline-0'>
             <UserCheck2 className='size-5' />
@@ -42,18 +43,20 @@ export default function AccountActions() {
             </span>
           </button>
         </DropdownMenuTrigger>
-      ) : (
+      </div>
+
+      {/* Mobile (below md) */}
+      <div className='block md:hidden'>
         <button onClick={() => navigate('/account/menu')}>
           <UserCheck2 className='size-5' />
         </button>
-      )}
+      </div>
 
       <DropdownMenuContent
         side='bottom'
         align='end'
         className='mt-2 w-52 rounded-md border border-border bg-popover p-1 shadow-lg'
       >
-        {/* My Account */}
         <DropdownMenuItem
           className='flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground transition hover:bg-accent hover:text-accent-foreground'
           onClick={() => navigate('/account')}
@@ -62,7 +65,6 @@ export default function AccountActions() {
           <span>My Account</span>
         </DropdownMenuItem>
 
-        {/* Orders */}
         <DropdownMenuItem
           className='flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground transition hover:bg-accent hover:text-accent-foreground'
           onClick={() => navigate('/account/orders')}
@@ -71,7 +73,6 @@ export default function AccountActions() {
           <span>Orders</span>
         </DropdownMenuItem>
 
-        {/* Wishlist */}
         <DropdownMenuItem
           className='flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground transition hover:bg-accent hover:text-accent-foreground'
           onClick={() => navigate('/account/wishlist')}

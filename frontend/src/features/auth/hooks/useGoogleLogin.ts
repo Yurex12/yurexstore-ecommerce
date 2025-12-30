@@ -15,6 +15,7 @@ export default function useGoogleLogin() {
     mutationFn: loginWithGoogleApi,
     onSuccess(data) {
       queryClient.setQueryData(['user'], data);
+      localStorage.setItem('isLoggedIn', 'true');
       toast.success('Login successful');
       navigate('/');
     },

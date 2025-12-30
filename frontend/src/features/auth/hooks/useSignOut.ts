@@ -16,7 +16,8 @@ export default function useSignOut() {
     onSuccess() {
       queryClient.clear();
       toast.success('Logout successful');
-      navigate('/login');
+      localStorage.removeItem('isLoggedIn');
+      navigate('/');
     },
     onError(error) {
       toast.error(error.message);

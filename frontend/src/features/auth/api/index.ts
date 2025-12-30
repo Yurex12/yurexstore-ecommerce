@@ -8,10 +8,16 @@ export async function signInUser({
   password,
 }: Omit<SignInSchema, 'rememberMe'>) {
   try {
-    const { data } = await api.post<UserData>('/auth/login', {
-      email,
-      password,
-    });
+    const { data } = await api.post<UserData>(
+      '/auth/login',
+      {
+        email,
+        password,
+      },
+      {
+        skipAuthInterceptor: true,
+      }
+    );
 
     return data.user;
   } catch (error) {

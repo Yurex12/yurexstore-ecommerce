@@ -1,30 +1,22 @@
-import { useState } from 'react';
-
 import HeaderActions from './HeaderActions';
-import MobileNav from './MobileNav';
 
 import Logo from '@/components/Logo';
 
-import { Sheet } from '@/components/ui/sheet';
-import ProductsSearchBar from '@/features/product/components/ProductsSearchBar';
 import MobileProductsSearchWrapper from '@/features/product/components/MobileProductsSearchWrapper';
+import ProductsSearchBar from '@/features/product/components/ProductsSearchBar';
 
 function Header() {
-  const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
   return (
     <header className='fixed top-0 z-50 mx-auto flex w-full items-center justify-between bg-background/80 border border-b border-input/40'>
-      <div className='mx-auto flex max-w-[1600px] px-4 py-4 md:px-10  flex-1 items-center justify-between backdrop-blur'>
+      <div className='mx-auto flex max-w-[1600px] px-4 lg:px-10 py-4  flex-1 items-center justify-between backdrop-blur'>
         <Logo />
 
+        {/* Desktop - hidden on smaller screens */}
         <ProductsSearchBar />
 
         <MobileProductsSearchWrapper />
 
-        <Sheet open={open} onOpenChange={setOpen}>
-          <MobileNav onClose={handleClose} />
-          <HeaderActions />
-        </Sheet>
+        <HeaderActions />
       </div>
     </header>
   );

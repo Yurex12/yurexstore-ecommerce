@@ -17,7 +17,8 @@ export default function MobileProductsSearch() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (searchInputRef) searchInputRef.current?.focus();
+    const timeout = setTimeout(() => searchInputRef.current?.focus(), 100);
+    return () => clearTimeout(timeout);
   }, []);
 
   const { products, isPending, error } = useSearchProducts(debounced);
@@ -33,7 +34,7 @@ export default function MobileProductsSearch() {
     navigate(`/shop?q=${encodeURIComponent(value.trim())}`);
   }
   return (
-    <div className='w-full h-svh fixed top-0 left-0  py-4 px-2 bg-background flex flex-col'>
+    <div className='w-full h-svh fixed top-0 left-0 z-[100] py-4 px-2 bg-background flex flex-col'>
       <div className='flex items-center gap-2 mb-4'>
         <button
           onClick={() => navigate('/shop')}

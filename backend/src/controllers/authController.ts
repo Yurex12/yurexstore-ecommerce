@@ -231,6 +231,11 @@ export const updateUserPassword = expressAsyncHandler(
       throw new Error('User not found');
     }
 
+    if (user.role === 'ADMIN' || user.email === 'johndoe@gmail.com') {
+      res.status(403);
+      throw new Error('Why do you want to change the admin password 🥴');
+    }
+
     const passwordMatch = await bcrypt.compare(oldPassword, user.password);
 
     if (!passwordMatch) {
@@ -239,7 +244,7 @@ export const updateUserPassword = expressAsyncHandler(
     }
 
     if (await bcrypt.compare(newPassword, user.password)) {
-      res.status(401);
+      res.status(400);
       throw new Error('New password must be different from old password');
     }
 

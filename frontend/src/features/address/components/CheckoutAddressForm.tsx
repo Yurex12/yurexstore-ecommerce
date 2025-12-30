@@ -45,6 +45,18 @@ export function CheckoutAddressForm() {
     });
   }
 
+  function fillDummyAddress() {
+    form.reset({
+      firstName: 'Ade',
+      lastName: 'Olawale',
+      deliveryAddress: '12 Admiralty Way, Lekki Phase 1',
+      city: 'Lekki',
+      state: 'Lagos',
+      phone: '+234 901 234 5678',
+      default: false,
+    });
+  }
+
   const isSubmitting = form.formState.isSubmitting || isPending;
 
   return (
@@ -186,13 +198,31 @@ export function CheckoutAddressForm() {
           )}
         />
 
-        <div className='flex justify-end gap-x-4'>
-          <Button type='button' variant='outline' onClick={showSelectedAddress}>
-            Cancel
+        <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
+          <Button
+            type='button'
+            variant='outline'
+            className='w-full shadow-none sm:w-auto'
+            onClick={fillDummyAddress}
+            disabled={isSubmitting}
+          >
+            Use dummy address
           </Button>
-          <Button type='submit' className='w-34'>
-            {isSubmitting ? <Spinner /> : <span>Save</span>}
-          </Button>
+
+          <div className='flex flex-col gap-3 sm:flex-row sm:gap-x-4'>
+            <Button
+              type='button'
+              variant='outline'
+              className='w-full sm:w-auto'
+              onClick={showSelectedAddress}
+            >
+              Cancel
+            </Button>
+
+            <Button type='submit' className='w-full sm:w-34'>
+              {isSubmitting ? <Spinner /> : <span>Save</span>}
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

@@ -1,4 +1,5 @@
 import { Skeleton } from '@/components/ui/skeleton';
+import useSignOut from '@/features/auth/hooks/useSignOut';
 import useUser from '@/features/auth/hooks/useUser';
 import {
   ChevronRight,
@@ -10,31 +11,39 @@ import {
   Package,
   Star,
 } from 'lucide-react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
+const menuItems = [
+  { name: 'Overview', path: '/account', icon: <Home size={18} /> },
+  { name: 'Orders', path: '/account/orders', icon: <Package size={18} /> },
+  { name: 'Wishlist', path: '/account/wishlist', icon: <Heart size={18} /> },
+  {
+    name: 'Pending Reviews',
+    path: '/account/pending-reviews',
+    icon: <Star size={18} />,
+  },
+
+  {
+    name: 'Update Password',
+    path: '/account/update-password',
+    icon: <Key size={18} />,
+  },
+  {
+    name: 'Address Book',
+    path: '/account/addresses',
+    icon: <MapPin size={18} />,
+  },
+];
 
 export default function AccountMobileMenu() {
   const { user } = useUser();
-  const menuItems = [
-    { name: 'Overview', path: '/account', icon: <Home size={18} /> },
-    { name: 'Orders', path: '/account/orders', icon: <Package size={18} /> },
-    { name: 'Wishlist', path: '/account/wishlist', icon: <Heart size={18} /> },
-    {
-      name: 'Pending Reviews',
-      path: '/account/pending-reviews',
-      icon: <Star size={18} />,
-    },
 
-    {
-      name: 'Update Password',
-      path: '/account/update-password',
-      icon: <Key size={18} />,
-    },
-    {
-      name: 'Address Book',
-      path: '/account/addresses',
-      icon: <MapPin size={18} />,
-    },
-  ];
+  const { signOut, isPending } = useSignOut();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
 
   return (
     <div className='space-y-6'>
@@ -84,8 +93,9 @@ export default function AccountMobileMenu() {
       </nav>
 
       <button
-        onClick={() => console.log('logout')}
+        onClick={() => signOut()}
         className='flex items-center gap-3 p-3 text-sm font-medium text-red-600 bg-red-600/10 rounded-md'
+        disabled={isPending}
       >
         <LogOut size={18} />
         Logout

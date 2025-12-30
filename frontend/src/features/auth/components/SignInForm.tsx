@@ -1,3 +1,7 @@
+import { useState } from 'react';
+
+import { Eye, EyeOff } from 'lucide-react';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
@@ -19,6 +23,8 @@ import { signInSchema, type SignInSchema } from '../schemas/signInSchema';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export default function SignInForm() {
+  const [showPassword, setShowPassword] = useState(false);
+
   const { signIn, isPending } = useSignIn();
   const navigate = useNavigate();
 
@@ -77,18 +83,34 @@ export default function SignInForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input
-                  placeholder='********'
-                  className='py-5 shadow-none placeholder:text-sm'
-                  type='password'
-                  {...field}
-                  disabled={isSubmitting}
-                />
+                <div className='relative'>
+                  <Input
+                    placeholder='********'
+                    className='py-5 pr-10 shadow-none placeholder:text-sm'
+                    type={showPassword ? 'text' : 'password'}
+                    {...field}
+                    disabled={isSubmitting}
+                  />
+
+                  <button
+                    type='button'
+                    onClick={() => setShowPassword((v) => !v)}
+                    disabled={isSubmitting}
+                    className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground'
+                  >
+                    {showPassword ? (
+                      <EyeOff className='h-4 w-4' />
+                    ) : (
+                      <Eye className='h-4 w-4' />
+                    )}
+                  </button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name='rememberMe'

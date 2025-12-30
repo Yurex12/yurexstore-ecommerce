@@ -7,10 +7,7 @@ export const createAddressSchema = z.object({
   city: z.string().min(1, 'City is required'),
   state: z.string().min(1, 'State is required'),
   default: z.boolean().optional().default(false),
-  phone: z
-    .string()
-    .min(7, 'Phone number is too short')
-    .max(15, 'Phone number is too long'),
+  phone: z.string().min(10, 'Phone number is too short'),
 });
 
 export const updateAddressSchema = createAddressSchema.partial();

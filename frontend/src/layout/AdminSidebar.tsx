@@ -1,4 +1,16 @@
 import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarRail,
+  useSidebar,
+} from '@/components/ui/sidebar';
+import useSignOut from '@/features/auth/hooks/useSignOut';
+import {
   LayoutDashboard,
   LogOut,
   Package,
@@ -7,69 +19,113 @@ import {
   Tag,
   Users,
 } from 'lucide-react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-export default function AdminSidebar() {
-  const { pathname } = useLocation();
+const navMain = [
+  {
+    title: 'Overview',
+    path: '/admin/overview',
+    icon: LayoutDashboard,
+  },
+  {
+    title: 'Products',
+    path: '/admin/products',
+    icon: ShoppingBag,
+  },
+  {
+    title: 'Categories',
+    path: '/admin/categories',
+    icon: Tag,
+  },
+  {
+    title: 'Colors',
+    path: '/admin/colors',
+    icon: Palette,
+  },
+  {
+    title: 'Orders',
+    path: '/admin/orders',
+    icon: Package,
+  },
+  {
+    title: 'Users',
+    path: '/admin/users',
+    icon: Users,
+  },
+];
 
-  const links = [
-    {
-      name: 'Overview',
-      path: '/admin/overview',
-      icon: <LayoutDashboard size={18} />,
-    },
-    {
-      name: 'Products',
-      path: '/admin/products',
-      icon: <ShoppingBag size={18} />,
-    },
-    { name: 'Categories', path: '/admin/categories', icon: <Tag size={18} /> },
-    { name: 'Colors', path: '/admin/colors', icon: <Palette size={18} /> },
-    { name: 'Orders', path: '/admin/orders', icon: <Package size={18} /> },
-    { name: 'Users', path: '/admin/users', icon: <Users size={18} /> },
-  ];
+export default function AdminSidebar(
+  props: React.ComponentProps<typeof Sidebar>
+) {
+  const { signOut, isPending } = useSignOut();
+  const { isMobile, setOpenMobile } = useSidebar();
 
-  const isActiveLink = (path: string) => {
-    if (path === '/admin/overview') return pathname === '/admin/overview';
-    return pathname.startsWith(path);
-  };
+  function handleClose() {
+    if (isMobile) setOpenMobile(false);
+  }
 
   return (
-    <aside className='hidden h-full w-64 flex-col justify-between rounded-sm bg-muted/50 p-4 md:flex'>
-      {/* Header */}
-      <div className='space-y-6'>
-        <h2 className='text-lg font-semibold text-foreground'>Admin Panel</h2>
+    <Sidebar {...props} className='border-r'>
+      <SidebarHeader className='px-6 py-5'>
+        <div className='flex items-center gap-2'>
+          <div className='flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-semibold text-sm'>
+            YS
+          </div>
+          <div className='flex flex-col'>
+            <span className='text-base font-semibold leading-none'>
+              Yurexstore
+            </span>
+            <span className='text-xs text-muted-foreground mt-1'>
+              Admin Panel
+            </span>
+          </div>
+        </div>
+      </SidebarHeader>
 
-        {/* Main navigation */}
-        <nav className='space-y-4'>
-          <ul className='space-y-1'>
-            {links.map((link) => {
-              const active = isActiveLink(link.path);
+      <SidebarContent className='px-3 py-4'>
+        <SidebarGroup>
+          <SidebarMenu className='gap-1'>
+            {navMain.map((item) => {
+              const Icon = item.icon;
               return (
-                <li key={link.name}>
+                <SidebarMenuItem key={item.path}>
                   <NavLink
-                    to={link.path}
-                    className={`flex items-center gap-3 rounded-md p-3 text-sm font-medium transition-colors ${
-                      active
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                    }`}
+                    to={item.path}
+                    onClick={() => setTimeout(handleClose, 50)}
+                    className={({ isActive }) =>
+                      `flex items-center h-11 px-3 gap-3 rounded transition-all duration-200 border-l-4 ${
+                        isActive
+                          ? 'bg-primary/10 text-primary font-medium border-primary'
+                          : 'text-muted-foreground hover:bg-accent hover:text-foreground border-transparent'
+                      }`
+                    }
                   >
-                    {link.icon}
-                    {link.name}
+                    <Icon className='h-[18px] w-[18px]' />
+                    <span className='text-[15px]'>{item.title}</span>
                   </NavLink>
-                </li>
+                </SidebarMenuItem>
               );
             })}
-          </ul>
-        </nav>
-      </div>
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
 
-      {/* Logout */}
-      <button className='mt-6 flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors'>
-        <LogOut size={18} />
-        Logout
-      </button>
-    </aside>
+      <SidebarFooter className='border-t px-3 py-3'>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <button
+              onClick={() => signOut()}
+              className='flex items-center w-full h-11 px-3 gap-3 rounded-md text-destructive hover:bg-destructive/10 hover:text-destructive transition-all duration-200'
+              disabled={isPending}
+            >
+              <LogOut className='h-[18px] w-[18px]' />
+              <span className='text-[15px] font-medium'>Logout</span>
+            </button>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+
+      <SidebarRail />
+    </Sidebar>
   );
 }

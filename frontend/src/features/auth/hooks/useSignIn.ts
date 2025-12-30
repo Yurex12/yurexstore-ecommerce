@@ -14,6 +14,7 @@ export default function useSignIn() {
     mutationFn: signInUser,
     onSuccess(data) {
       queryClient.setQueryData(['user'], data);
+      localStorage.setItem('isLoggedIn', 'true');
       toast.success('Login successful');
     },
     onError(error) {

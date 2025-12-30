@@ -5,22 +5,19 @@ function Logo({ className }: { className?: string }) {
   return (
     <Link
       to='/'
-      className={cn('text-xl font-semibold text-primary', className)}
+      className={cn(
+        'flex items-center gap-2 font-semibold text-primary',
+        className
+      )}
     >
-      <span>Yurexstore</span>
+      {/* N Monogram */}
+      <span className='flex h-8 w-8 items-center justify-center rounded-md bg-primary text-white text-sm font-bold'>
+        N
+      </span>
+
+      {/* Wordmark */}
+      <span className='text-lg tracking-tight'>Nexura</span>
     </Link>
-
-    // <Link to="/">
-    //   <img src="logo.png" alt="logo" />
-    // </Link>
-
-    // <Link to="/" className="flex items-center justify-center gap-4">
-    //   {/* <HiMiniShoppingCart className="text-brandBlue text-3xl font-semibold" />
-    //    */}
-    //   <FaCartShopping className="text-brandBlue text-3xl font-semibold" />
-    //   <span className="text-brandGray-10 text-xl font-semibold">
-    //     Yurexstore
-    // </Link>
   );
 }
 

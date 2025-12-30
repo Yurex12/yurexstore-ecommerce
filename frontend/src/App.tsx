@@ -22,7 +22,7 @@ import UpdatePasswordPage from './pages/UpdatePassword/UpdatePasswordPage';
 import WishlistPage from './pages/Wishlist/WishlistPage';
 import WriteReviewPage from './pages/WriteReview/WriteReviewPage';
 
-import AdminLayout from './layout/AdminLayout2';
+import AdminLayout from './layout/AdminLayout';
 
 import AdminProtectedRoute from './layout/AdminProtectedRoute';
 import ProtectedRoute from './layout/ProtectedRoute';
