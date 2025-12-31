@@ -2,6 +2,7 @@ import { api, handleApiError } from '@/services/api';
 
 import type { SignInSchema } from '../schemas/signInSchema';
 import type { UserData, UsersData } from '../types';
+import type { SignUpSchema } from '../schemas/signUpSchema';
 
 export async function signInUser({
   email,
@@ -22,6 +23,16 @@ export async function signInUser({
     return data.user;
   } catch (error) {
     handleApiError(error, 'Failed to login');
+  }
+}
+
+export async function signUp(userData: Omit<SignUpSchema, 'confirmPassword'>) {
+  try {
+    const { data } = await api.post<UserData>('/auth/register', userData);
+
+    return data;
+  } catch (error) {
+    handleApiError(error, 'Failed to register');
   }
 }
 

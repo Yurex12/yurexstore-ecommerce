@@ -10,12 +10,10 @@ function Logo({ className }: { className?: string }) {
         className
       )}
     >
-      {/* N Monogram */}
       <span className='flex h-8 w-8 items-center justify-center rounded-md bg-primary text-white text-sm font-bold'>
         N
       </span>
 
-      {/* Wordmark */}
       <span className='text-lg tracking-tight'>Nexura</span>
     </Link>
   );

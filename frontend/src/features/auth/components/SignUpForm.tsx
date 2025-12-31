@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
-import { Button } from '@/components//ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -12,9 +13,18 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
+import { Eye, EyeOff } from 'lucide-react';
+
 import { signUpSchema, type SignUpSchema } from '../schemas/signUpSchema';
+import { useSignUp } from '../hooks/useSignUp';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function SignUpForm() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const { signUp, isPending } = useSignUp();
+
   const form = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -25,13 +35,15 @@ export default function SignUpForm() {
     },
   });
 
-  async function onsubmit(values: SignUpSchema) {
-    console.log(values);
+  const isSigningUp = form.formState.isSubmitting || isPending;
+
+  async function onSubmit(values: SignUpSchema) {
+    signUp(values);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onsubmit)} className='space-y-6'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
         <FormField
           control={form.control}
           name='name'
@@ -44,13 +56,14 @@ export default function SignUpForm() {
                   className='py-5 shadow-none placeholder:text-sm'
                   type='text'
                   {...field}
-                  disabled={form.formState.isSubmitting}
+                  disabled={isSigningUp}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name='email'
@@ -63,13 +76,14 @@ export default function SignUpForm() {
                   className='py-5 shadow-none placeholder:text-sm'
                   type='email'
                   {...field}
-                  disabled={form.formState.isSubmitting}
+                  disabled={isSigningUp}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name='password'
@@ -77,18 +91,33 @@ export default function SignUpForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input
-                  placeholder='********'
-                  type='password'
-                  className='py-5 shadow-none placeholder:text-sm'
-                  {...field}
-                  disabled={form.formState.isSubmitting}
-                />
+                <div className='relative'>
+                  <Input
+                    placeholder='********'
+                    type={showPassword ? 'text' : 'password'}
+                    className='py-5 shadow-none placeholder:text-sm pr-10'
+                    {...field}
+                    disabled={isSigningUp}
+                  />
+                  <button
+                    type='button'
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground'
+                    tabIndex={-1}
+                  >
+                    {showPassword ? (
+                      <EyeOff className='h-4 w-4' />
+                    ) : (
+                      <Eye className='h-4 w-4' />
+                    )}
+                  </button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name='confirmPassword'
@@ -96,24 +125,35 @@ export default function SignUpForm() {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <Input
-                  placeholder='********'
-                  type='password'
-                  className='py-5 shadow-none placeholder:text-sm'
-                  {...field}
-                  disabled={form.formState.isSubmitting}
-                />
+                <div className='relative'>
+                  <Input
+                    placeholder='********'
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    className='py-5 shadow-none placeholder:text-sm pr-10'
+                    {...field}
+                    disabled={isSigningUp}
+                  />
+                  <button
+                    type='button'
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    className='absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground'
+                    tabIndex={-1}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className='h-4 w-4' />
+                    ) : (
+                      <Eye className='h-4 w-4' />
+                    )}
+                  </button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button
-          type='submit'
-          className='w-full'
-          disabled={form.formState.isSubmitting}
-        >
-          Sign up
+
+        <Button type='submit' className='w-full' disabled={isSigningUp}>
+          {isSigningUp ? <Spinner /> : <span>Sign up</span>}
         </Button>
       </form>
     </Form>

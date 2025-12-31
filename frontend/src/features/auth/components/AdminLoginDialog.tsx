@@ -1,5 +1,3 @@
-import { type Dispatch, type SetStateAction } from 'react';
-
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -9,24 +7,24 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-import { ShieldAlert } from 'lucide-react';
-import useSignIn from '../hooks/useSignIn';
-import { useNavigate } from 'react-router-dom';
 import { Spinner } from '@/components/ui/spinner';
+import { ShieldAlert } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import useSignIn from '../hooks/useSignIn';
 
 export default function AdminLoginDialog({
   open,
   setOpen,
 }: {
   open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  setOpen: (open: boolean) => void;
 }) {
   const { signIn, isPending } = useSignIn();
   const navigate = useNavigate();
 
   function handleLogin() {
     signIn(
-      { email: 'yusuf2@gmail.com', password: 'Adeyemi@17' },
+      { email: 'admin@gmail.com', password: '12345678' },
       {
         onSuccess() {
           navigate('/admin');

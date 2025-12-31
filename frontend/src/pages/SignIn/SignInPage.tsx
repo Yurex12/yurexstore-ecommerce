@@ -10,7 +10,7 @@ export default function SignInPage() {
   return (
     <div className='flex h-svh flex-col items-center justify-center gap-6 p-4 md:p-10'>
       <div className='flex w-full max-w-md flex-col gap-y-6'>
-        <Logo className='text-center uppercase text-2xl' />
+        <Logo className='mx-auto' />
         <Card className='shadow-none border border-input'>
           <CardHeader className='text-center'>
             <CardTitle className='text-lg md:text-2xl text-foreground/90'>

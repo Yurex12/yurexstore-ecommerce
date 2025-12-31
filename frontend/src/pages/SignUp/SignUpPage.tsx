@@ -1,21 +1,17 @@
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import Logo from '@/components/Logo';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import SignUpForm from '@/features/auth/components/SignUpForm';
 import SocialLogin from '@/features/auth/components/SocialLogin';
-import useUser from '@/features/auth/hooks/useUser';
 
 export default function SignUpPage() {
-  const { user } = useUser();
-
-  if (user) return <Navigate to='/' />;
-
   return (
     <div className='flex h-svh flex-col items-center justify-center gap-6 p-4 md:p-10'>
       <div className='flex w-full max-w-md flex-col gap-y-6'>
-        <Logo className='text-center uppercase text-2xl' />
+        <Logo className='mx-auto' />
+
         <Card className='shadow-none border border-input'>
           <CardHeader className='text-center'>
             <CardTitle className='text-xl md:text-2xl text-foreground/90'>
