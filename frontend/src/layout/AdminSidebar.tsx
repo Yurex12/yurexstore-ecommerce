@@ -1,3 +1,4 @@
+import Logo from '@/components/Logo';
 import {
   Sidebar,
   SidebarContent,
@@ -66,23 +67,11 @@ export default function AdminSidebar(
 
   return (
     <Sidebar {...props} className='border-r'>
-      <SidebarHeader className='px-6 py-5'>
-        <div className='flex items-center gap-2'>
-          <div className='flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-semibold text-sm'>
-            YS
-          </div>
-          <div className='flex flex-col'>
-            <span className='text-base font-semibold leading-none'>
-              Yurexstore
-            </span>
-            <span className='text-xs text-muted-foreground mt-1'>
-              Admin Panel
-            </span>
-          </div>
-        </div>
+      <SidebarHeader className='px-6 py-4 border-b'>
+        <Logo />
       </SidebarHeader>
 
-      <SidebarContent className='px-3 py-4'>
+      <SidebarContent className='px-3'>
         <SidebarGroup>
           <SidebarMenu className='gap-1'>
             {navMain.map((item) => {

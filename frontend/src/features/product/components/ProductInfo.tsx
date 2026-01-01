@@ -70,7 +70,8 @@ export default function ProductInfo({ product }: { product: ProductDetails }) {
     ? selectedVariant?.quantity
     : product.quantity;
 
-  const isOutOfStock = product.quantity === 0;
+  const isOutOfStock =
+    selectedVariant?.quantity === 0 || product.quantity === 0;
 
   function handleWishlistToggle() {
     performAction(

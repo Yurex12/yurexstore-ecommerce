@@ -9,7 +9,6 @@ export function useChartData() {
   } = useQuery({
     queryKey: ['chartData'],
     queryFn: getChartData,
-    refetchInterval: 5 * 1000,
     staleTime: 0,
     refetchOnWindowFocus: true,
   });

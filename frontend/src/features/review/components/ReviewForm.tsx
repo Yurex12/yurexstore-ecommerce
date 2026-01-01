@@ -23,7 +23,7 @@ export default function ReviewForm() {
     resolver: zodResolver(reviewSchema),
     defaultValues: {
       rating: 0,
-      reviewText: '',
+      content: '',
     },
   });
 
@@ -47,7 +47,10 @@ export default function ReviewForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='space-y-6 md:bg-white md:px-4 md:py-6 md:rounded-md md:border'
+      >
         <FormField
           control={form.control}
           name='rating'
@@ -79,7 +82,7 @@ export default function ReviewForm() {
 
         <FormField
           control={form.control}
-          name='reviewText'
+          name='content'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Your Review (Optional)</FormLabel>
