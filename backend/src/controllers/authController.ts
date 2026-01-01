@@ -36,8 +36,7 @@ export const registerUser = expressAsyncHandler(
       throw new Error('Email already exist.');
     }
 
-    const hashedPassword = await bcrypt.hash('12345678', 10);
-    // const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await prisma.user.create({
       data: {

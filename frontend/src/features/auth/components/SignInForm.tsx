@@ -35,7 +35,7 @@ export default function SignInForm() {
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: 'john@gmail.com',
+      email: 'johndoe@gmail.com',
       password: '12345678',
       rememberMe: false,
     },
