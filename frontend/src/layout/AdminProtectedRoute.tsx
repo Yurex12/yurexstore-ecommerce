@@ -20,5 +20,5 @@ export default function AdminProtectedRoute({
 
   if (user.role !== 'ADMIN') return <Navigate to='/' replace />;
 
-  return <>{children}</>;
+  return <div>{children}</div>;
 }
