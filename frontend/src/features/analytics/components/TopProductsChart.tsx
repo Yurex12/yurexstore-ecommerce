@@ -32,7 +32,12 @@ export default function TopProductsChart() {
   if (error)
     return <AnalyticsError title='Top Products' className='h-[500px]' />;
 
-  if (!topProducts) return <p>No data</p>;
+  if (!topProducts?.length)
+    return (
+      <div className='border h-full w-full rounded-sm p-4'>
+        <p>No data</p>
+      </div>
+    );
 
   return (
     <Card className='shadow-none rounded-xl border'>
