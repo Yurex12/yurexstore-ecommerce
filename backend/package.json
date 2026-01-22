@@ -9,7 +9,7 @@
     "worker": "tsx src/worker/paymentWorker.ts",
     "dev": "nodemon src/server.ts",
     "copy:prisma": "cp -r src/generated dist/generated",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate --no-engine"
   },
   "keywords": [],
   "author": "",
