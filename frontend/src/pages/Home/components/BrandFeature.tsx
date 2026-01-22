@@ -1,4 +1,4 @@
-import type { BrandFeature as BrandFeatureProps } from './types';
+import type { BrandFeature as BrandFeatureProps } from '../types';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
