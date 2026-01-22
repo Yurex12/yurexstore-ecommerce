@@ -7,11 +7,11 @@ import AppLayout from './layout/AppLayout';
 
 import AccountLayout from './layout/AccountLayout';
 import AccountMobileMenu from './layout/AccountMobileMenu';
-import AboutPage from './pages/About/AboutPage';
+
 import AccountOverviewPage from './pages/AccountOverview/AccountOverviewPage';
 import AddressPage from './pages/Address/AddressPage';
 import CartPage from './pages/Cart/CartPage';
-import ContactPage from './pages/Contact/ContactPage';
+
 import HomePage from './pages/Home/HomePage';
 import OrderDetailsPage from './pages/OrderDetails/OrderDetailsPage';
 import OrdersPage from './pages/Orders/OrdersPage';
@@ -36,12 +36,12 @@ import AdminCategoriesPage from './pages/Categories/AdminCategoriesPage';
 import CheckoutPage from './pages/checkout/CheckoutPage';
 import AdminColorsPage from './pages/Color/AdminColorsPage';
 
+import AdminOverviewPage from './pages/AdminOverview/AdminOverviewPage';
 import CreateAddressPage from './pages/CreateAddress/CreateAddressPage';
 import EditAddressPage from './pages/EditAddress/EditAddressPage';
 import OrderConfirmationPage from './pages/OrderConfirmation/OrderConfirmationPage';
 import PendingReviewsPage from './pages/PendingReviews/PendingReviewsPage';
 import ProductDetailsPage from './pages/ProductDetails/ProductDetailsPage';
-import AdminOverviewPage from './pages/AdminOverview/AdminOverviewPage';
 
 const queryClient = new QueryClient();
 
@@ -56,8 +56,6 @@ export default function App() {
             <Route path='/' element={<HomePage />} />
             <Route path='/shop' element={<ShopPage />} />
             <Route path='/shop/:productId' element={<ProductDetailsPage />} />
-            <Route path='/about-us' element={<AboutPage />} />
-            <Route path='/contact-us' element={<ContactPage />} />
 
             <Route element={<ProtectedRoute />}>
               <Route path='/cart' element={<CartPage />} />
