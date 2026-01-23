@@ -110,7 +110,7 @@ export const getProducts = expressAsyncHandler(
       totalProducts,
       totalPages: Math.ceil(totalProducts / ITEMS_PER_PAGE) || 1,
     });
-  }
+  },
 );
 //@desc fetch all products
 //@route GET api/products/featured-products/
@@ -140,7 +140,7 @@ export const getFeaturedProducts = expressAsyncHandler(
     });
 
     res.json({ success: true, message: 'Successful', products });
-  }
+  },
 );
 
 //@desc fetch all products
@@ -170,7 +170,7 @@ export const getAdminProducts = expressAsyncHandler(
       message: 'Successful.',
       products,
     });
-  }
+  },
 );
 
 //@desc fetch a product
@@ -202,7 +202,7 @@ export const getProduct = expressAsyncHandler(
       message: 'Successful.',
       product,
     });
-  }
+  },
 );
 
 //@desc fetch similar products
@@ -263,7 +263,7 @@ export const getSimilarProduct = expressAsyncHandler(
       message: 'Successful.',
       products,
     });
-  }
+  },
 );
 
 //@desc fetch search products
@@ -293,7 +293,7 @@ export const getSearchProducts = expressAsyncHandler(
       message: 'Successful.',
       products,
     });
-  }
+  },
 );
 
 //@desc Create a product
@@ -318,16 +318,18 @@ export const createProduct = expressAsyncHandler(
     let price: number;
     let productVariants: any[] | undefined;
 
-    if (productData.hasVariants) {
-      totalQuantity = productData.productVariants.reduce(
+    const data = productData as ProductSchema;
+
+    if (data.hasVariants === true) {
+      totalQuantity = data.productVariants.reduce(
         (sum, variant) => sum + Number(variant.quantity),
-        0
+        0,
       );
-      price = Number(productData.productVariants[0].price);
-      productVariants = productData.productVariants;
+      price = Number(data.productVariants[0].price);
+      productVariants = data.productVariants;
     } else {
-      totalQuantity = Number(productData.quantity);
-      price = Number(productData.price);
+      totalQuantity = Number(data.quantity);
+      price = Number(data.price);
       productVariants = undefined;
     }
 
@@ -363,7 +365,7 @@ export const createProduct = expressAsyncHandler(
       message: 'Product created Successfully.',
       data: { product: newProduct },
     });
-  }
+  },
 );
 
 //@desc Update a product
@@ -394,7 +396,7 @@ export const updateProduct = expressAsyncHandler(
     if (hasVariants && productVariants && productVariants.length > 0) {
       totalQuantity = productVariants.reduce(
         (sum, variant) => sum + Number(variant.quantity),
-        0
+        0,
       );
 
       // Use first variant's price as product price
@@ -438,7 +440,7 @@ export const updateProduct = expressAsyncHandler(
 
       // 3. DELETE removed variants
       const variantsToDelete = existingVariantIds.filter(
-        (id) => !submittedVariantIds.includes(id)
+        (id) => !submittedVariantIds.includes(id),
       );
       if (variantsToDelete.length > 0) {
         await prisma.productVariant.deleteMany({
@@ -497,7 +499,7 @@ export const updateProduct = expressAsyncHandler(
       message: 'Product updated successfully.',
       data: { product: updatedProduct },
     });
-  }
+  },
 );
 
 //@desc delete a product
@@ -517,7 +519,7 @@ export const deleteProduct = expressAsyncHandler(
       success: true,
       message: 'Product deleted successfully',
     });
-  }
+  },
 );
 
 //@desc delete many product
@@ -537,5 +539,5 @@ export const deleteProducts = expressAsyncHandler(
       success: true,
       message: `Successfully deleted ${products.count} product(s).`,
     });
-  }
+  },
 );
