@@ -11,7 +11,7 @@ export default function CheckoutItem({
     <div className='flex justify-between py-5 border-b-1 gap-x-2'>
       <div className='flex gap-x-3 lg:gap-x-5'>
         <img
-          src='shirt.png'
+          src={product.images[0].url}
           className='size-15 rounded-md bg-muted/60 object-cover'
         />
 
@@ -34,7 +34,7 @@ export default function CheckoutItem({
       <div className='flex flex-col gap-y-1 items-end'>
         <span className='font-semibold text-foreground/70 text-sm sm:text-base'>
           {formatCurrency(
-            productVariant ? productVariant.price : product.price
+            productVariant ? productVariant.price : product.price,
           )}
         </span>
         <span className='text-sm'>Qty: {quantity}</span>
