@@ -5,6 +5,9 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
+// worker
+import './worker/paymentWorker';
+
 // routes
 import authRoutes from './routes/authRoutes';
 import categoryRoutes from './routes/categoryRoutes';
