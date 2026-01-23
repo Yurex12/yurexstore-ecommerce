@@ -7,7 +7,7 @@ const router = express.Router();
 router.post(
   '/webhook',
   express.raw({ type: 'application/json' }),
-  stripeWebhook
+  stripeWebhook,
 );
 
 export default router;

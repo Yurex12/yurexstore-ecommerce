@@ -8,7 +8,9 @@ export default function SocialLogin() {
           Or continue with
         </span>
       </div>
-      <GoogleLoginButton />
+      <div className='flex items-center justify-center'>
+        <GoogleLoginButton />
+      </div>
     </>
   );
 }

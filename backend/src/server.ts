@@ -32,7 +32,7 @@ app.use(
   }),
 );
 
-app.use('/api/stripe', webHookRoutes);
+app.use('/api', webHookRoutes);
 
 app.use(express.json());
 app.use(cookieParser());

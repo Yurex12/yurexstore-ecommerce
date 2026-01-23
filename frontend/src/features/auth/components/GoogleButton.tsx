@@ -9,7 +9,7 @@ export default function GoogleAuthButton() {
     <GoogleLogin
       text='continue_with'
       logo_alignment='center'
-      width={420}
+      width={250}
       onSuccess={(credentialResponse) => {
         const tokenId = credentialResponse.credential;
         if (!tokenId) {
