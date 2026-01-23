@@ -30,11 +30,10 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className='relative z-10 flex-1 w-full h-full sm:h-80 md:h-full bg-muted/50 border-b md:border-b-0 md:border-l border-white/10'>
+      <div className='relative z-10 flex-1 w-full h-full sm:h-80 md:h-full border-b md:border-b-0 md:border-l border-white/10'>
         <img
-          src='/hero.png'
           alt='Featured Products'
-          className='w-full h-full object-cover'
+          className='w-full h-full object-cover aspect-square'
         />
 
         <div className='absolute inset-0 bg-gradient-to-t from-accent via-transparent to-transparent md:hidden' />
