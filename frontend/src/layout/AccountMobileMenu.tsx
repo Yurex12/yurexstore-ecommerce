@@ -48,10 +48,8 @@ export default function AccountMobileMenu() {
   return (
     <div className='space-y-6'>
       <div className='bg-primary/5 p-2 rounded-sm'>
-        <h2 className='text-lg font-bold'>Welcome, Yusuf 👋</h2>
-        <p className='text-sm text-muted-foreground'>
-          ekungomiadeyemi@gmail.com
-        </p>
+        <h2 className='text-lg font-bold'>Welcome, {user?.name} 👋</h2>
+        <p className='text-sm text-muted-foreground'>{user?.email}</p>
       </div>
 
       <nav>
