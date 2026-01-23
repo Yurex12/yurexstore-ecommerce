@@ -32,7 +32,8 @@ export default function Hero() {
 
       <div className='relative z-10 flex-1 w-full h-full sm:h-80 md:h-full border-b md:border-b-0 md:border-l border-white/10'>
         <img
-          alt='Featured Products'
+          src='/hero.png'
+          alt='hero'
           className='w-full h-full object-cover aspect-square'
         />
 
