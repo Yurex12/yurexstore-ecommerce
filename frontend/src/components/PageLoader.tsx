@@ -11,8 +11,8 @@ export default function PageLoader({
   return (
     <div
       className={cn(
-        'flex flex-col items-center gap-3 justify-center h-[75svh] md:h-[60svh] w-full',
-        className
+        'flex flex-col items-center gap-3 justify-center h-[75vh] md:h-[60vh] w-full',
+        className,
       )}
     >
       <Spinner className='h-10 w-10' />

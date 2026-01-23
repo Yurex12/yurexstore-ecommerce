@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '../api';
 
 export default function useUser() {
-  const hasToken = !!localStorage.getItem('isLoggedIn');
+  const hasSessionHint = !!localStorage.getItem('isLoggedIn');
 
   const {
     data: user,
@@ -11,10 +11,9 @@ export default function useUser() {
   } = useQuery({
     queryKey: ['user'],
     queryFn: getUserData,
-    enabled: hasToken,
-    staleTime: Infinity,
+    enabled: hasSessionHint,
+    staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
-    refetchOnMount: false,
     retry: (count, err: Error) => {
       if (err.message === 'Your session has expired. Please log in again.')
         return false;
@@ -22,7 +21,7 @@ export default function useUser() {
     },
   });
 
-  const isPending = hasToken ? queryIsPending : false;
+  const isPending = hasSessionHint ? queryIsPending : false;
 
   return {
     user,

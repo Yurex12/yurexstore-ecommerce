@@ -15,9 +15,9 @@ export default function useSignOut() {
     mutationFn: signOutApi,
     onSuccess() {
       queryClient.clear();
-      toast.success('Logout successful');
       localStorage.removeItem('isLoggedIn');
       navigate('/');
+      toast.success('Logout successful');
     },
     onError(error) {
       toast.error(error.message);
