@@ -13,7 +13,7 @@ import { useIncrementCartItem } from '@/features/cart/hooks/useIncrementCartItem
 import { useAddToWishlist } from '@/features/wishlist/hooks/useAddToWishlist';
 import { useRemoveFromWishlist } from '@/features/wishlist/hooks/useRemoveFromWishlist';
 import { useWishlist } from '@/features/wishlist/hooks/useWishlist';
-import useUser from '@/features/auth/hooks/useUser'; // Added this
+import useUser from '@/features/auth/hooks/useUser';
 
 import { LoginRequiredDialog } from '@/components/LoginRequiredDialog';
 import { useAuthAction } from '@/hooks/useAuthAction';
@@ -48,7 +48,7 @@ export default function ProductCard(product: Product) {
 
   const inCart = cart?.find((cartItem) => cartItem.productId === product.id);
   const productInWishlist = wishlist?.find(
-    (wishlistItem) => wishlistItem.productId === product.id
+    (wishlistItem) => wishlistItem.productId === product.id,
   );
   const isWorking = isIncrementing || isDecrementing;
 
@@ -70,7 +70,7 @@ export default function ProductCard(product: Product) {
           desc: 'Sign in to save your favorites.',
         });
         setShowLoginModal(true);
-      }
+      },
     );
   }
 
@@ -83,7 +83,7 @@ export default function ProductCard(product: Product) {
           desc: 'Sign in to save items to your cart and sync them across all your devices.',
         });
         setShowLoginModal(true);
-      }
+      },
     );
   }
 
@@ -148,7 +148,7 @@ export default function ProductCard(product: Product) {
       </div>
 
       <div className='mt-2 space-y-2'>
-        {hasReachedStockLimit && (
+        {hasReachedStockLimit && !product.productVariants.length && (
           <p className='text-xs text-destructive text-center'>
             Maximum stock reached
           </p>
@@ -185,7 +185,7 @@ export default function ProductCard(product: Product) {
                 onClick={() =>
                   performAction(
                     () => incrementCartItem(inCart.id),
-                    () => setShowLoginModal(true)
+                    () => setShowLoginModal(true),
                   )
                 }
                 disabled={showCartLoading || isWorking || hasReachedStockLimit}
