@@ -46,7 +46,7 @@ export default function OrderConfirmationPage() {
       setStatus('CONFIRMED');
       const successId = setTimeout(
         () => navigate(`/account/orders/${order.orderId}`),
-        1000
+        1000,
       );
       return () => clearTimeout(successId);
     }
@@ -55,7 +55,7 @@ export default function OrderConfirmationPage() {
   if (!paymentId) return <Navigate to='/cart' replace />;
 
   return (
-    <div className='min-h-screen flex items-center justify-center'>
+    <div className='h-dvh flex items-center justify-center'>
       <div className='text-center'>
         {status === 'PROCESSING' && <OrderProcessingCard />}
 
