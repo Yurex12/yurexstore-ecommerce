@@ -9,7 +9,7 @@ import type { ApiResponseBase } from '@/services/types';
 export async function getPendingReviews() {
   try {
     const { data } = await api.get<GetPendingReviewsResponse>(
-      `/reviews/pending-reviews`
+      `/reviews/pending-reviews`,
     );
 
     return data.pendingReviews;
@@ -21,7 +21,7 @@ export async function getPendingReviews() {
 export async function getProductReviews(productId: string) {
   try {
     const { data } = await api.get<GetProductReviewsResponse>(
-      `/reviews/${productId}`
+      `/reviews/${productId}`,
     );
 
     return data.reviews;
@@ -31,13 +31,13 @@ export async function getProductReviews(productId: string) {
 }
 
 export async function createReview(
-  reviewData: ReviewSchema & { productId: string }
+  reviewData: ReviewSchema & { productId: string },
 ) {
   try {
     const { data } = await api.post<ApiResponseBase>(`/reviews`, reviewData);
 
     return data;
   } catch (error) {
-    handleApiError(error, 'Failed to fetch color');
+    handleApiError(error, 'Failed to review product');
   }
 }

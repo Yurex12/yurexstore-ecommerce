@@ -1,11 +1,11 @@
 import z from 'zod';
 
 export const reviewSchema = z.object({
-  rating: z.number().min(1, 'Rating is required'),
+  rating: z.number().int().min(1).max(5),
   content: z
     .string()
-    .optional()
-    .refine((val) => !val || val.length >= 10, {
+    .trim()
+    .refine((val) => val === '' || val.length >= 10, {
       message: 'Review must be at least 10 characters',
     }),
 });

@@ -5,8 +5,6 @@ import { validateData } from '../middlewares/validation';
 
 import {
   createReview,
-  // createReview,
-  // deleteReview,
   getReviews,
   getUserPendingReviews,
 } from '../controllers/reviewController';

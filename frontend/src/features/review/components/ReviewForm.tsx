@@ -41,7 +41,7 @@ export default function ReviewForm() {
           form.reset();
           navigate('/account/pending-reviews');
         },
-      }
+      },
     );
   }
 
