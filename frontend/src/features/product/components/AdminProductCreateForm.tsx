@@ -105,7 +105,7 @@ export default function AdminProductCreateForm() {
 
   async function onSubmit(data: ProductCreateSchema) {
     const res = await Promise.all(
-      data.images.map((image) => uploadImage(image, 'products'))
+      data.images.map((image) => uploadImage(image, 'products')),
     );
 
     const failed = res.some((item) => item === null);
@@ -116,7 +116,7 @@ export default function AdminProductCreateForm() {
     }
 
     const uploadedImages = res.filter(
-      (item): item is { url: string; fileId: string } => item !== null
+      (item): item is { url: string; fileId: string } => item !== null,
     );
 
     createProduct(
@@ -129,7 +129,7 @@ export default function AdminProductCreateForm() {
           form.reset();
           navigate('/admin/products');
         },
-      }
+      },
     );
   }
 
@@ -560,7 +560,7 @@ export default function AdminProductCreateForm() {
                                 type='button'
                                 onClick={() =>
                                   field.onChange(
-                                    images.filter((_, i) => i !== index)
+                                    images.filter((_, i) => i !== index),
                                   )
                                 }
                                 className='absolute top-1 right-1 bg-black/50 rounded-full p-1'
@@ -580,15 +580,15 @@ export default function AdminProductCreateForm() {
                             </span>
                             <input
                               type='file'
-                              accept='image/png'
+                              accept='image/*'
                               multiple
                               className='hidden'
                               onChange={(e) => {
                                 const newFiles = Array.from(
-                                  e.target.files || []
+                                  e.target.files || [],
                                 );
                                 field.onChange(
-                                  [...images, ...newFiles].slice(0, 4)
+                                  [...images, ...newFiles].slice(0, 4),
                                 );
                                 e.target.value = '';
                               }}
