@@ -115,7 +115,7 @@ const worker = new Worker(
         });
       },
 
-      { timeout: 15_000 }
+      { timeout: 15_000 },
     );
 
     await prisma.checkout.delete({
@@ -124,11 +124,11 @@ const worker = new Worker(
 
     return;
   },
-  { connection }
+  { connection, removeOnComplete: { count: 10 }, removeOnFail: { count: 50 } },
 );
 
 worker.on('completed', (job, res) =>
-  console.log(`Job ${job?.id} completed successfully`)
+  console.log(`Job ${job?.id} completed successfully`),
 );
 
 worker.on('failed', (job, err) => {

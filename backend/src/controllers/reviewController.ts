@@ -33,7 +33,7 @@ export const getReviews = expressAsyncHandler(
       message: 'Successful.',
       reviews,
     });
-  }
+  },
 );
 
 //@desc fetch user pending reviews
@@ -87,11 +87,11 @@ export const getUserPendingReviews = expressAsyncHandler(
     });
 
     const reviewedProductIds = new Set(
-      existingReviews.map((review) => review.productId)
+      existingReviews.map((review) => review.productId),
     );
 
     const unReviewedProductIds = purchasedProductIds.filter(
-      (productId) => !reviewedProductIds.has(productId)
+      (productId) => !reviewedProductIds.has(productId),
     );
 
     const unReviewedProducts = await prisma.product.findMany({
@@ -122,7 +122,7 @@ export const getUserPendingReviews = expressAsyncHandler(
       message: 'Successfully retrieved pending reviews.',
       pendingReviews,
     });
-  }
+  },
 );
 
 //@desc create product reviews
@@ -159,36 +159,39 @@ export const createReview = expressAsyncHandler(
       throw new Error('You must purchase this product before reviewing it');
     }
 
-    await prisma.$transaction(async (tx) => {
-      await tx.review.create({
-        data: {
-          content,
-          rating,
-          productId,
-          userId,
-        },
-      });
+    await prisma.$transaction(
+      async (tx) => {
+        await tx.review.create({
+          data: {
+            content,
+            rating,
+            productId,
+            userId,
+          },
+        });
 
-      const stats = await tx.review.aggregate({
-        where: { productId },
-        _avg: { rating: true },
-        _count: true,
-      });
+        const stats = await tx.review.aggregate({
+          where: { productId },
+          _avg: { rating: true },
+          _count: true,
+        });
 
-      await tx.product.update({
-        where: {
-          id: productId,
-        },
-        data: {
-          avgRating: stats._avg.rating,
-          reviewCount: stats._count,
-        },
-      });
-    });
+        await tx.product.update({
+          where: {
+            id: productId,
+          },
+          data: {
+            avgRating: stats._avg.rating,
+            reviewCount: stats._count,
+          },
+        });
+      },
+      { timeout: 10_000 },
+    );
 
     res.status(201).json({
       success: true,
       message: 'Product reviewed Successfully.',
     });
-  }
+  },
 );

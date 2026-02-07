@@ -68,14 +68,14 @@ export const createPaymentIntent = expressAsyncHandler(
       ) {
         res.status(409);
         throw new Error(
-          'Some items are out of stock. Your cart has been updated.'
+          'Some items are out of stock. Your cart has been updated.',
         );
       }
 
       if (cartItem.product.quantity < cartItem.quantity) {
         res.status(409);
         throw new Error(
-          'Some items are out of stock. Your cart has been updated.'
+          'Some items are out of stock. Your cart has been updated.',
         );
       }
 
@@ -92,7 +92,7 @@ export const createPaymentIntent = expressAsyncHandler(
 
     const totalPrice = validatedItems.reduce(
       (sum, item) => sum + item.productPrice * item.quantity,
-      0
+      0,
     );
 
     // 1% of total price
@@ -137,7 +137,7 @@ export const createPaymentIntent = expressAsyncHandler(
       clientSecret: paymentIntent.client_secret,
       paymentIntentId: paymentIntent.id,
     });
-  }
+  },
 );
 
 //@desc
@@ -175,7 +175,7 @@ export const stripeWebhook = async (req: Request, res: Response) => {
             type: 'exponential',
             delay: 3000,
           },
-        }
+        },
       );
     }
 

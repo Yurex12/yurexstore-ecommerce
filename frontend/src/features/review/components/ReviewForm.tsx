@@ -21,8 +21,9 @@ import { Spinner } from '@/components/ui/spinner';
 export default function ReviewForm() {
   const form = useForm<ReviewSchema>({
     resolver: zodResolver(reviewSchema),
+    mode: 'onSubmit',
     defaultValues: {
-      rating: 0,
+      rating: 1,
       content: '',
     },
   });
