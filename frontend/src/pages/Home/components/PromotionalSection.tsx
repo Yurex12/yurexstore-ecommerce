@@ -9,7 +9,11 @@ export default function PromotionalSection() {
   return (
     <div className=' mx-auto mt-10 flex flex-col items-center justify-around rounded-lg px-4 py-2 sm:mt-28 md:flex-row md:gap-20 bg-muted/50 '>
       <div className='md:basis-1/2'>
-        <img src='promotion.png' alt='' className='object-cover' />
+        <img
+          src='promotion.png'
+          alt='promotion'
+          className='rounded h-auto w-full aspect-[4/3] object-cover'
+        />
       </div>
 
       <div className='space-y-5 py-6 md:basis-1/2'>
