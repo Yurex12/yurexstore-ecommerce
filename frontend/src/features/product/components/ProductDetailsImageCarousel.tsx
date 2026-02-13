@@ -23,11 +23,11 @@ export default function ProductImageCarousel({ images }: Props) {
       className='w-full md:h-125 h-100 relative bg-gray-50'
     >
       {images.map((img) => (
-        <SwiperSlide key={img.id} className='flex justify-center items-center'>
+        <SwiperSlide key={img.id} className='bg-gray-50'>
           <img
             src={img.url}
-            alt=''
-            className='w-full h-full object-contain rounded-md p-2'
+            alt='product image'
+            className='h-full w-full object-cover object-center'
           />
         </SwiperSlide>
       ))}

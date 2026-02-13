@@ -2,8 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { getProductReviews } from '../api';
 
 export function useReviews(productId: string) {
-  console.log(productId);
-
   const {
     data: reviews,
     isPending,
