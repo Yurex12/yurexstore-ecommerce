@@ -25,8 +25,10 @@ export default function CategoryCard({
       </div>
 
       <div className='text-center'>
-        <p className='font-semibold text-sm'>{name}</p>
-        <p className='text-xs text-muted-foreground'>{description}</p>
+        <p className='font-semibold text-sm capitalize'>{name}</p>
+        <p className='text-xs text-muted-foreground capitalize max-w-[140px] line-clamp-1'>
+          {description}
+        </p>
       </div>
     </div>
   );

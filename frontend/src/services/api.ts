@@ -39,7 +39,7 @@ export function handleApiError(error: unknown, fallbackMessage: string) {
   if (axios.isAxiosError(error)) {
     const err = error as AxiosError<ApiResponseBase>;
     let message = err.response?.data.message;
-    console.log(err.response?.status);
+    // console.log(err.response?.status);
 
     if (err.response?.status === 500) {
       console.log(err.response.data.message);

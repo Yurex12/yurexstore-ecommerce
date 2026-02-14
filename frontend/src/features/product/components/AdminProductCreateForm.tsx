@@ -486,7 +486,11 @@ export default function AdminProductCreateForm() {
                         </SelectTrigger>
                         <SelectContent>
                           {colors.map((color) => (
-                            <SelectItem key={color.id} value={color.id}>
+                            <SelectItem
+                              key={color.id}
+                              value={color.id}
+                              className='capitalize'
+                            >
                               {color.name}
                               <span
                                 className='inline-block size-4 rounded-full border-b'
@@ -523,7 +527,7 @@ export default function AdminProductCreateForm() {
                         </span>
                         <input
                           type='file'
-                          accept='image/png'
+                          accept='image/*'
                           multiple
                           className='hidden'
                           onChange={(e) => {

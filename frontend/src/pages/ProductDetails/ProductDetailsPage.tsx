@@ -34,17 +34,15 @@ export default function ProductDetailsPage() {
 
   if (error)
     return (
-      <ErrorState
-        message='unable to load products.'
-        className='h-[80svh] border-0'
-      />
+      <ErrorState message={error.message} className='h-[80svh] border-0' />
     );
+
   if (!product)
     return (
       <EmptyState message='Product not found' className='h-[80svh] border-0' />
     );
   return (
-    <div className='space-y-4'>
+    <div className='space-y-10'>
       <div className='flex gap-x-4 mb-4'>
         <button
           onClick={() => navigate(-1)}

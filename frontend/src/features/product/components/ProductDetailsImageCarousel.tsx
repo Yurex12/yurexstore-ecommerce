@@ -15,6 +15,7 @@ export default function ProductImageCarousel({ images }: Props) {
       modules={[Navigation, Pagination]}
       spaceBetween={10}
       slidesPerView={1}
+      loop={true}
       navigation={{
         nextEl: '.swiper-button-next-custom',
         prevEl: '.swiper-button-prev-custom',

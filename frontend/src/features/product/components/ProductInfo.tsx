@@ -25,7 +25,7 @@ import { useAuthAction } from '@/hooks/useAuthAction';
 
 export default function ProductInfo({ product }: { product: ProductDetails }) {
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
-    product.productVariants.length > 0 ? product.productVariants[0] : null
+    product.productVariants.length > 0 ? product.productVariants[0] : null,
   );
 
   const [modalConfig, setModalConfig] = useState({ title: '', desc: '' });
@@ -58,7 +58,7 @@ export default function ProductInfo({ product }: { product: ProductDetails }) {
     }
   });
   const productInWishlist = wishlist?.find(
-    (wishlistItem) => wishlistItem.productId === product.id
+    (wishlistItem) => wishlistItem.productId === product.id,
   );
   const isWorking = isIncrementing || isDecrementing;
 
@@ -85,7 +85,7 @@ export default function ProductInfo({ product }: { product: ProductDetails }) {
           desc: 'Sign in to save your favorites.',
         });
         setShowLoginModal(true);
-      }
+      },
     );
   }
 
@@ -102,7 +102,7 @@ export default function ProductInfo({ product }: { product: ProductDetails }) {
           desc: 'Sign in to save items to your cart and sync them across all your devices.',
         });
         setShowLoginModal(true);
-      }
+      },
     );
   }
 
@@ -147,7 +147,7 @@ export default function ProductInfo({ product }: { product: ProductDetails }) {
 
         <Badge variant='outline' className='flex items-center gap-2'>
           <div
-            className='h-3 w-3 rounded-full'
+            className='h-3 w-3 rounded-full shadow'
             style={{ backgroundColor: product.color.code }}
           />
           <span className='capitalize'>{product.color.name}</span>
@@ -160,7 +160,9 @@ export default function ProductInfo({ product }: { product: ProductDetails }) {
           <div className='space-y-1'>
             <p className='text-sm font-medium text-slate-500'>Price</p>
             <p className='text-2xl md:text-4xl font-semibold'>
-              {formatCurrency(product.price)}
+              {selectedVariant
+                ? formatCurrency(selectedVariant.price)
+                : formatCurrency(product.price)}
             </p>
           </div>
 
@@ -239,7 +241,7 @@ export default function ProductInfo({ product }: { product: ProductDetails }) {
                 onClick={() =>
                   performAction(
                     () => incrementCartItem(inCart.id),
-                    () => setShowLoginModal(true)
+                    () => setShowLoginModal(true),
                   )
                 }
                 disabled={isFetchingCart || isWorking || hasReachedStockLimit}

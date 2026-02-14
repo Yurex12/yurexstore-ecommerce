@@ -512,6 +512,7 @@ export default function AdminProductEditForm() {
                               key={color.id}
                               value={color.id}
                               disabled={isWorking}
+                              className='capitalize'
                             >
                               {color.name}
                               <span
@@ -550,7 +551,7 @@ export default function AdminProductEditForm() {
                         <input
                           disabled={isWorking}
                           type='file'
-                          accept='image/png'
+                          accept='image/*'
                           multiple
                           className='hidden'
                           onChange={(e) => {

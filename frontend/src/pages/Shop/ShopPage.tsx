@@ -5,11 +5,15 @@ import ProductFilters from '@/features/product/components/ProductFilters';
 import ProductsList from '@/features/product/components/ProductsList';
 import ProductSort from '@/features/product/components/ProductSort';
 import ProductsSearchQueryBadge from '@/features/product/components/ProductsSearchQueryBadge';
+import { useSearchParams } from 'react-router-dom';
 
 export default function ShopPage() {
+  const [searchParams] = useSearchParams();
+
+  const page = searchParams.get('page');
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, []);
+  }, [page]);
   return (
     <div>
       <div className='flex items-center justify-between'>

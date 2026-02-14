@@ -27,7 +27,7 @@ export default function ProductVariantDialog({
   setOpen,
 }: ProductVariantProps) {
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
-    product?.productVariants.length > 0 ? product.productVariants[0].id : null
+    product?.productVariants.length > 0 ? product.productVariants[0].id : null,
   );
 
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -42,11 +42,11 @@ export default function ProductVariantDialog({
   const { cart } = useCart();
 
   const inCart = cart?.find(
-    (cartItem) => cartItem.productVariantId === selectedVariantId
+    (cartItem) => cartItem.productVariantId === selectedVariantId,
   );
 
   const item = product.productVariants.find(
-    (variant) => variant.id === selectedVariantId
+    (variant) => variant.id === selectedVariantId,
   );
 
   const itemPrice = item?.price || product.price;
@@ -69,7 +69,7 @@ export default function ProductVariantDialog({
           desc: 'Sign in to save items to your cart and sync them across all your devices.',
         });
         setShowLoginModal(true);
-      }
+      },
     );
   }
 
@@ -80,7 +80,7 @@ export default function ProductVariantDialog({
           <DialogHeader>
             <DialogTitle>
               <span className='text-lg text-foreground'>
-                Select a {product.variantTypeName}
+                Select {product.variantTypeName}
               </span>
               <p className='text-foreground/60 text-sm'>{product.name}</p>
             </DialogTitle>
@@ -97,7 +97,7 @@ export default function ProductVariantDialog({
                   <img
                     src={img.url}
                     alt={`Product ${product.name}`}
-                    className='max-w-full max-h-full object-contain rounded-md'
+                    className='w-full h-full object-cover object-center rounded-md'
                   />
                 </div>
               ))}
@@ -144,7 +144,7 @@ export default function ProductVariantDialog({
                           onClick={() =>
                             performAction(
                               () => incrementCartItem(inCart.id),
-                              () => setShowLoginModal(true)
+                              () => setShowLoginModal(true),
                             )
                           }
                           disabled={

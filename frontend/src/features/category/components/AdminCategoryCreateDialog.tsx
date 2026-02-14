@@ -128,7 +128,7 @@ export default function AdminCreateCategoryDialog({
                     <Input
                       disabled={isWorking}
                       className=' pt-2  pb-8 shadow-none placeholder:text-sm'
-                      accept='image/*'
+                      accept='image/png'
                       ref={field.ref}
                       onChange={(e) => {
                         const file = e.target.files?.[0];

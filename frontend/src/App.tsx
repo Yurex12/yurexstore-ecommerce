@@ -42,6 +42,7 @@ import EditAddressPage from './pages/EditAddress/EditAddressPage';
 import OrderConfirmationPage from './pages/OrderConfirmation/OrderConfirmationPage';
 import PendingReviewsPage from './pages/PendingReviews/PendingReviewsPage';
 import ProductDetailsPage from './pages/ProductDetails/ProductDetailsPage';
+import { TooltipProvider } from './components/ui/tooltip';
 
 const queryClient = new QueryClient();
 
@@ -50,98 +51,103 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <Toaster />
       <ReactQueryDevtools initialIsOpen={false} />
-      <BrowserRouter>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route path='/' element={<HomePage />} />
-            <Route path='/shop' element={<ShopPage />} />
-            <Route path='/shop/:productId' element={<ProductDetailsPage />} />
+      <TooltipProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route path='/' element={<HomePage />} />
+              <Route path='/shop' element={<ShopPage />} />
+              <Route path='/shop/:productId' element={<ProductDetailsPage />} />
 
-            <Route element={<ProtectedRoute />}>
-              <Route path='/cart' element={<CartPage />} />
-              <Route path='/checkout' element={<CheckoutPage />} />
-            </Route>
-
-            <Route element={<ProtectedRoute />}>
-              <Route path='/account' element={<AccountLayout />}>
-                <Route index element={<Navigate to='overview' replace />} />
-
-                <Route path='overview' element={<AccountOverviewPage />} />
-                <Route path='orders' element={<OrdersPage />} />
-                <Route
-                  path='pending-reviews'
-                  element={<PendingReviewsPage />}
-                />
-                <Route path='wishlist' element={<WishlistPage />} />
-                <Route path='orders/:id' element={<OrderDetailsPage />} />
-                <Route
-                  path='update-password'
-                  element={<UpdatePasswordPage />}
-                />
-                <Route
-                  path='pending-reviews/:pendingReviewId/write'
-                  element={<WriteReviewPage />}
-                />
-                <Route path='addresses' element={<AddressPage />} />
-                <Route
-                  path='addresses/form/new'
-                  element={<CreateAddressPage />}
-                />
-                <Route
-                  path='addresses/form/:id'
-                  element={<EditAddressPage />}
-                />
+              <Route element={<ProtectedRoute />}>
+                <Route path='/cart' element={<CartPage />} />
+                <Route path='/checkout' element={<CheckoutPage />} />
               </Route>
 
-              <Route path='/account/menu' element={<AccountMobileMenu />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path='/account' element={<AccountLayout />}>
+                  <Route index element={<Navigate to='overview' replace />} />
+
+                  <Route path='overview' element={<AccountOverviewPage />} />
+                  <Route path='orders' element={<OrdersPage />} />
+                  <Route
+                    path='pending-reviews'
+                    element={<PendingReviewsPage />}
+                  />
+                  <Route path='wishlist' element={<WishlistPage />} />
+                  <Route path='orders/:id' element={<OrderDetailsPage />} />
+                  <Route
+                    path='update-password'
+                    element={<UpdatePasswordPage />}
+                  />
+                  <Route
+                    path='pending-reviews/:pendingReviewId/write'
+                    element={<WriteReviewPage />}
+                  />
+                  <Route path='addresses' element={<AddressPage />} />
+                  <Route
+                    path='addresses/form/new'
+                    element={<CreateAddressPage />}
+                  />
+                  <Route
+                    path='addresses/form/:id'
+                    element={<EditAddressPage />}
+                  />
+                </Route>
+
+                <Route path='/account/menu' element={<AccountMobileMenu />} />
+              </Route>
             </Route>
-          </Route>
 
-          <Route path='/login' element={<SignInPage />} />
-          <Route path='/register' element={<SignUpPage />} />
+            <Route path='/login' element={<SignInPage />} />
+            <Route path='/register' element={<SignUpPage />} />
 
-          <Route element={<ProtectedRoute />}>
+            <Route element={<ProtectedRoute />}>
+              <Route
+                path='/order-confirmation'
+                element={<OrderConfirmationPage />}
+              />
+            </Route>
+            {/* Admin */}
             <Route
-              path='/order-confirmation'
-              element={<OrderConfirmationPage />}
-            />
-          </Route>
-          {/* Admin */}
-          <Route
-            element={
-              <AdminProtectedRoute>
-                <AdminLayout />
-              </AdminProtectedRoute>
-            }
-          >
-            <Route
-              path='/admin'
-              index
-              element={<Navigate to='overview' replace />}
-            />
-            <Route path='/admin/overview' element={<AdminOverviewPage />} />
-            <Route path='/admin/colors' element={<AdminColorsPage />} />
-            <Route path='/admin/categories' element={<AdminCategoriesPage />} />
-            <Route path='/admin/products' element={<AdminProductsPage />} />
-            <Route
-              path='/admin/products/new'
-              element={<AdminProductCreatePage />}
-            />
-            <Route
-              path='/admin/products/edit/:productId'
-              element={<AdminProductEditPage />}
-            />
+              element={
+                <AdminProtectedRoute>
+                  <AdminLayout />
+                </AdminProtectedRoute>
+              }
+            >
+              <Route
+                path='/admin'
+                index
+                element={<Navigate to='overview' replace />}
+              />
+              <Route path='/admin/overview' element={<AdminOverviewPage />} />
+              <Route path='/admin/colors' element={<AdminColorsPage />} />
+              <Route
+                path='/admin/categories'
+                element={<AdminCategoriesPage />}
+              />
+              <Route path='/admin/products' element={<AdminProductsPage />} />
+              <Route
+                path='/admin/products/new'
+                element={<AdminProductCreatePage />}
+              />
+              <Route
+                path='/admin/products/edit/:productId'
+                element={<AdminProductEditPage />}
+              />
 
-            <Route path='/admin/orders' element={<AdminOrdersPage />} />
-            <Route
-              path='/admin/orders/:orderId'
-              element={<AdminOrderDetailsPage />}
-            />
+              <Route path='/admin/orders' element={<AdminOrdersPage />} />
+              <Route
+                path='/admin/orders/:orderId'
+                element={<AdminOrderDetailsPage />}
+              />
 
-            <Route path='/admin/users' element={<AdminUsersPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+              <Route path='/admin/users' element={<AdminUsersPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
     </QueryClientProvider>
   );
 }

@@ -120,7 +120,7 @@ export default function ProductCard(product: Product) {
           <img
             src={product.images.at(0)?.url}
             alt={product.name}
-            className='max-h-full max-w-full object-contain'
+            className='h-full w-full object-cover'
           />
         </div>
 
@@ -129,7 +129,9 @@ export default function ProductCard(product: Product) {
           <p className='truncate text-sm font-medium text-foreground'>
             {product.name}
           </p>
-          <p className='text-xs text-foreground/50'>{product.category.name}</p>
+          <p className='text-xs text-foreground/50 capitalize'>
+            {product.category.name}
+          </p>
 
           <div className='flex items-center justify-between'>
             <span className='text-sm text-foreground font-medium'>

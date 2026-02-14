@@ -126,6 +126,7 @@ export const getFeaturedProducts = expressAsyncHandler(
       skipRange > 0 ? Math.floor(Math.random() * (skipRange + 1)) : 0;
 
     const products = await prisma.product.findMany({
+      orderBy: { createdAt: 'desc' },
       take,
       skip,
       select: {
@@ -149,6 +150,9 @@ export const getFeaturedProducts = expressAsyncHandler(
 export const getAdminProducts = expressAsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const products = await prisma.product.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
       select: {
         id: true,
         name: true,

@@ -20,18 +20,18 @@ export default function ProductPreviewCard({
       className='p-1 border border-input/50 pb-2 sm:p-4 space-y-2 hover:cursor-pointer'
       onClick={() => navigate(`/shop/${id}`)}
     >
-      <div className='w-full h-48 sm:h-60 bg-muted/60 flex items-center justify-center'>
+      <div className='w-full h-48 sm:h-60 bg-muted/60'>
         <img
           src={images.at(0)?.url}
           alt={name}
-          className='max-h-full max-w-full object-contain'
+          className='h-full w-full object-cover'
         />
       </div>
 
       <div className='space-y-2'>
         <p className='truncate text-sm font-medium text-foreground'>{name}</p>
 
-        <p className='text-xs text-foreground/50'>{category.name}</p>
+        <p className='text-xs text-foreground/50 capitalize'>{category.name}</p>
 
         <div className='flex items-center justify-between'>
           <span className='text-sm text-foreground font-medium'>

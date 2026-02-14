@@ -64,17 +64,11 @@ export function ConfirmDelete({
           </Button>
 
           {/* <Button
-
             disabled={disabled}
-
             onClick={onConfirm}
-
             className='w-20 bg-red-500 hover:bg-red-600 flex items-center justify-center'
-
           >
-
             {disabled ? <Spinner /> : 'Delete'}
-
           </Button> */}
         </AlertDialogFooter>
       </AlertDialogContent>

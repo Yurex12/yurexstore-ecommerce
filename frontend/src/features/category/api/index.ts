@@ -16,12 +16,12 @@ export async function getCategories() {
 }
 
 export async function createCategory(
-  categoryData: Omit<Category, 'slug' | 'id'>
+  categoryData: Omit<Category, 'slug' | 'id'>,
 ) {
   try {
     const { data } = await api.post<CategoryResponse>(
       '/categories',
-      categoryData
+      categoryData,
     );
     return data.category;
   } catch (error) {
@@ -37,11 +37,9 @@ export async function updateCategory({
   categoryId: string;
 }) {
   try {
-    console.log(categoryData);
-
     const { data } = await api.patch<CategoryResponse>(
       `/categories/${categoryId}`,
-      categoryData
+      categoryData,
     );
     return data.category;
   } catch (error) {
@@ -52,7 +50,7 @@ export async function updateCategory({
 export async function deleteCategory(categoryId: string) {
   try {
     const { data } = await api.delete<ApiResponseBase>(
-      `/categories/${categoryId}`
+      `/categories/${categoryId}`,
     );
     return data;
   } catch (error) {

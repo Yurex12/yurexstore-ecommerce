@@ -1,4 +1,3 @@
-import EmptyState from '@/components/EmptyState';
 import InlineError from '@/components/ErrorState';
 import ReviewCard from '@/features/review/components/ReviewCard';
 import { ReviewsSkeleton } from '@/features/review/components/ReviewsSkeleton';
@@ -9,11 +8,10 @@ export default function ProductReview({ productId }: { productId: string }) {
 
   if (isPending) return <ReviewsSkeleton />;
   if (error) return <InlineError message='Unable to load reviews' />;
-  if (!reviews?.length)
-    return <EmptyState message='This product has no review yet.' />;
+  if (!reviews?.length) return null;
 
   return (
-    <section className='w-full py-8 space-y-6'>
+    <section className='w-full space-y-6'>
       <h2 className='text-xl font-semibold'>
         Customer Reviews ({reviews.length})
       </h2>

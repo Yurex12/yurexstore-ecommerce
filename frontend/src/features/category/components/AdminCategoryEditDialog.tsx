@@ -87,7 +87,7 @@ export default function AdminCategoryEditDialog() {
             setEditingCategory(null);
             setFormOpen(false);
           },
-        }
+        },
       );
     } catch {
       toast.error('Category update failed');
