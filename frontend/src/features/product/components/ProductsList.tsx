@@ -27,7 +27,7 @@ export default function ProductsList() {
 
   if (!products?.length) {
     return (
-      <div className='h-[75dvh] border mt-4 rounded-sm gap-2 flex items-center justify-center flex-col'>
+      <div className='h-[75svh] md:border mt-4 rounded-sm gap-2 flex items-center justify-center flex-col'>
         <div className={'flex text-center gap-2'}>
           <AlertCircle className='size-4 text-muted-foreground' />
           <p className='text-sm text-muted-foreground'>No products found</p>
