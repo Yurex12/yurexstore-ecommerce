@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Navigate, useNavigate } from 'react-router-dom';
 
@@ -23,6 +23,8 @@ export default function CheckoutPage() {
     undefined,
   );
 
+  const justOrdered = useRef(false);
+
   const { addresses, selectedAddressId } = useAddressStore();
 
   const { createPaymentIntent, isPending: isCreatingPaymentIntent } =
@@ -44,7 +46,8 @@ export default function CheckoutPage() {
       />
     );
 
-  if (!cart?.length && !isCreatingOrder) return <Navigate to='/shop' replace />;
+  if (!cart?.length && !isCreatingOrder && !justOrdered.current)
+    return <Navigate to='/shop' replace />;
 
   const selectedAddress = addresses?.find((a) => a.id === selectedAddressId);
 
@@ -63,6 +66,7 @@ export default function CheckoutPage() {
       },
       {
         onSuccess(orderId) {
+          justOrdered.current = true;
           navigate(`/account/orders/${orderId}`);
         },
       },
