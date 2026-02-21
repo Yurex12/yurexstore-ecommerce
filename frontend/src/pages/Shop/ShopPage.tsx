@@ -11,6 +11,7 @@ export default function ShopPage() {
   const [searchParams] = useSearchParams();
 
   const page = searchParams.get('page');
+  
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [page]);

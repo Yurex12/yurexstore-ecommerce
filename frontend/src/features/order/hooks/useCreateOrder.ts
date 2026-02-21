@@ -12,10 +12,15 @@ export function useCreateOrder() {
     error,
   } = useMutation({
     mutationFn: createOrderApi,
-    onSuccess() {
+    onSuccess: async () => {
+      queryClient.setQueryData(['cart'], []);
+
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['cart'] }),
+        queryClient.invalidateQueries({ queryKey: ['order'] }),
+      ]);
+
       toast.success('Order placed successfully');
-      queryClient.invalidateQueries({ queryKey: ['order'] });
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
     onError: (error) => {
       let message = 'Failed to create order';

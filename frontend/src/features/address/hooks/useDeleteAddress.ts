@@ -19,7 +19,8 @@ export function useDeleteAddress() {
       const prevAddresses = queryClient.getQueryData<Address[]>(['addresses']);
 
       queryClient.setQueryData<Address[]>(['addresses'], (addresses) => {
-        return addresses?.filter((address) => address.id !== addressId);
+        if (!addresses) return addresses;
+        return addresses.filter((address) => address.id !== addressId);
       });
 
       return { prevAddresses };

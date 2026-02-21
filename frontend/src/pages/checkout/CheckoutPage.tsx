@@ -20,7 +20,7 @@ export default function CheckoutPage() {
   const { cart, isPending: isFetchingCart, error } = useCart();
   const { createOrder, isPending: isCreatingOrder } = useCreateOrder();
   const [clientSecret, setClientSecret] = useState<string | undefined>(
-    undefined
+    undefined,
   );
 
   const { addresses, selectedAddressId } = useAddressStore();
@@ -44,7 +44,7 @@ export default function CheckoutPage() {
       />
     );
 
-  if (!cart?.length) return <Navigate to='/shop' replace />;
+  if (!cart?.length && !isCreatingOrder) return <Navigate to='/shop' replace />;
 
   const selectedAddress = addresses?.find((a) => a.id === selectedAddressId);
 
@@ -65,7 +65,7 @@ export default function CheckoutPage() {
         onSuccess(orderId) {
           navigate(`/account/orders/${orderId}`);
         },
-      }
+      },
     );
   }
 
@@ -86,7 +86,7 @@ export default function CheckoutPage() {
         onSuccess(data) {
           setClientSecret(data?.clientSecret);
         },
-      }
+      },
     );
   }
 
