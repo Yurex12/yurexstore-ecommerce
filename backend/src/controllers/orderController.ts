@@ -29,7 +29,7 @@ export const getOrders = expressAsyncHandler(
       message: 'Successful.',
       orders,
     });
-  }
+  },
 );
 
 //@desc fetch an order
@@ -61,7 +61,7 @@ export const getAllOrders = expressAsyncHandler(
       message: 'Successful.',
       orders,
     });
-  }
+  },
 );
 
 //@desc fetch an order
@@ -96,7 +96,7 @@ export const getOrder = expressAsyncHandler(
       message: 'Successful.',
       order,
     });
-  }
+  },
 );
 
 //@desc fetch an order
@@ -130,7 +130,7 @@ export const getOrderById = expressAsyncHandler(
       message: 'Successful.',
       order,
     });
-  }
+  },
 );
 
 //@desc create an order
@@ -176,6 +176,11 @@ export const createOrder = expressAsyncHandler(
       },
     });
 
+    if (!cart.length) {
+      res.status(400);
+      throw new Error('No item in cart');
+    }
+
     const validatedItems = cart.map((cartItem) => {
       if (cartItem.productVariantId && !cartItem.productVariant) {
         res.status(404);
@@ -194,14 +199,14 @@ export const createOrder = expressAsyncHandler(
       ) {
         res.status(409);
         throw new Error(
-          'Some items are out of stock. Your cart has been updated.'
+          'Some items are out of stock. Your cart has been updated.',
         );
       }
 
       if (cartItem.product.quantity < cartItem.quantity) {
         res.status(409);
         throw new Error(
-          'Some items are out of stock. Your cart has been updated.'
+          'Some items are out of stock. Your cart has been updated.',
         );
       }
 
@@ -218,7 +223,7 @@ export const createOrder = expressAsyncHandler(
 
     const totalPrice = validatedItems.reduce(
       (sum, item) => sum + item.productPrice * item.quantity,
-      0
+      0,
     );
 
     // 1% of total price
@@ -269,7 +274,7 @@ export const createOrder = expressAsyncHandler(
 
         return newOrder;
       },
-      { timeout: 15_000 }
+      { timeout: 15_000 },
     );
 
     res.status(201).json({
@@ -277,7 +282,7 @@ export const createOrder = expressAsyncHandler(
       message: 'Successful.',
       orderId: order.id,
     });
-  }
+  },
 );
 
 //@desc Mark order as completed
@@ -338,7 +343,7 @@ export const completeOrder = expressAsyncHandler(
       message: 'Order marked as completed',
       orderId: order.id,
     });
-  }
+  },
 );
 
 //@desc Cancel order
@@ -419,10 +424,10 @@ export const cancelOrder = expressAsyncHandler(
                 },
               });
             }
-          })
+          }),
         );
       },
-      { timeout: 10000 }
+      { timeout: 10000 },
     );
 
     res.status(200).json({
@@ -430,7 +435,7 @@ export const cancelOrder = expressAsyncHandler(
       message: 'Order cancelled',
       orderId: order.id,
     });
-  }
+  },
 );
 
 //@desc check order status
@@ -469,5 +474,5 @@ export const checkOrderStatus = expressAsyncHandler(
       orderId: order.id,
       status: 'CONFIRMED',
     });
-  }
+  },
 );

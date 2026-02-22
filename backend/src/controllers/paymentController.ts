@@ -50,6 +50,11 @@ export const createPaymentIntent = expressAsyncHandler(
       },
     });
 
+    if (!cart.length) {
+      res.status(400);
+      throw new Error('No item in cart');
+    }
+
     const validatedItems = cart.map((cartItem) => {
       if (cartItem.productVariantId && !cartItem.productVariant) {
         res.status(404);
