@@ -23,14 +23,14 @@ export default function CheckoutPage() {
     undefined,
   );
 
+  const navigate = useNavigate();
+
   const justOrdered = useRef(false);
 
   const { addresses, selectedAddressId } = useAddressStore();
 
   const { createPaymentIntent, isPending: isCreatingPaymentIntent } =
     useCreatePaymentIntent();
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({ left: 0, top: 0, behavior: 'instant' });
@@ -46,7 +46,7 @@ export default function CheckoutPage() {
       />
     );
 
-  if (!cart?.length && !isCreatingOrder && !justOrdered.current)
+  if (!cart?.length && !justOrdered.current)
     return <Navigate to='/shop' replace />;
 
   const selectedAddress = addresses?.find((a) => a.id === selectedAddressId);
@@ -67,7 +67,7 @@ export default function CheckoutPage() {
       {
         onSuccess(orderId) {
           justOrdered.current = true;
-          navigate(`/account/orders/${orderId}`);
+          navigate(`/account/orders/${orderId}`, { replace: true });
         },
       },
     );

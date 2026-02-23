@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createOrder as createOrderApi } from '../api';
 
-import toast from 'react-hot-toast';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 export function useCreateOrder() {
   const queryClient = useQueryClient();
@@ -14,24 +14,17 @@ export function useCreateOrder() {
   } = useMutation({
     mutationFn: createOrderApi,
 
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['cart'] });
-      const previousCart = queryClient.getQueryData(['cart']);
-      queryClient.setQueryData(['cart'], (oldData) => {
-        if (!oldData) return oldData;
-        else return [];
+    onSuccess: () => {
+      toast.success('Order placed successfully');
+      queryClient.setQueryData(['cart'], []);
+      queryClient.invalidateQueries({
+        queryKey: ['orders'],
+        refetchType: 'none',
       });
-      return { previousCart };
     },
 
-    onSuccess: () => toast.success('Order placed successfully'),
-
-    onError: (error, _, context) => {
+    onError: (error) => {
       let message = 'Failed to create order';
-
-      if (context?.previousCart) {
-        queryClient.setQueryData(['cart'], context.previousCart);
-      }
 
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;
@@ -47,11 +40,6 @@ export function useCreateOrder() {
       }
 
       toast.error(message);
-    },
-
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
-      queryClient.invalidateQueries({ queryKey: ['order'] });
     },
   });
 
