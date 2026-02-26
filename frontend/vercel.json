@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://nexurastore.onrender.com/api/:path*"
+      "destination": "https://yurexstore-ecommerce.pxxl.click/api/:path*"
     },
     {
       "source": "/((?!api/).*)",
